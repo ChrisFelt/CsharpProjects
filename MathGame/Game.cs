@@ -1,0 +1,6 @@
+using MathGame;
+
+class Game
+{
+
+}
