@@ -16,7 +16,7 @@ class Program
         // inner loop:
         // create Game object and add to GameHistory list
         // use play method in Game object to display question and prompt user for answer
-        // prompt user to continue game y/n
+        // prompt user to continue game y/n  <-- y continues inner loop, n stops Game timer and exits inner loop
 
     }
 }
