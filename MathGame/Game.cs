@@ -1,5 +1,6 @@
 using MathGame;
 using System;
+using System.Reflection.Metadata.Ecma335;
 using System.Timers;
 
 class Game
@@ -19,6 +20,9 @@ class Game
     public int TimeElapsed { get; private set; }
     public List<string> QuestionHistory { get; private set; }
 
+    // array to hold list of exact divisors for each number up to 100
+    static private List<int>[] _divisors;
+
     // extra properties that may be used:
     // count of questions asked, read-only
     // count of correct answers given, read-only
@@ -31,6 +35,13 @@ class Game
         _difficultyMode = difficulty;
         _operationChoice = operation;
         StartTimer();
+    }
+
+    // static constructor allows ExactDivisors to be called only once 
+    // and the results shared across all instances of Game
+    static Game()
+    {
+        _divisors = ExactDivisors(100);
     }
 
     // methods:
@@ -53,7 +64,7 @@ class Game
         TimeElapsed++;
     }
 
-    
+
     // 2. random number method uses difficulty mode to determine size of number
     private int GenerateNum(int start, int end)
     {
@@ -66,6 +77,34 @@ class Game
         // 1 must always be an option
         // in case of a 0 for dividend, simply generate a random number between 1 and 100
         // 0 must never be an option for the divisor
+
+        // todo: return expected value
+        return 2;
+    }
+
+    static private List<int>[] ExactDivisors(int n)
+    {
+        // find all divisors for each number up to n using the Sieve of Eratosthenes
+        // and store in result
+        // time complexity of this algorithm: O(n log log n)
+        List<int>[] result = new List<int>[n + 1];
+
+        // initialize lists
+        for (int i = 0; i < n + 1; i++)
+        {
+            result[i] = new List<int>();
+        }
+
+        for (int i = 1; i <= n; i++)
+        {
+            // add i to the list of each number in the array that it is a factor of
+            for (int j = i; j <= n; j += i)
+            {
+                result[j].Add(i);
+            }
+        }
+
+        return result;
     }
 
     // 3. check answer method takes operands, operator, and answer. 
