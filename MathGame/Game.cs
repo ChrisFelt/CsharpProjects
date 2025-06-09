@@ -37,6 +37,7 @@ class Game
     // constructor
     public Game(int difficulty, int operation)
     {
+        TimeElapsed = 0;
         _difficultyMode = difficulty;
         _operationChoice = operation - 1;
         QuestionHistory = new List<string>();
