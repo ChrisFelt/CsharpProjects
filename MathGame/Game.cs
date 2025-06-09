@@ -1,5 +1,7 @@
 using MathGame;
 using System;
+using System.Buffers;
+using System.Reflection.Metadata;
 using System.Reflection.Metadata.Ecma335;
 using System.Timers;
 
@@ -12,16 +14,19 @@ class Game
     // time elapsed, read-only
     // List of operations INCLUDING "random", no getter or setter
     // List of questions asked and answers given, read-only
-    private string _difficultyMode;
-    private string _operationChoice;
+    private int _difficultyMode;
+    // private int[] _difficultyModifier = {100, 1000, 10000};
+    private int _operationChoice;
     private System.Timers.Timer _timer;
     private String[] _operations = { "+", "-", "*", "/" };
-    private String[] _difficulties = { "too easy", "easy", "normal" };
+    // private String[] _difficulties = { "too easy", "easy", "normal" };
     public int TimeElapsed { get; private set; }
     public List<string> QuestionHistory { get; private set; }
 
     // array to hold list of exact divisors for each number up to 100
     static private List<int>[] _divisors;
+    private const int _operandMax = 100;
+    private const int _operandMin = 0;
 
     // extra properties that may be used:
     // count of questions asked, read-only
@@ -30,10 +35,11 @@ class Game
     public int CorrectAnswers { get; private set; }
 
     // constructor
-    public Game(string difficulty, string operation)
+    public Game(int difficulty, int operation)
     {
         _difficultyMode = difficulty;
-        _operationChoice = operation;
+        _operationChoice = operation - 1;
+        QuestionHistory = new List<string>();
         StartTimer();
     }
 
@@ -41,11 +47,35 @@ class Game
     // and the results shared across all instances of Game
     static Game()
     {
-        _divisors = ExactDivisors(100);
+        _divisors = ExactDivisors(_operandMax);
     }
 
     // methods:
-    // 1. internal start and stop timer methods
+    // 1. exact divisors method finds all divisors for each number up to n using the Sieve of Eratosthenes and stores in output
+    static private List<int>[] ExactDivisors(int n)
+    {
+        // time complexity of this algorithm: O(n log log n)
+        // initialize array of lists 
+        // each index of the array represents the integer for which factors will be listed
+        List<int>[] result = new List<int>[n + 1];
+        for (int i = 0; i < n + 1; i++)
+        {
+            result[i] = new List<int>();
+        }
+
+        for (int i = 1; i <= n; i++)
+        {
+            // add i to the list of each number in the array that it is a factor of
+            for (int j = i; j <= n; j += i)
+            {
+                result[j].Add(i);
+            }
+        }
+
+        return result;
+    }
+
+    // 2. start and stop timer methods
     private void StartTimer()
     {
         // one second interval timer
@@ -64,52 +94,75 @@ class Game
         TimeElapsed++;
     }
 
-
-    // 2. random number method uses difficulty mode to determine size of number
-    private int GenerateNum(int start, int end)
+    // 3. generate question method uses difficulty mode and operator to generate a question
+    private (string question, int solution) GenerateQuestion()
     {
         Random rand = new Random();
+        string question = "";
+        int solution = rand.Next(_operandMax + 1);
+        int next;
 
-        // to comply with division specifications:
-        // in static constructor: generate all factors of every number between 0 and 100 and store in an array of lists
-        // generate a random number between 0 and 100 for dividend
-        // find a random factor of that number from the array of lists and use it as the divisor
-        // 1 must always be an option
-        // in case of a 0 for dividend, simply generate a random number between 1 and 100
-        // 0 must never be an option for the divisor
-
-        // todo: return expected value
-        return 2;
-    }
-
-    static private List<int>[] ExactDivisors(int n)
-    {
-        // find all divisors for each number up to n using the Sieve of Eratosthenes
-        // and store in result
-        // time complexity of this algorithm: O(n log log n)
-        List<int>[] result = new List<int>[n + 1];
-
-        // initialize lists
-        for (int i = 0; i < n + 1; i++)
+        // determine operation mode
+        string mode;
+        if (_operationChoice == 5)
         {
-            result[i] = new List<int>();
+            mode = _operations[rand.Next(_operations.Length)];
+        }
+        else
+        {
+            mode = _operations[_operationChoice - 1];
         }
 
-        for (int i = 1; i <= n; i++)
+        // generate an extra number for each difficulty mode
+        for (int i = 0; i < _difficultyMode + 1; i++)
         {
-            // add i to the list of each number in the array that it is a factor of
-            for (int j = i; j <= n; j += i)
+            // switch case to check for mode
+            switch (mode)
             {
-                result[j].Add(i);
+                // all modes besides division: gen rand number, then determine question and solution
+                case "+":
+                    next = rand.Next(_operandMax + 1);
+                    question += " + " + next;
+                    solution += next;
+                    break;
+                case "-":
+                    next = rand.Next(_operandMax + 1);
+                    question += " - " + next;
+                    solution -= next;
+                    break;
+                case "*":
+                    next = rand.Next(_operandMax + 1);
+                    question += " * " + next;
+                    solution *= next;
+                    break;
+                // division: find a random factor of solution from _divisors, then determine question and solution
+                case "/":
+                    // account for 0 dividend edge case
+                    if (solution == 0)
+                    {
+                        next = rand.Next(1, _operandMax + 1);  // divisor cannot be 0
+                    }
+                    else
+                    {
+                        next = _divisors[solution][rand.Next(_divisors[solution].Count)];
+                    }
+                    question += " / " + next;
+                    solution /= next;
+                    break;
             }
+
         }
 
-        return result;
+        return (question, solution);
     }
 
-    // 3. check answer method takes operands, operator, and answer. 
+    // 4. check answer method takes operands, operator, and answer. 
     // Checks the answer given and updates questions asked and correct answers given properties
-    // 4. play method uses (2) to generate random numbers, gets operator, and prints question, then gets user input and calls (3)
+    // 5. play method uses (2) to generate random numbers, gets operator, and prints question, then gets user input and calls (3)
     // Finally, stores question and answer in history property
+    public void Play()
+    {
+
+    }
     // 5. print history method prints each question and answer on a new line, with total correct/total questions asked at the end
 }
