@@ -18,10 +18,10 @@ class Game
     // private int[] _difficultyModifier = {100, 1000, 10000};
     private int _operationChoice;
     private System.Timers.Timer _timer;
-    private String[] _operations = { "+", "-", "*", "/" };
+    private string[] _operations = { "+", "-", "*", "/" };
     // private String[] _difficulties = { "too easy", "easy", "normal" };
     public int TimeElapsed { get; private set; }
-    public List<string> QuestionHistory { get; private set; }
+    public List<(string question, int answer, int solution)> QuestionHistory { get; private set; }
 
     // array to hold list of exact divisors for each number up to 100
     static private List<int>[] _divisors;
@@ -40,7 +40,7 @@ class Game
         TimeElapsed = 0;
         _difficultyMode = difficulty;
         _operationChoice = operation - 1;
-        QuestionHistory = new List<string>();
+        QuestionHistory = new List<(string question, int answer, int solution)>();
         StartTimer();
     }
 
@@ -105,10 +105,12 @@ class Game
 
         // determine operation mode
         string mode;
+        // randomize operator when user chooses random
         if (_operationChoice == 5)
         {
             mode = _operations[rand.Next(_operations.Length)];
         }
+        // use user operator choice
         else
         {
             mode = _operations[_operationChoice - 1];
@@ -158,11 +160,51 @@ class Game
     }
 
     // 4. check answer method takes operands, operator, and answer. 
+    private void CheckAnswer(string question, int answer, int solution)
+    {
+        // notify user of results
+        if (answer == solution)
+        {
+            Console.WriteLine($"Correct! {question} = {solution}");
+            CorrectAnswers += 1;
+        }
+        else
+        {
+            Console.WriteLine($"Incorrect. {question} = {solution}");
+        }
+
+        // update stats and history
+        TotalQuestions += 1;
+        QuestionHistory.Add((question, answer, solution));
+    }
     // Checks the answer given and updates questions asked and correct answers given properties
     // 5. play method uses (2) to generate random numbers, gets operator, and prints question, then gets user input and calls (3)
     // Finally, stores question and answer in history property
     public void Play()
     {
+        string? userInput;
+        int userAnswer;
+        bool validInput;
+        // assign question and solution tuple to separate variables
+        (string question, int solution) = GenerateQuestion();
+
+        // print question and get user input
+        Console.Write($"{question} = ");
+
+        // validate answer
+        do
+        {
+            userInput = Console.ReadLine();
+            validInput = int.TryParse(userInput, out userAnswer);
+            if (!validInput)
+            {
+                Console.Write("\nInvalid input. Please type an integer number: ");
+            }
+
+        } while (!validInput);
+
+        Console.WriteLine();
+        CheckAnswer(question, userAnswer, solution);
 
     }
     // 5. print history method prints each question and answer on a new line, with total correct/total questions asked at the end
