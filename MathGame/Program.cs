@@ -6,21 +6,14 @@ class Program
     {
         // initialize game history and defaults
         GameHistory history = new GameHistory();
-        string[] difficulties = { "too easy", "easy", "normal" };
-        string[] operations = { "+", "-", "*", "/", "random operator" };
-        string[] menuOptions = { "1", "2", "3", "4", "5"};
+        string[] difficulties = { "Too Easy", "Easy", "Normal" };
+        string[] operations = { "+", "-", "*", "/", "Random Operator" };
+        string[] menuOptions = { "1", "2", "3", "4", "5" };
         int currentDifficulty = 1;
         int currentOperation = 1;
         string? userInput;
         bool exitProgram = false;
-        // outer loop:
-        // create GameHistory object  <-- holds Game objects in a list and contains a method to print history
-        // prompt user for:
-        // difficulty level
-        // operation via menu, or random operation mode
-        // AFTER inner loop, prompt user for:
-        // print history? y/n  <-- y prints history and continues, n continues
-        // play again? y/n  <-- y continues outer loop, n closes program
+
         while (!exitProgram)
         {
             // display menu
@@ -45,29 +38,86 @@ class Program
                 {
                     Console.Write("Invalid input. Please enter a menu option from 1 to 5: ");
                 }
-            } while(true);
+            } while (true);
 
             switch (userInput)
             {
                 case "1":
+                    // prompt user to select game difficulty
+                    Console.WriteLine("\nPlease select a difficulty.");
+                    for (int i = 0; i < difficulties.Length; i++)
+                    {
+                        Console.WriteLine($"{i + 1}. {difficulties[i]}");
+                    }
+                    Console.WriteLine();
+                    Console.Write("Enter your selection: ");
+
+                    // validate input
+                    do
+                    {
+                        userInput = Console.ReadLine();
+                        if (userInput == "1" || userInput == "2" || userInput == "3")
+                        {
+                            break;
+                        }
+                        else
+                        {
+                            Console.Write("Invalid input. Please enter a difficulty from 1 to 3: ");
+                        }
+                    } while (true);
+
+                    // update difficulty
+                    currentDifficulty = int.Parse(userInput);
+                    Console.WriteLine();
                     break;
+
                 case "2":
+                    // prompt user to select operator or random
+                    Console.WriteLine("\nPlease select an operator.");
+                    for (int i = 0; i < operations.Length; i++)
+                    {
+                        Console.WriteLine($"{i + 1}. {operations[i]}");
+                    }
+                    Console.WriteLine();
+                    Console.Write("Enter your selection: ");
+
+                    // validate input
+                    do
+                    {
+                        userInput = Console.ReadLine();
+                        if (menuOptions.Contains(userInput))
+                        {
+                            break;
+                        }
+                        else
+                        {
+                            Console.Write("Invalid input. Please enter a difficulty from 1 to 3: ");
+                        }
+                    } while (true);
+
+                    // update operation
+                    currentOperation = int.Parse(userInput);
+                    Console.WriteLine();
                     break;
+
                 case "3":
+                    // TODO: implement print game history feature
+                    Console.WriteLine(" Currently under construction. Please check back again later.");
+                    Console.WriteLine();
                     break;
+
                 case "4":
+                    // display instructions with note to enter "quit" to quit game at any time
+                    // create Game object and add to GameHistory list
+                    // call Play method from game - continues until user enters "quit"
+                    // call StopTimer method from Game
                     break;
+
                 case "5":
                     exitProgram = true;
                     break;
             }
         }
-
-
-        // inner loop:
-        // create Game object and add to GameHistory list
-        // use play method in Game object to display question and prompt user for answer
-        // prompt user to continue game y/n  <-- y continues inner loop, n stops Game timer and exits inner loop
 
     }
 }
