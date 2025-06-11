@@ -102,7 +102,9 @@ class Program
 
                 case "3":
                     // TODO: implement print game history feature
-                    Console.WriteLine(" Currently under construction. Please check back again later.");
+                    Console.WriteLine("Currently under construction. Please check back again later.");
+                    Console.WriteLine("Press any key to continue.");
+                    Console.ReadLine();
                     Console.WriteLine();
                     break;
 
