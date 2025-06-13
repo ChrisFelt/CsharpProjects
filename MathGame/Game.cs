@@ -67,7 +67,9 @@ class Game
     }
 
     // 2. start and stop timer methods
-    // TODO: timer currently globally applies to all instances of Game. Fix!
+    // TODO: timer tentatively fixed by removing _timer.Dispose(); in StopTimer()
+    // TODO: Timers are stored in a static reference, which means all Timer objects across instances of Game are the same 
+    // and releasing all resources for it with Dispose() appears to make it impossible to restart conventionally
     private void StartTimer()
     {
         // one second interval timer
@@ -79,7 +81,6 @@ class Game
     public void StopTimer()
     {
         _timer.Stop();
-        _timer.Dispose();
     }
     private void OnTimedEvent(object? source, ElapsedEventArgs e)
     {
