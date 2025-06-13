@@ -22,7 +22,7 @@ class Program
             Console.WriteLine("Welcome to Math Game! Please select a menu option below.");
             Console.WriteLine($"1. Change difficulty level. Current difficulty: {difficulties[currentDifficulty - 1]}");
             Console.WriteLine($"2. Change operator. Current operator: {operations[currentOperation - 1]}");
-            Console.WriteLine("3. Show game history. Currently under construction.");
+            Console.WriteLine("3. Show game history.");
             Console.WriteLine("4. Play game with current settings.");
             Console.WriteLine("5. Exit program.");
             Console.WriteLine();
@@ -103,10 +103,9 @@ class Program
                     break;
 
                 case "3":
-                    // TODO: implement print game history feature
-                    Console.WriteLine("Currently under construction. Please check back again later.");
-                    Console.WriteLine("Press any key to continue.");
-                    Console.ReadLine();
+                    // display game history
+                    Console.WriteLine();
+                    history.ShowGames();
                     Console.WriteLine();
                     break;
 
