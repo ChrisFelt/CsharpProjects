@@ -96,7 +96,7 @@ class Game
         // determine operation mode
         string mode;
         // randomize operator when user chooses random
-        if (_operationChoice == 5)
+        if (_operationChoice == 4)
         {
             mode = _operations[rand.Next(_operations.Length)];
         }
