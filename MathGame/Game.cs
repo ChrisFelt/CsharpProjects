@@ -168,8 +168,7 @@ class Game
             Console.WriteLine($"Incorrect. {question} = {solution}");
         }
 
-        // update stats and history
-        TotalQuestions += 1;
+        // update history
         QuestionHistory.Add((question, answer, solution));
     }
 
@@ -177,7 +176,7 @@ class Game
     // Repeats until user quits game
     public void Play()
     {
-        while (true)
+        for (int i = 0; i < TotalQuestions; i++)
         {
             string? userInput;
             int userAnswer;
@@ -197,13 +196,6 @@ class Game
                 // exit when user inputs "quit"
                 if (userInput == "quit")
                 {
-                    // stop timer and display stats
-                    StopTimer();
-                    Console.WriteLine();
-                    Console.WriteLine($"Game over. Time taken to complete: {TimeElapsed} seconds.");
-                    Console.WriteLine($"You answered {CorrectAnswers} / {TotalQuestions} questions correctly.");
-                    Console.WriteLine("Press any key to continue...");
-                    Console.ReadLine();
                     return;
                 }
 

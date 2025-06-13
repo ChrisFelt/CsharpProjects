@@ -119,6 +119,14 @@ class Program
                     history.AddGame(currentGame);
                     // call Play method from game - continues until user enters "quit"
                     currentGame.Play();
+                    
+                    // stop timer and display stats
+                    currentGame.StopTimer();
+                    Console.WriteLine();
+                    Console.WriteLine($"Game over. Time taken to complete: {currentGame.TimeElapsed} seconds.");
+                    Console.WriteLine($"You answered {currentGame.CorrectAnswers} / {currentGame.TotalQuestions} questions correctly.");
+                    Console.WriteLine("Press any key to continue...");
+                    Console.ReadLine();
                     break;
 
                 case "5":
