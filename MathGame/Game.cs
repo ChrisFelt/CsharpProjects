@@ -186,7 +186,7 @@ class Game
             (string question, int solution) = GenerateQuestion();
 
             // print question and get user input
-            Console.Write($"{question} = ");
+            Console.Write($"{i + 1}. {question} = ");
 
             // validate answer
             do
@@ -212,4 +212,5 @@ class Game
     }
 
     // 6. print history method prints each question and answer on a new line, with total correct/total questions asked at the end
+
 }

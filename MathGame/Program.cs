@@ -113,10 +113,13 @@ class Program
                 case "4":
                     // display instructions with note to enter "quit" to quit game at any time
                     Console.WriteLine("Game starting!");
+                    Console.WriteLine($"You will be asked {noQuestions} questions.");
                     Console.WriteLine("Please enter your answer when a question is displayed, or type 'quit' to end the current game.");
+                    
                     // create Game object and add to GameHistory list
                     currentGame = new Game(currentDifficulty, currentOperation, noQuestions);
                     history.AddGame(currentGame);
+
                     // call Play method from game - continues until user enters "quit"
                     currentGame.Play();
                     
