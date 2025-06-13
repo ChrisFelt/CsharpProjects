@@ -203,14 +203,13 @@ class Game
                     Console.WriteLine($"You answered {CorrectAnswers} / {TotalQuestions} questions correctly.");
                     Console.WriteLine("Press any key to continue...");
                     Console.ReadLine();
-                    Console.WriteLine();
                     return;
                 }
 
                 validInput = int.TryParse(userInput, out userAnswer);
                 if (!validInput)
                 {
-                    Console.Write("\nInvalid input. Please type an integer number: ");
+                    Console.Write("Invalid input. Please type an integer number: ");
                 }
 
             } while (!validInput);
