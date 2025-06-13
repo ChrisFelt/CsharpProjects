@@ -106,7 +106,6 @@ class Program
                     // display game history
                     Console.WriteLine();
                     history.ShowGames();
-                    Console.WriteLine();
                     break;
 
                 case "4":
