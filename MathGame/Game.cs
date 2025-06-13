@@ -67,6 +67,7 @@ class Game
     }
 
     // 2. start and stop timer methods
+    // TODO: timer currently globally applies to all instances of Game. Fix!
     private void StartTimer()
     {
         // one second interval timer
