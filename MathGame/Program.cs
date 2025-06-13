@@ -6,6 +6,7 @@ class Program
     {
         // initialize game history and defaults
         GameHistory history = new GameHistory();
+        Game currentGame;
         string[] difficulties = { "Too Easy", "Easy", "Normal" };
         string[] operations = { "+", "-", "*", "/", "Random Operator" };
         string[] menuOptions = { "1", "2", "3", "4", "5" };
@@ -110,8 +111,13 @@ class Program
 
                 case "4":
                     // display instructions with note to enter "quit" to quit game at any time
+                    Console.WriteLine("Game starting!");
+                    Console.WriteLine("Please enter your answer when a question is displayed, or type 'quit' to end the current game.");
                     // create Game object and add to GameHistory list
+                    currentGame = new Game(currentDifficulty, currentOperation);
+                    history.AddGame(currentGame);
                     // call Play method from game - continues until user enters "quit"
+                    currentGame.Play();
                     // call StopTimer method from Game
                     break;
 
