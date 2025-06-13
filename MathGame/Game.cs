@@ -75,7 +75,6 @@ class Game
         _timer.AutoReset = true;  // enables repeated events
         _timer.Enabled = true;  // starts timer
     }
-    // TODO: make private and call when user enters "quit" in Play method?
     public void StopTimer()
     {
         _timer.Stop();
@@ -210,7 +209,5 @@ class Game
             CheckAnswer(question, userAnswer, solution);
         }
     }
-
-    // 6. print history method prints each question and answer on a new line, with total correct/total questions asked at the end
 
 }
