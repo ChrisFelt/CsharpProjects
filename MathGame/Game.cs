@@ -7,32 +7,21 @@ using System.Timers;
 
 class Game
 {
-    // properties:
-    // difficulty mode, no getter or setter
-    // operation menu choice 1 - 5 (+, -, *, /, random), no getter or setter
-    // timer object, no getter or setter
-    // time elapsed, read-only
-    // List of operations INCLUDING "random", no getter or setter
-    // List of questions asked and answers given, read-only
+    // fields:
     private int _difficultyMode;
-    // private int[] _difficultyModifier = {100, 1000, 10000};
     private int _operationChoice;
     private System.Timers.Timer _timer;
     private string[] _operations = { "+", "-", "*", "/" };
-    // private String[] _difficulties = { "too easy", "easy", "normal" };
-    public int TimeElapsed { get; private set; }
-    public List<(string question, int answer, int solution)> QuestionHistory { get; private set; }
-
     // array to hold list of exact divisors for each number up to 100
     static private List<int>[] _divisors;
     private const int _operandMax = 100;
     private const int _operandMin = 0;
 
-    // extra properties that may be used:
-    // count of questions asked, read-only
-    // count of correct answers given, read-only
+    // properties:
+    public int TimeElapsed { get; private set; }
     public int TotalQuestions { get; private set; }
     public int CorrectAnswers { get; private set; }
+    public List<(string question, int answer, int solution)> QuestionHistory { get; private set; }
 
     // constructor
     public Game(int difficulty, int operation)
@@ -85,6 +74,7 @@ class Game
         _timer.AutoReset = true;  // enables repeated events
         _timer.Enabled = true;  // starts timer
     }
+    // TODO: make private and call when user enters "quit" in Play method?
     public void StopTimer()
     {
         _timer.Stop();
@@ -99,8 +89,8 @@ class Game
     private (string question, int solution) GenerateQuestion()
     {
         Random rand = new Random();
-        string question = "";
         int solution = rand.Next(_operandMax + 1);
+        string question = $"{solution}";
         int next;
 
         // determine operation mode
@@ -113,11 +103,11 @@ class Game
         // use user operator choice
         else
         {
-            mode = _operations[_operationChoice - 1];
+            mode = _operations[_operationChoice];
         }
 
         // generate an extra number for each difficulty mode
-        for (int i = 0; i < _difficultyMode + 1; i++)
+        for (int i = 0; i < _difficultyMode; i++)
         {
             // switch case to check for mode
             switch (mode)
@@ -128,16 +118,19 @@ class Game
                     question += " + " + next;
                     solution += next;
                     break;
+
                 case "-":
                     next = rand.Next(_operandMax + 1);
                     question += " - " + next;
                     solution -= next;
                     break;
+
                 case "*":
                     next = rand.Next(_operandMax + 1);
                     question += " * " + next;
                     solution *= next;
                     break;
+
                 // division: find a random factor of solution from _divisors, then determine question and solution
                 case "/":
                     // account for 0 dividend edge case
@@ -160,6 +153,7 @@ class Game
     }
 
     // 4. check answer method takes operands, operator, and answer. 
+    // Checks the answer given and updates questions asked and correct answers given properties
     private void CheckAnswer(string question, int answer, int solution)
     {
         // notify user of results
@@ -177,35 +171,53 @@ class Game
         TotalQuestions += 1;
         QuestionHistory.Add((question, answer, solution));
     }
-    // Checks the answer given and updates questions asked and correct answers given properties
-    // 5. play method uses (2) to generate random numbers, gets operator, and prints question, then gets user input and calls (3)
-    // Finally, stores question and answer in history property
+
+    // 5. play method uses (2) to generate a question, prompts user for answer, and uses (4) to check the results
+    // Repeats until user quits game
     public void Play()
     {
-        string? userInput;
-        int userAnswer;
-        bool validInput;
-        // assign question and solution tuple to separate variables
-        (string question, int solution) = GenerateQuestion();
-
-        // print question and get user input
-        Console.Write($"{question} = ");
-
-        // validate answer
-        do
+        while (true)
         {
-            userInput = Console.ReadLine();
-            validInput = int.TryParse(userInput, out userAnswer);
-            if (!validInput)
+            string? userInput;
+            int userAnswer;
+            bool validInput;
+            Console.WriteLine();
+            // assign question and solution tuple to separate variables
+            (string question, int solution) = GenerateQuestion();
+
+            // print question and get user input
+            Console.Write($"{question} = ");
+
+            // validate answer
+            do
             {
-                Console.Write("\nInvalid input. Please type an integer number: ");
-            }
+                userInput = Console.ReadLine();
 
-        } while (!validInput);
+                // exit when user inputs "quit"
+                if (userInput == "quit")
+                {
+                    // stop timer and display stats
+                    StopTimer();
+                    Console.WriteLine();
+                    Console.WriteLine($"Game over. Time taken to complete: {TimeElapsed} seconds.");
+                    Console.WriteLine($"You answered {CorrectAnswers} / {TotalQuestions} questions correctly.");
+                    Console.WriteLine("Press any key to continue...");
+                    Console.ReadLine();
+                    Console.WriteLine();
+                    return;
+                }
 
-        Console.WriteLine();
-        CheckAnswer(question, userAnswer, solution);
+                validInput = int.TryParse(userInput, out userAnswer);
+                if (!validInput)
+                {
+                    Console.Write("\nInvalid input. Please type an integer number: ");
+                }
 
+            } while (!validInput);
+
+            CheckAnswer(question, userAnswer, solution);
+        }
     }
-    // 5. print history method prints each question and answer on a new line, with total correct/total questions asked at the end
+
+    // 6. print history method prints each question and answer on a new line, with total correct/total questions asked at the end
 }
