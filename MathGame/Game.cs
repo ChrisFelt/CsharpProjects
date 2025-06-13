@@ -24,11 +24,12 @@ class Game
     public List<(string question, int answer, int solution)> QuestionHistory { get; private set; }
 
     // constructor
-    public Game(int difficulty, int operation)
+    public Game(int difficulty, int operation, int questions)
     {
         TimeElapsed = 0;
         _difficultyMode = difficulty;
         _operationChoice = operation - 1;
+        TotalQuestions = questions;
         QuestionHistory = new List<(string question, int answer, int solution)>();
         StartTimer();
     }

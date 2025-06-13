@@ -10,6 +10,7 @@ class Program
         string[] difficulties = { "Too Easy", "Easy", "Normal" };
         string[] operations = { "+", "-", "*", "/", "Random Operator" };
         string[] menuOptions = { "1", "2", "3", "4", "5" };
+        int noQuestions = 10;  // set the number of questions to ask per game
         int currentDifficulty = 1;
         int currentOperation = 1;
         string? userInput;
@@ -114,11 +115,10 @@ class Program
                     Console.WriteLine("Game starting!");
                     Console.WriteLine("Please enter your answer when a question is displayed, or type 'quit' to end the current game.");
                     // create Game object and add to GameHistory list
-                    currentGame = new Game(currentDifficulty, currentOperation);
+                    currentGame = new Game(currentDifficulty, currentOperation, noQuestions);
                     history.AddGame(currentGame);
                     // call Play method from game - continues until user enters "quit"
                     currentGame.Play();
-                    // call StopTimer method from Game
                     break;
 
                 case "5":
