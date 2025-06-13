@@ -1,8 +1,4 @@
-using MathGame;
-using System;
-using System.Buffers;
-using System.Reflection.Metadata;
-using System.Reflection.Metadata.Ecma335;
+namespace MathGame;
 using System.Timers;
 
 class Game
