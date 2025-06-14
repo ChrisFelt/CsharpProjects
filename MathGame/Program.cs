@@ -16,6 +16,8 @@ class Program
         string? userInput;
         bool exitProgram = false;
 
+        Console.WriteLine();  // one-time aesthetic spacing on program startup
+
         while (!exitProgram)
         {
             // display menu
@@ -93,7 +95,7 @@ class Program
                         }
                         else
                         {
-                            Console.Write("Invalid input. Please enter a difficulty from 1 to 3: ");
+                            Console.Write("Invalid input. Please enter an operator from 1 to 5: ");
                         }
                     } while (true);
 
