@@ -1,4 +1,4 @@
-## Math Game
+# Math Game
 
 Welcome to Math Game, a simple console program written in C#.
 
