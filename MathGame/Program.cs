@@ -9,7 +9,6 @@ class Program
         Game currentGame;
         string[] difficulties = { "Too Easy", "Easy", "Normal" };
         string[] operations = { "+", "-", "*", "/", "Random Operator" };
-        string[] menuOptions = { "1", "2", "3", "4", "5" };
         int noQuestions = 10;  // set the number of questions to ask per game
         int currentDifficulty = 1;
         int currentOperation = 1;
@@ -34,7 +33,7 @@ class Program
             do
             {
                 userInput = Console.ReadLine();
-                if (menuOptions.Contains(userInput))
+                if (userInput == "1" || userInput == "2" || userInput == "3" || userInput == "4" || userInput == "5")
                 {
                     break;
                 }
@@ -89,7 +88,7 @@ class Program
                     do
                     {
                         userInput = Console.ReadLine();
-                        if (menuOptions.Contains(userInput))
+                        if (userInput == "1" || userInput == "2" || userInput == "3" || userInput == "4" || userInput == "5")
                         {
                             break;
                         }
