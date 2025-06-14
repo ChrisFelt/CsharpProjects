@@ -1,3 +1,72 @@
+## Math Game
+
+Welcome to Math Game, a simple console program written in C#.
+
+Math Game tests the user's math skills with addition, subtraction, multiplication, and division.
+
+To play, simply run the program and select the desired menu options from the main menu.
+
+The main menu options are:
+1. Change difficulty level.
+    ```
+    Adjusts the difficulty of the game.
+    The current difficulty is listed next to this option in the main menu.
+
+    There are three options to choose from:
+    1. Too easy: problems contain two operands
+    2. Easy: problems contain three operands
+    3. Normal: problems contain four operands
+
+    Only an integer 1 - 3 will be accepted as input.
+    ```
+2. Change operator.
+    ```
+    Changes the operation used in the next game. 
+    Games consist entirely of the operation chosen.
+    The current operator is listed next to this option in the main menu.
+
+    There are five options to choose from:
+    1. + (addition)
+    2. - (subtraction)
+    3. * (multiplication)
+    4. / (division)
+    5. Random Operator: a random operator is chosen for each question asked.
+
+    Only an integer 1 - 5 will be accepted as input.
+    ```
+3. Show game history.
+    ```
+    Displays the problems from each game played along with the correct solution and the player's answer.
+    Time taken and correct / total questions are also listed.
+    
+    The program pauses between listing each game and the user may press any key to continue.
+    ```
+4. Play game with current settings.
+    ```
+    Starts the game using the current difficulty and operator settings.
+    
+    The game will promt the user to answer 10 total math questions one at a time, pausing at the current question until the user types an integer answer into the console.
+
+    Each time the user inputs an answer, the program provides immediate feedback notifying the user if they answered correctly.
+    If the user answers incorrectly, the correct answer will be shown.
+
+    The user may additionally quit at any time during the game by typing 'quit'.
+
+    Once the game is complete, time taken and correct / total questions will be shown.
+    ```
+5. Exit program
+    ```
+    Immediately terminates program execution.
+    ```
+
+<br>
+
+---
+
+<br>
+
+I wrote this program using the requirements listed by the C# Academy below. All requirements and challenge goals were met as written.
+
 Project Outline Source: https://www.thecsharpacademy.com/project/53/math-game
 
 Requirements:
