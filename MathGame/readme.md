@@ -45,7 +45,7 @@ The main menu options are:
     ```
     Starts the game using the current difficulty and operator settings.
     
-    The game will promt the user to answer 10 total math questions one at a time, 
+    The game will prompt the user to answer 10 total math questions one at a time, 
     pausing at the current question until the user types an integer answer into the console.
 
     Each time the user inputs an answer, the program provides immediate feedback notifying the user if they answered correctly.
