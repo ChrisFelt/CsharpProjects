@@ -132,6 +132,9 @@ class Program
                     break;
 
                 case "5":
+                    Console.WriteLine();
+                    Console.WriteLine("Thank you for playing Math Game. Goodbye.");
+                    Console.WriteLine();
                     exitProgram = true;
                     break;
             }
