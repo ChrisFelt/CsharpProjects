@@ -127,7 +127,7 @@ class Program
                     currentGame.StopTimer();
                     Console.WriteLine();
                     Console.WriteLine($"Game over. Time taken to complete: {currentGame.TimeElapsed} seconds.");
-                    Console.WriteLine($"You answered {currentGame.CorrectAnswers} / {currentGame.TotalQuestions} questions correctly.");
+                    Console.WriteLine($"You answered {currentGame.CorrectAnswers} / {currentGame.QuestionsAnswered} questions correctly.");
                     Console.WriteLine("Press any key to continue...");
                     Console.ReadLine();
                     break;

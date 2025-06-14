@@ -22,7 +22,6 @@ class GameHistory
     public void ShowGames()
     {
         Console.WriteLine("Displaying Game History...");
-        Console.WriteLine();
 
         // notify user if no history
         if (_gameList.Count == 0)
@@ -37,6 +36,7 @@ class GameHistory
         else
         {
             Console.WriteLine($"Total games played: {_gameList.Count}");
+            Console.WriteLine();
             for (int i = 0; i < _gameList.Count; i++)
             {
                 Console.WriteLine($"Game {i + 1} history:");
@@ -60,7 +60,7 @@ class GameHistory
                 // display stats for the current game
                 Console.WriteLine();
                 Console.WriteLine($"Time taken for game {i + 1}: {_gameList[i].TimeElapsed} seconds.");
-                Console.WriteLine($"{_gameList[i].CorrectAnswers} / {_gameList[i].TotalQuestions} questions answered correctly.");
+                Console.WriteLine($"{_gameList[i].CorrectAnswers} / {_gameList[i].QuestionsAnswered} questions answered correctly.");
                 Console.WriteLine("Press any key to continue...");
                 Console.ReadLine();
             }

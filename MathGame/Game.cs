@@ -6,16 +6,16 @@ class Game
     // fields:
     private int _difficultyMode;
     private int _operationChoice;
-    private System.Timers.Timer _timer;
+    private Timer _timer;
     private string[] _operations = { "+", "-", "*", "/" };
     // array to hold list of exact divisors for each number up to 100
     static private List<int>[] _divisors;
     private const int _operandMax = 100;
-    private const int _operandMin = 0;
+    private int _noQuestions;
 
     // properties:
     public int TimeElapsed { get; private set; }
-    public int TotalQuestions { get; private set; }
+    public int QuestionsAnswered { get; private set; }
     public int CorrectAnswers { get; private set; }
     public List<(string question, int answer, int solution)> QuestionHistory { get; private set; }
 
@@ -25,7 +25,8 @@ class Game
         TimeElapsed = 0;
         _difficultyMode = difficulty;
         _operationChoice = operation - 1;
-        TotalQuestions = questions;
+        _noQuestions = questions;
+        QuestionsAnswered = 0;
         QuestionHistory = new List<(string question, int answer, int solution)>();
         StartTimer();
     }
@@ -63,20 +64,17 @@ class Game
     }
 
     // 2. start and stop timer methods
-    // TODO: timer tentatively fixed by removing _timer.Dispose(); in StopTimer()
-    // TODO: Timers are stored in a static reference, which means all Timer objects across instances of Game are the same 
-    // and releasing all resources for it with Dispose() appears to make it impossible to restart conventionally
     private void StartTimer()
     {
         // one second interval timer
-        _timer = new System.Timers.Timer(1000);
+        _timer = new Timer(1000);
         _timer.Elapsed += OnTimedEvent;
         _timer.AutoReset = true;  // enables repeated events
         _timer.Enabled = true;  // starts timer
     }
     public void StopTimer()
     {
-        _timer.Stop();
+        _timer.Stop();  // Dispose() prevents timer from restarting in other instances of Game
     }
     private void OnTimedEvent(object? source, ElapsedEventArgs e)
     {
@@ -165,7 +163,8 @@ class Game
             Console.WriteLine($"Incorrect. {question} = {solution}");
         }
 
-        // update history
+        // update stats and history
+        QuestionsAnswered += 1;
         QuestionHistory.Add((question, answer, solution));
     }
 
@@ -173,7 +172,7 @@ class Game
     // Repeats until user quits game
     public void Play()
     {
-        for (int i = 0; i < TotalQuestions; i++)
+        for (int i = 0; i < _noQuestions; i++)
         {
             string? userInput;
             int userAnswer;
