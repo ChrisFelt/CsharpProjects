@@ -22,6 +22,7 @@ class GameHistory
     public void ShowGames()
     {
         Console.WriteLine("Displaying Game History...");
+        Console.WriteLine();
 
         // notify user if no history
         if (_gameList.Count == 0)
