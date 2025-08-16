@@ -32,6 +32,7 @@ Requirements:
 Challenge Goals:
 
 1. If you haven't, try using parameterized queries to make your application more secure.
+// https://stackoverflow.com/questions/5468425/how-do-parameterized-queries-help-against-sql-injection
 
 2. Let the users create their own habits to track. That will require that you let them choose the unit of measurement of each habit.
 
