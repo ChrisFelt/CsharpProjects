@@ -10,7 +10,7 @@ Project Outline Source: https://www.thecsharpacademy.com/project/12/habit-logger
 
 Requirements:
 
-1. This is an application where youÅfll log occurrences of a habit.
+1. This is an application where you'll log occurrences of a habit.
 
 2. This habit can't be tracked by time (ex. hours of sleep), only by quantity (ex. number of water glasses a day)
 
@@ -18,7 +18,7 @@ Requirements:
 
 4. The application should store and retrieve data from a real database
 
-5. When the application starts, it should create a sqlite database, if one isnÅft present.
+5. When the application starts, it should create a sqlite database, if one isn't present.
 
 6. It should also create a table in the database, where the habit will be logged.
 
@@ -26,7 +26,7 @@ Requirements:
 
 8. You should handle all possible errors so that the application never crashes.
 
-9. You can only interact with the database using ADO.NET. You canÅft use mappers such as Entity Framework or Dapper.
+9. You can only interact with the database using ADO.NET. You can't use mappers such as Entity Framework or Dapper.
 
 
 Challenge Goals:
