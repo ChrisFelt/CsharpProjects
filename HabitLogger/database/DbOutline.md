@@ -24,7 +24,7 @@ Entities:
 
 3. Dates
     - Relationships: 
-        1. Dates may have 0 or more Habits; optional M:N relationship with Habits.
+        1. Dates must have 1 or more Habits; required M:N relationship with Habits.
     - Attributes:
         1. Unique KEY
         2. Date - MM/DD/YYYY format
