@@ -33,21 +33,17 @@ WHERE Users.userID = userIDInput;  -- this value automatically supplied by the a
 -- with Habits after the Habit is cascade deleted when User is deleted
 DELETE
 FROM Dates
-WHERE dateID = (SELECT d.dateID,
-					   h.habitID,
-					   h.userID
+WHERE dateID = (SELECT d.dateID
 				FROM Dates AS d
 				INNER JOIN Habits_has_Dates AS hd
 					ON d.dateID = hd.dateID
 				INNER JOIN Habits AS h
-					ON hd.habitID = h.habitIP
+					ON hd.habitID = h.habitID
 				WHERE h.userID = userIDInput  -- all habits and dates for the user
 					AND (SELECT COUNT(dateID)
 						 FROM Habits_has_Dates
 						 WHERE dateID = d.dateID) <= 1);  -- limit to dates with 1 or less relationships for that date
-
--- remove the user and all associated habits - automatic due to ON DELETE CASCADE 
--- foreign key constraint in Habits table
+-- remove the user and all associated habits (including intermediary Habits_has_Dates records) - automatic due to ON DELETE CASCADE foreign key constraint in Habits table
 DELETE
 FROM Users
 WHERE userID = userIDInput;
