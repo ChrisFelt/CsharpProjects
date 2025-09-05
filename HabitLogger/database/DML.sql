@@ -47,6 +47,7 @@ DELETE
 FROM Users
 WHERE userID = userIDInput;
 
+
 -- -----------------------------------------------------
 -- Habits Data Manipulation Queries
 -- -----------------------------------------------------
@@ -64,11 +65,13 @@ VALUES (nameInput,
 		userIDInput);
 
 -- READ
+-- only get Habits info for the current User
 SELECT	habitID			AS 'Habit ID',
 		name			AS 'Name',
 		description		AS 'Description',
 		userID			AS 'User ID'
-FROM Habits;
+FROM Habits
+WHERE userID = userIDInput;
 
 -- UPDATE
 -- display the Habit that will be updated
@@ -87,7 +90,7 @@ SET	Habits.name			= nameInput,
 WHERE Habits.habitID = habitIDInput;
 
 -- DELETE
--- first delete any Dates for which this Habit is the only existing relationship
+-- first, delete any Dates for which this Habit is the only existing relationship
 DELETE
 FROM Dates
 WHERE dateID = (SELECT d.dateID
@@ -104,3 +107,27 @@ WHERE dateID = (SELECT d.dateID
 DELETE
 FROM Habits
 WHERE habitID = habitIDInput;
+
+
+-- -----------------------------------------------------
+-- Dates Data Manipulation Queries
+-- and Habits_has_Dates Data Manipulation Queries
+-- -----------------------------------------------------
+-- CREATE
+-- 1. insert new row into Dates
+INSERT INTO Dates (date)
+VALUES (dateInput);
+-- 2. establish relationship with Habits via Habits_has_Dates intermediate table
+INSERT INTO Habits_has_Dates (quantity, habitID, dateID)
+VALUES (quantityInput,
+		(SELECT habitID FROM Habits WHERE name=nameInput),  -- pull nameInput from Habit selection when added to Date
+		(SELECT dateID FROM Dates WHERE date=dateInput));
+
+-- READ
+-- Read from Dates and Habits_has_Dates simultaneously given an input Date
+SELECT	d.date			AS 'Date',
+		hd.quantity		AS 'Quantity'
+FROM Dates AS d
+INNER JOIN Habits_has_Dates AS hd
+	ON d.dateID = hd.dateID
+WHERE d.date = dateInput;
