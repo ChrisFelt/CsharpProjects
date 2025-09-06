@@ -125,9 +125,29 @@ VALUES (quantityInput,
 
 -- READ
 -- Read from Dates and Habits_has_Dates simultaneously given an input Date
-SELECT	d.date			AS 'Date',
-		hd.quantity		AS 'Quantity'
+SELECT	d.date				AS 'Date',
+		hd.quantity			AS 'Quantity',
+		hd.habitHasDateID	AS 'updateID'  -- make available for easier quantity update
 FROM Dates AS d
 INNER JOIN Habits_has_Dates AS hd
 	ON d.dateID = hd.dateID
 WHERE d.date = dateInput;
+
+-- UPDATE
+-- update frequency given a HabitHasDateID
+UPDATE Habits_has_Dates
+SET	Habits_has_Dates.quantity		= quantityInput
+WHERE Habits_has_Dates.habitHasDateID = HabitHasDateIDInput;
+
+-- DELETE
+-- Option 1. delete Habits_has_Dates record given a habitHasDateID
+DELETE
+FROM Habits_has_Dates
+WHERE habitHasDateID = habitHasDateIDInput;
+-- Option 2. delete Date (less common, may not need)
+-- Habits_has_Dates cascade deletes when Dates is deleted, and Habits do not require a Dates relationship
+DELETE
+FROM Dates
+WHERE dateID = dateIDInput;
+
+
