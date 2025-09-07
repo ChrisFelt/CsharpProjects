@@ -19,7 +19,7 @@ namespace HabitLogger
 
         private void btnStart_Click(object sender, EventArgs e)
         {
-
+            // MessageBox.Show("Message", "Title", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         private void btnExit_Click(object sender, EventArgs e)
@@ -33,5 +33,6 @@ namespace HabitLogger
             NewUserForm newUser = new NewUserForm();
             newUser.Show();
         }
+
     }
 }

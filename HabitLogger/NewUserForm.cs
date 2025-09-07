@@ -21,5 +21,10 @@ namespace HabitLogger
         {
             
         }
+
+        private void btnCreateNewUser_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
