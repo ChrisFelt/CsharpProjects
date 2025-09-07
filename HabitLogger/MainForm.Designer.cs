@@ -33,7 +33,7 @@
             this.lblSelectDate = new System.Windows.Forms.Label();
             this.lstHabits = new System.Windows.Forms.ListBox();
             this.monthCalendar = new System.Windows.Forms.MonthCalendar();
-            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
             this.txtUserName = new System.Windows.Forms.TextBox();
@@ -51,13 +51,14 @@
             this.lblHabitDesc = new System.Windows.Forms.Label();
             this.lblMain = new System.Windows.Forms.Label();
             this.pnlMain.SuspendLayout();
-            this.menuStrip1.SuspendLayout();
+            this.menuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).BeginInit();
             this.pnlLogin.SuspendLayout();
             this.SuspendLayout();
             // 
             // pnlMain
             // 
+            this.pnlMain.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.pnlMain.Controls.Add(this.lblMain);
             this.pnlMain.Controls.Add(this.lblHabitDesc);
             this.pnlMain.Controls.Add(this.btnDelete);
@@ -68,8 +69,7 @@
             this.pnlMain.Controls.Add(this.lblSelectDate);
             this.pnlMain.Controls.Add(this.lstHabits);
             this.pnlMain.Controls.Add(this.monthCalendar);
-            this.pnlMain.Controls.Add(this.menuStrip1);
-            this.pnlMain.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlMain.Controls.Add(this.menuStrip);
             this.pnlMain.Location = new System.Drawing.Point(0, 0);
             this.pnlMain.Name = "pnlMain";
             this.pnlMain.Size = new System.Drawing.Size(800, 450);
@@ -77,6 +77,7 @@
             // 
             // lblSelectDate
             // 
+            this.lblSelectDate.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblSelectDate.AutoSize = true;
             this.lblSelectDate.Location = new System.Drawing.Point(22, 40);
             this.lblSelectDate.Name = "lblSelectDate";
@@ -86,6 +87,7 @@
             // 
             // lstHabits
             // 
+            this.lstHabits.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lstHabits.FormattingEnabled = true;
             this.lstHabits.ItemHeight = 20;
             this.lstHabits.Location = new System.Drawing.Point(292, 62);
@@ -95,19 +97,22 @@
             // 
             // monthCalendar
             // 
+            this.monthCalendar.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.monthCalendar.Location = new System.Drawing.Point(18, 62);
             this.monthCalendar.Name = "monthCalendar";
             this.monthCalendar.TabIndex = 1;
             // 
-            // menuStrip1
+            // menuStrip
             // 
-            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuStrip.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.menuStrip.Dock = System.Windows.Forms.DockStyle.None;
+            this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.helpToolStripMenuItem});
-            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
-            this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(800, 24);
-            this.menuStrip1.TabIndex = 0;
-            this.menuStrip1.Text = "menuStrip1";
+            this.menuStrip.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip.Name = "menuStrip";
+            this.menuStrip.Size = new System.Drawing.Size(52, 24);
+            this.menuStrip.TabIndex = 0;
+            this.menuStrip.Text = "menuStrip1";
             // 
             // helpToolStripMenuItem
             // 
@@ -195,6 +200,7 @@
             // 
             // lblSelectHabit
             // 
+            this.lblSelectHabit.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblSelectHabit.AutoSize = true;
             this.lblSelectHabit.Location = new System.Drawing.Point(295, 39);
             this.lblSelectHabit.Name = "lblSelectHabit";
@@ -214,6 +220,7 @@
             // 
             // rtxtHabitDesc
             // 
+            this.rtxtHabitDesc.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.rtxtHabitDesc.Location = new System.Drawing.Point(292, 349);
             this.rtxtHabitDesc.Name = "rtxtHabitDesc";
             this.rtxtHabitDesc.ReadOnly = true;
@@ -243,6 +250,7 @@
             // 
             // lblHabitDesc
             // 
+            this.lblHabitDesc.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblHabitDesc.AutoSize = true;
             this.lblHabitDesc.Location = new System.Drawing.Point(295, 326);
             this.lblHabitDesc.Name = "lblHabitDesc";
@@ -252,6 +260,7 @@
             // 
             // lblMain
             // 
+            this.lblMain.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblMain.AutoSize = true;
             this.lblMain.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblMain.Location = new System.Drawing.Point(37, 300);
@@ -266,13 +275,13 @@
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.pnlMain);
             this.Controls.Add(this.pnlLogin);
-            this.MainMenuStrip = this.menuStrip1;
+            this.MainMenuStrip = this.menuStrip;
             this.Name = "main";
             this.Text = "Habit Logger";
             this.pnlMain.ResumeLayout(false);
             this.pnlMain.PerformLayout();
-            this.menuStrip1.ResumeLayout(false);
-            this.menuStrip1.PerformLayout();
+            this.menuStrip.ResumeLayout(false);
+            this.menuStrip.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).EndInit();
             this.pnlLogin.ResumeLayout(false);
             this.pnlLogin.PerformLayout();
@@ -292,7 +301,7 @@
         private System.Windows.Forms.Panel pnlLogin;
         private System.Windows.Forms.ListBox lstHabits;
         private System.Windows.Forms.MonthCalendar monthCalendar;
-        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.MenuStrip menuStrip;
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
         private System.Windows.Forms.Label lblSelectDate;
         private System.Windows.Forms.Label lblSelectHabit;
