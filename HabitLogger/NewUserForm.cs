@@ -15,6 +15,7 @@ namespace HabitLogger
         public NewUserForm()
         {
             InitializeComponent();
+            CenterToScreen();
         }
 
         private void NewUserForm_Load(object sender, EventArgs e)
