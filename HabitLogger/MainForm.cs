@@ -15,6 +15,7 @@ namespace HabitLogger
         public main()
         {
             InitializeComponent();
+            CenterToScreen();
         }
 
         private void btnStart_Click(object sender, EventArgs e)
