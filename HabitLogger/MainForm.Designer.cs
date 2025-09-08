@@ -30,6 +30,13 @@
         {
             this.components = new System.ComponentModel.Container();
             this.pnlMain = new System.Windows.Forms.Panel();
+            this.lblMain = new System.Windows.Forms.Label();
+            this.lblHabitDesc = new System.Windows.Forms.Label();
+            this.btnDelete = new System.Windows.Forms.Button();
+            this.btnEdit = new System.Windows.Forms.Button();
+            this.rtxtHabitDesc = new System.Windows.Forms.RichTextBox();
+            this.btnAdd = new System.Windows.Forms.Button();
+            this.lblSelectHabit = new System.Windows.Forms.Label();
             this.lblSelectDate = new System.Windows.Forms.Label();
             this.lstHabits = new System.Windows.Forms.ListBox();
             this.monthCalendar = new System.Windows.Forms.MonthCalendar();
@@ -38,18 +45,12 @@
             this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
             this.txtUserName = new System.Windows.Forms.TextBox();
             this.lblWelcome = new System.Windows.Forms.Label();
-            this.btnStart = new System.Windows.Forms.Button();
+            this.btnLogin = new System.Windows.Forms.Button();
             this.btnExit = new System.Windows.Forms.Button();
             this.lblUserName = new System.Windows.Forms.Label();
             this.lblNewUser = new System.Windows.Forms.Label();
             this.pnlLogin = new System.Windows.Forms.Panel();
-            this.lblSelectHabit = new System.Windows.Forms.Label();
-            this.btnAdd = new System.Windows.Forms.Button();
-            this.rtxtHabitDesc = new System.Windows.Forms.RichTextBox();
-            this.btnEdit = new System.Windows.Forms.Button();
-            this.btnDelete = new System.Windows.Forms.Button();
-            this.lblHabitDesc = new System.Windows.Forms.Label();
-            this.lblMain = new System.Windows.Forms.Label();
+            this.btnLogout = new System.Windows.Forms.Button();
             this.pnlMain.SuspendLayout();
             this.menuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).BeginInit();
@@ -59,6 +60,7 @@
             // pnlMain
             // 
             this.pnlMain.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.pnlMain.Controls.Add(this.btnLogout);
             this.pnlMain.Controls.Add(this.lblMain);
             this.pnlMain.Controls.Add(this.lblHabitDesc);
             this.pnlMain.Controls.Add(this.btnDelete);
@@ -74,6 +76,77 @@
             this.pnlMain.Name = "pnlMain";
             this.pnlMain.Size = new System.Drawing.Size(800, 450);
             this.pnlMain.TabIndex = 0;
+            // 
+            // lblMain
+            // 
+            this.lblMain.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.lblMain.AutoSize = true;
+            this.lblMain.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblMain.Location = new System.Drawing.Point(33, 283);
+            this.lblMain.Name = "lblMain";
+            this.lblMain.Size = new System.Drawing.Size(197, 31);
+            this.lblMain.TabIndex = 10;
+            this.lblMain.Text = "Habbit Logger";
+            // 
+            // lblHabitDesc
+            // 
+            this.lblHabitDesc.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.lblHabitDesc.AutoSize = true;
+            this.lblHabitDesc.Location = new System.Drawing.Point(295, 326);
+            this.lblHabitDesc.Name = "lblHabitDesc";
+            this.lblHabitDesc.Size = new System.Drawing.Size(132, 20);
+            this.lblHabitDesc.TabIndex = 9;
+            this.lblHabitDesc.Text = "Habit description:";
+            // 
+            // btnDelete
+            // 
+            this.btnDelete.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.btnDelete.Location = new System.Drawing.Point(705, 274);
+            this.btnDelete.Name = "btnDelete";
+            this.btnDelete.Size = new System.Drawing.Size(76, 30);
+            this.btnDelete.TabIndex = 8;
+            this.btnDelete.Text = "Delete";
+            this.btnDelete.UseVisualStyleBackColor = true;
+            // 
+            // btnEdit
+            // 
+            this.btnEdit.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.btnEdit.Location = new System.Drawing.Point(623, 274);
+            this.btnEdit.Name = "btnEdit";
+            this.btnEdit.Size = new System.Drawing.Size(76, 30);
+            this.btnEdit.TabIndex = 7;
+            this.btnEdit.Text = "Edit";
+            this.btnEdit.UseVisualStyleBackColor = true;
+            // 
+            // rtxtHabitDesc
+            // 
+            this.rtxtHabitDesc.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.rtxtHabitDesc.Location = new System.Drawing.Point(292, 349);
+            this.rtxtHabitDesc.Name = "rtxtHabitDesc";
+            this.rtxtHabitDesc.ReadOnly = true;
+            this.rtxtHabitDesc.Size = new System.Drawing.Size(489, 77);
+            this.rtxtHabitDesc.TabIndex = 6;
+            this.rtxtHabitDesc.Text = "";
+            // 
+            // btnAdd
+            // 
+            this.btnAdd.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.btnAdd.Location = new System.Drawing.Point(541, 274);
+            this.btnAdd.Name = "btnAdd";
+            this.btnAdd.Size = new System.Drawing.Size(76, 30);
+            this.btnAdd.TabIndex = 5;
+            this.btnAdd.Text = "Add";
+            this.btnAdd.UseVisualStyleBackColor = true;
+            // 
+            // lblSelectHabit
+            // 
+            this.lblSelectHabit.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.lblSelectHabit.AutoSize = true;
+            this.lblSelectHabit.Location = new System.Drawing.Point(295, 39);
+            this.lblSelectHabit.Name = "lblSelectHabit";
+            this.lblSelectHabit.Size = new System.Drawing.Size(110, 20);
+            this.lblSelectHabit.TabIndex = 4;
+            this.lblSelectHabit.Text = "Select a habit:";
             // 
             // lblSelectDate
             // 
@@ -139,16 +212,16 @@
             this.lblWelcome.TabIndex = 2;
             this.lblWelcome.Text = "Welcome to Habit Logger!";
             // 
-            // btnStart
+            // btnLogin
             // 
-            this.btnStart.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.btnStart.Location = new System.Drawing.Point(360, 244);
-            this.btnStart.Name = "btnStart";
-            this.btnStart.Size = new System.Drawing.Size(76, 37);
-            this.btnStart.TabIndex = 3;
-            this.btnStart.Text = "Start";
-            this.btnStart.UseVisualStyleBackColor = true;
-            this.btnStart.Click += new System.EventHandler(this.btnStart_Click);
+            this.btnLogin.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.btnLogin.Location = new System.Drawing.Point(360, 244);
+            this.btnLogin.Name = "btnLogin";
+            this.btnLogin.Size = new System.Drawing.Size(76, 37);
+            this.btnLogin.TabIndex = 3;
+            this.btnLogin.Text = "Login";
+            this.btnLogin.UseVisualStyleBackColor = true;
+            this.btnLogin.Click += new System.EventHandler(this.btnStart_Click);
             // 
             // btnExit
             // 
@@ -189,7 +262,7 @@
             this.pnlLogin.Controls.Add(this.lblNewUser);
             this.pnlLogin.Controls.Add(this.lblUserName);
             this.pnlLogin.Controls.Add(this.btnExit);
-            this.pnlLogin.Controls.Add(this.btnStart);
+            this.pnlLogin.Controls.Add(this.btnLogin);
             this.pnlLogin.Controls.Add(this.lblWelcome);
             this.pnlLogin.Controls.Add(this.txtUserName);
             this.pnlLogin.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -198,76 +271,15 @@
             this.pnlLogin.Size = new System.Drawing.Size(800, 450);
             this.pnlLogin.TabIndex = 0;
             // 
-            // lblSelectHabit
+            // btnLogout
             // 
-            this.lblSelectHabit.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.lblSelectHabit.AutoSize = true;
-            this.lblSelectHabit.Location = new System.Drawing.Point(295, 39);
-            this.lblSelectHabit.Name = "lblSelectHabit";
-            this.lblSelectHabit.Size = new System.Drawing.Size(110, 20);
-            this.lblSelectHabit.TabIndex = 4;
-            this.lblSelectHabit.Text = "Select a habit:";
-            // 
-            // btnAdd
-            // 
-            this.btnAdd.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.btnAdd.Location = new System.Drawing.Point(541, 274);
-            this.btnAdd.Name = "btnAdd";
-            this.btnAdd.Size = new System.Drawing.Size(76, 30);
-            this.btnAdd.TabIndex = 5;
-            this.btnAdd.Text = "Add";
-            this.btnAdd.UseVisualStyleBackColor = true;
-            // 
-            // rtxtHabitDesc
-            // 
-            this.rtxtHabitDesc.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.rtxtHabitDesc.Location = new System.Drawing.Point(292, 349);
-            this.rtxtHabitDesc.Name = "rtxtHabitDesc";
-            this.rtxtHabitDesc.ReadOnly = true;
-            this.rtxtHabitDesc.Size = new System.Drawing.Size(489, 77);
-            this.rtxtHabitDesc.TabIndex = 6;
-            this.rtxtHabitDesc.Text = "";
-            // 
-            // btnEdit
-            // 
-            this.btnEdit.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.btnEdit.Location = new System.Drawing.Point(623, 274);
-            this.btnEdit.Name = "btnEdit";
-            this.btnEdit.Size = new System.Drawing.Size(76, 30);
-            this.btnEdit.TabIndex = 7;
-            this.btnEdit.Text = "Edit";
-            this.btnEdit.UseVisualStyleBackColor = true;
-            // 
-            // btnDelete
-            // 
-            this.btnDelete.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.btnDelete.Location = new System.Drawing.Point(705, 274);
-            this.btnDelete.Name = "btnDelete";
-            this.btnDelete.Size = new System.Drawing.Size(76, 30);
-            this.btnDelete.TabIndex = 8;
-            this.btnDelete.Text = "Delete";
-            this.btnDelete.UseVisualStyleBackColor = true;
-            // 
-            // lblHabitDesc
-            // 
-            this.lblHabitDesc.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.lblHabitDesc.AutoSize = true;
-            this.lblHabitDesc.Location = new System.Drawing.Point(295, 326);
-            this.lblHabitDesc.Name = "lblHabitDesc";
-            this.lblHabitDesc.Size = new System.Drawing.Size(132, 20);
-            this.lblHabitDesc.TabIndex = 9;
-            this.lblHabitDesc.Text = "Habit description:";
-            // 
-            // lblMain
-            // 
-            this.lblMain.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.lblMain.AutoSize = true;
-            this.lblMain.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblMain.Location = new System.Drawing.Point(37, 300);
-            this.lblMain.Name = "lblMain";
-            this.lblMain.Size = new System.Drawing.Size(197, 31);
-            this.lblMain.TabIndex = 10;
-            this.lblMain.Text = "Habbit Logger";
+            this.btnLogout.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.btnLogout.Location = new System.Drawing.Point(69, 335);
+            this.btnLogout.Name = "btnLogout";
+            this.btnLogout.Size = new System.Drawing.Size(124, 55);
+            this.btnLogout.TabIndex = 11;
+            this.btnLogout.Text = "Logout";
+            this.btnLogout.UseVisualStyleBackColor = true;
             // 
             // main
             // 
@@ -295,7 +307,7 @@
         private System.Windows.Forms.BindingSource bindingSource1;
         private System.Windows.Forms.TextBox txtUserName;
         private System.Windows.Forms.Label lblWelcome;
-        private System.Windows.Forms.Button btnStart;
+        private System.Windows.Forms.Button btnLogin;
         private System.Windows.Forms.Button btnExit;
         private System.Windows.Forms.Label lblUserName;
         private System.Windows.Forms.Label lblNewUser;
@@ -312,6 +324,7 @@
         private System.Windows.Forms.Button btnEdit;
         private System.Windows.Forms.RichTextBox rtxtHabitDesc;
         private System.Windows.Forms.Label lblMain;
+        private System.Windows.Forms.Button btnLogout;
     }
 }
 
