@@ -72,6 +72,7 @@
             this.btnCloseNewUserForm.TabIndex = 5;
             this.btnCloseNewUserForm.Text = "Cancel";
             this.btnCloseNewUserForm.UseVisualStyleBackColor = true;
+            this.btnCloseNewUserForm.Click += new System.EventHandler(this.btnCloseNewUserForm_Click);
             // 
             // NewUserForm
             // 
