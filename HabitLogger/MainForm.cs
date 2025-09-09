@@ -12,6 +12,7 @@ namespace HabitLogger
 {
     public partial class main : Form
     {
+        DbController sqliteDb = new DbController();
         public main()
         {
             InitializeComponent();
@@ -20,7 +21,7 @@ namespace HabitLogger
 
         private void btnStart_Click(object sender, EventArgs e)
         {
-            // MessageBox.Show("Message", "Title", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
         }
 
         private void btnExit_Click(object sender, EventArgs e)
@@ -31,7 +32,7 @@ namespace HabitLogger
         private void lblNewUser_Click(object sender, EventArgs e)
         {
             // open NewUserForm window
-            NewUserForm newUser = new NewUserForm();
+            NewUserForm newUser = new NewUserForm(sqliteDb);
             newUser.Show();
         }
 
