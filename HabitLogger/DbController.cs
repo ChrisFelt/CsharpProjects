@@ -17,12 +17,12 @@ namespace HabitLogger
 		public SQLiteConnection conn;
 
 		// default constructor
-		public DbController()
+		public DbController(string dbFile= "../../database/HabitLoggerDb.db", string ddlFile="DDL.sql")
 		{
 			// TODO: move db to project directory
             DbConnect(@"../../database/HabitLoggerDb.db");
             // TODO: only execute this method if the database is empty
-            RunDdlFromFile();
+            RunDdlFromResourceFile(ddlFile);
 		}
 
         public void DbConnect(string path)
@@ -41,19 +41,26 @@ namespace HabitLogger
 			}
 		}
 
-		// create tables and run sample inserts from DDL.sql
-		public void RunDdlFromFile()
+        /* 
+        Create database tables and optionally run sample inserts from a given DDL file name
+		Assumes fileName exists as resource in the project AND that it contains valid DDL for creating a database
+		*/
+        public void RunDdlFromResourceFile(string fileName)
 		{
             SQLiteCommand cmd = conn.CreateCommand();
 
-            // get embedded resource DDL.sql 
+            // get array of resource names from the assembly and find matching resource to fileName
             Assembly assembly = Assembly.GetExecutingAssembly();
-            string resourceName = assembly.GetManifestResourceNames().Single(str => str.EndsWith("DDL.sql"));
+			string[] resourceArray = assembly.GetManifestResourceNames();
+			string resourceName = resourceArray.FirstOrDefault(str => str.EndsWith($"{fileName}"));
 
-			using (Stream stream = assembly.GetManifestResourceStream(resourceName))
-			using (StreamReader reader = new StreamReader(stream))
+			// read contents of resource to cmd
+            using (Stream stream = assembly.GetManifestResourceStream(resourceName))
 			{
-				cmd.CommandText = reader.ReadToEnd();
+				using (StreamReader reader = new StreamReader(stream))
+				{
+					cmd.CommandText = reader.ReadToEnd();
+				}
 			}
 			
             try
