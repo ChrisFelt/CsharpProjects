@@ -20,7 +20,7 @@ namespace HabitLogger
 		public DbController(string dbFile= "../../database/HabitLoggerDb.db", string ddlFile="DDL.sql")
 		{
 			// TODO: move db to project directory
-            DbConnect(@"../../database/HabitLoggerDb.db");
+            DbConnect("../../database/HabitLoggerDb.db");
             // TODO: only execute this method if the database is empty
             RunDdlFromResourceFile(ddlFile);
 		}
@@ -91,16 +91,21 @@ namespace HabitLogger
 
 		}
 
-        public void ReadUser()
+        public int ReadUser(string name)
         {
-			// TODO: BROKEN. fix read.GetString(0) 
+            // get userID given a userName
+            int id = 0;
 			SQLiteCommand cmd = conn.CreateCommand();
-			cmd.CommandText = "SELECT userID AS 'User ID', userName AS 'User Name' FROM Users;";
+			cmd.CommandText = $"SELECT userID AS 'User ID', userName AS 'User Name' FROM Users WHERE userName = '{name}';";
 			SQLiteDataReader read = cmd.ExecuteReader();
-			while (read.Read())
+
+			// return userID if userName found
+			// Read() gets the next matching record, but only one record can match given unique userName constraint
+			if (read.Read())
 			{
-				Console.WriteLine(read.GetString(0));
+				id = Convert.ToInt32(read["User ID"]);
 			}
+			return id;  // returns 0 when no match found
         }
     }
 }
