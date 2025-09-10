@@ -27,8 +27,8 @@ namespace HabitLogger
 
         public void DbConnect(string path)
 		{
+			// create db connection and attempt to open
 			conn = new SQLiteConnection($"Data Source={path}; Version=3; New=True;Compress=True");
-			//attempt to open db connection
 			try
 			{
 				conn.Open();
@@ -43,7 +43,7 @@ namespace HabitLogger
 
         /* 
         Create database tables and optionally run sample inserts from a given DDL file name
-		Assumes fileName exists as resource in the project AND that it contains valid DDL for creating a database
+		Assumes fileName exists as a resource in the project AND that it contains valid DDL for creating a database
 		*/
         public void RunDdlFromResourceFile(string fileName)
 		{
@@ -63,6 +63,7 @@ namespace HabitLogger
 				}
 			}
 			
+			// execute DDL
             try
             {
                 cmd.ExecuteNonQuery();
@@ -76,6 +77,7 @@ namespace HabitLogger
 
         public void CreateUser(string userName)
 		{
+			// Add User record with userName to Users table
 			SQLiteCommand cmd = conn.CreateCommand();
 			cmd.CommandText = $"INSERT INTO Users (userName) VALUES ('{userName}');";
 			try
