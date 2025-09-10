@@ -34,7 +34,7 @@ namespace HabitLogger
             conn = new SQLiteConnection($"Data Source={path}; Version=3; New=True;Compress=True");
             try
             {
-                conn.Open()
+                conn.Open();
             }
             catch (Exception ex)
             {
