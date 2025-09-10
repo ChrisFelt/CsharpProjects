@@ -11,11 +11,11 @@ INSERT INTO Users (userName)
 VALUES (userNameInput);  -- userNameInput variable value determined by user input
 
 -- READ
--- get all Users
+-- get UserID with userName
 SELECT userID			AS 'User ID',
 	   userName			AS 'User Name'
 FROM Users
-WHERE userID = userIDInput;
+WHERE userName = userNameInput;
 
 -- UPDATE
 -- allow user to modify their user name
