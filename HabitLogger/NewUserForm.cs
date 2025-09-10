@@ -42,7 +42,9 @@ namespace HabitLogger
         private void btnCloseNewUserForm_Click(object sender, EventArgs e)
         {
             // temporary: read Users on click
-            sqliteDb.ReadUser();
+            string inputTxt = txtNewUser.Text;
+            inputTxt = inputTxt.Trim(' ');
+            MessageBox.Show($"User ID for {inputTxt}: {sqliteDb.ReadUser(inputTxt)}", "Username Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 }

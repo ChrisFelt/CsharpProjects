@@ -30,6 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             this.pnlMain = new System.Windows.Forms.Panel();
+            this.btnLogout = new System.Windows.Forms.Button();
             this.lblMain = new System.Windows.Forms.Label();
             this.lblHabitDesc = new System.Windows.Forms.Label();
             this.btnDelete = new System.Windows.Forms.Button();
@@ -50,7 +51,6 @@
             this.lblUserName = new System.Windows.Forms.Label();
             this.lblNewUser = new System.Windows.Forms.Label();
             this.pnlLogin = new System.Windows.Forms.Panel();
-            this.btnLogout = new System.Windows.Forms.Button();
             this.pnlMain.SuspendLayout();
             this.menuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).BeginInit();
@@ -77,6 +77,16 @@
             this.pnlMain.Size = new System.Drawing.Size(800, 450);
             this.pnlMain.TabIndex = 0;
             // 
+            // btnLogout
+            // 
+            this.btnLogout.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.btnLogout.Location = new System.Drawing.Point(69, 335);
+            this.btnLogout.Name = "btnLogout";
+            this.btnLogout.Size = new System.Drawing.Size(124, 55);
+            this.btnLogout.TabIndex = 11;
+            this.btnLogout.Text = "Logout";
+            this.btnLogout.UseVisualStyleBackColor = true;
+            // 
             // lblMain
             // 
             this.lblMain.Anchor = System.Windows.Forms.AnchorStyles.None;
@@ -94,7 +104,7 @@
             this.lblHabitDesc.AutoSize = true;
             this.lblHabitDesc.Location = new System.Drawing.Point(295, 326);
             this.lblHabitDesc.Name = "lblHabitDesc";
-            this.lblHabitDesc.Size = new System.Drawing.Size(132, 20);
+            this.lblHabitDesc.Size = new System.Drawing.Size(89, 13);
             this.lblHabitDesc.TabIndex = 9;
             this.lblHabitDesc.Text = "Habit description:";
             // 
@@ -144,7 +154,7 @@
             this.lblSelectHabit.AutoSize = true;
             this.lblSelectHabit.Location = new System.Drawing.Point(295, 39);
             this.lblSelectHabit.Name = "lblSelectHabit";
-            this.lblSelectHabit.Size = new System.Drawing.Size(110, 20);
+            this.lblSelectHabit.Size = new System.Drawing.Size(75, 13);
             this.lblSelectHabit.TabIndex = 4;
             this.lblSelectHabit.Text = "Select a habit:";
             // 
@@ -154,7 +164,7 @@
             this.lblSelectDate.AutoSize = true;
             this.lblSelectDate.Location = new System.Drawing.Point(22, 40);
             this.lblSelectDate.Name = "lblSelectDate";
-            this.lblSelectDate.Size = new System.Drawing.Size(107, 20);
+            this.lblSelectDate.Size = new System.Drawing.Size(73, 13);
             this.lblSelectDate.TabIndex = 3;
             this.lblSelectDate.Text = "Select a date:";
             // 
@@ -162,10 +172,9 @@
             // 
             this.lstHabits.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lstHabits.FormattingEnabled = true;
-            this.lstHabits.ItemHeight = 20;
             this.lstHabits.Location = new System.Drawing.Point(292, 62);
             this.lstHabits.Name = "lstHabits";
-            this.lstHabits.Size = new System.Drawing.Size(489, 204);
+            this.lstHabits.Size = new System.Drawing.Size(489, 199);
             this.lstHabits.TabIndex = 2;
             // 
             // monthCalendar
@@ -198,7 +207,7 @@
             this.txtUserName.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.txtUserName.Location = new System.Drawing.Point(282, 201);
             this.txtUserName.Name = "txtUserName";
-            this.txtUserName.Size = new System.Drawing.Size(236, 26);
+            this.txtUserName.Size = new System.Drawing.Size(236, 20);
             this.txtUserName.TabIndex = 1;
             // 
             // lblWelcome
@@ -270,16 +279,6 @@
             this.pnlLogin.Name = "pnlLogin";
             this.pnlLogin.Size = new System.Drawing.Size(800, 450);
             this.pnlLogin.TabIndex = 0;
-            // 
-            // btnLogout
-            // 
-            this.btnLogout.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.btnLogout.Location = new System.Drawing.Point(69, 335);
-            this.btnLogout.Name = "btnLogout";
-            this.btnLogout.Size = new System.Drawing.Size(124, 55);
-            this.btnLogout.TabIndex = 11;
-            this.btnLogout.Text = "Logout";
-            this.btnLogout.UseVisualStyleBackColor = true;
             // 
             // main
             // 
