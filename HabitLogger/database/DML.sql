@@ -14,7 +14,8 @@ VALUES (userNameInput);  -- userNameInput variable value determined by user inpu
 -- get all Users
 SELECT userID			AS 'User ID',
 	   userName			AS 'User Name'
-FROM Users;
+FROM Users
+WHERE userID = userIDInput;
 
 -- UPDATE
 -- allow user to modify their user name
