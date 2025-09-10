@@ -132,5 +132,32 @@ namespace HabitLogger
             }
         }
 
+        // ReadHabit method
+        // returns a list of habits given a userID; for use with btnAdd in MainForm
+
+        // UpdateHabit method
+        // updates habit name or description given a habitID
+
+        // DeleteHabit method
+        // delete a Habit given its ID, also deletes Dates and intermediate Habits_has_Dates records where appropriate
+
+        // -----------------------------------------------------
+        // Dates and Habits_has_Dates Table Queries
+        // -----------------------------------------------------
+
+        // CreateDate method
+        // creates a Dates record if it doesn't already exist and establishes relationship to Habits via intermediate table Habits_has_Dates
+
+        // ReadDateAndHabit method
+        // gets dateID given a date and returns all habits that occur on that date as a list to be viewed in the lstHabits form
+
+        // UpdateHabitsHasDates method
+        // given a habitHasDateID, updates the quantity column
+
+        // DeleteHabitHasDate method
+        // deletes a Habits_has_Dates record given habitHasDateID and also deletes Dates record if appropriate
+
+        // DeleteDate method
+        // deletes Dates record given a date
     }
 }
