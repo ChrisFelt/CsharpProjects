@@ -35,16 +35,17 @@ namespace HabitLogger
             }
             else
             {
-                sqliteDb.CreateUser(inputTxt.Trim(' '));
+                // create new user, notify the user, and close NewUserForm
+                inputTxt = inputTxt.Trim(' ');
+                sqliteDb.CreateUser(inputTxt);
+                MessageBox.Show($"New user: '{inputTxt}' added.", "Success!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                Close();
             }
         }
 
         private void btnCloseNewUserForm_Click(object sender, EventArgs e)
         {
-            // temporary: read Users on click
-            string inputTxt = txtNewUser.Text;
-            inputTxt = inputTxt.Trim(' ');
-            MessageBox.Show($"User ID for {inputTxt}: {sqliteDb.ReadUser(inputTxt)}", "Username Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            Close();
         }
     }
 }
