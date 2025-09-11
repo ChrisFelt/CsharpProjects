@@ -76,6 +76,7 @@ namespace HabitLogger
             pnlLogin.Show();
             pnlMain.Hide();
             curUserID = 0;
+            txtUserName.Select();
         }
 
     }
