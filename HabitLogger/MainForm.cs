@@ -30,6 +30,7 @@ namespace HabitLogger
             if (string.IsNullOrWhiteSpace(inputTxt))
             {
                 MessageBox.Show("Invalid Username.\nPlease enter one or more characters.", "Username Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                txtUserName.Select();
             }
             else
             {
@@ -41,6 +42,8 @@ namespace HabitLogger
                 {
                     // login failed, notify user
                     MessageBox.Show($"Username: '{inputTxt}' does not exist.\nPlease try again.", "Login failed.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    txtUserName.Clear();
+                    txtUserName.Select();
                 }
                 else
                 {
