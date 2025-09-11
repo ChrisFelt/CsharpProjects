@@ -2,6 +2,7 @@
 using System.Data.SQLite;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
@@ -30,6 +31,8 @@ namespace HabitLogger
         // -----------------------------------------------------
         public void DbConnect(string path)
         {
+            // TODO: close db on program exit
+            // reference on design choice: https://stackoverflow.com/questions/5474646/is-it-okay-to-always-leave-a-database-connection-open
             // create db connection and attempt to open
             conn = new SQLiteConnection($"Data Source={path}; Version=3; New=True;Compress=True");
             try
@@ -103,14 +106,22 @@ namespace HabitLogger
             int id = 0;
             SQLiteCommand cmd = conn.CreateCommand();
             cmd.CommandText = $"SELECT userID AS 'User ID', userName AS 'User Name' FROM Users WHERE userName = '{userName}';";
-            SQLiteDataReader read = cmd.ExecuteReader();
-
-            // return userID if userName found
-            // Read() gets the next matching record, but only one record can match given unique userName constraint
-            if (read.Read())
+            try
             {
-                id = Convert.ToInt32(read["User ID"]);
+                SQLiteDataReader read = cmd.ExecuteReader();
+
+                // return userID if userName found
+                // Read() gets the next matching record, but only one record can match given unique userName constraint
+                if (read.Read())
+                {
+                    id = Convert.ToInt32(read["User ID"]);
+                }
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"{ex.Message}", "Read User Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
             return id;  // returns 0 when no match found
         }
 
