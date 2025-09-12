@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace HabitLogger
 {
@@ -38,7 +39,17 @@ namespace HabitLogger
                 inputTxt = inputTxt.Trim(' ');
                 curUserID = sqliteDb.ReadUser(inputTxt);
 
-                if (curUserID == 0)
+                if (curUserID > 0)
+                {
+                    // login success, swap to pnlMain
+                    pnlLogin.Hide();
+                    pnlMain.Show();
+
+                    // clear txtUserName for next login
+                    txtUserName.Clear();
+                    // TODO: welcome user by name in main panel
+                }
+                else if (curUserID == 0)
                 {
                     // login failed, notify user
                     MessageBox.Show($"Username: '{inputTxt}' does not exist.\nPlease try again.", "Login failed.", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -47,13 +58,8 @@ namespace HabitLogger
                 }
                 else
                 {
-                    // swap to main panel if login succeeds
-                    pnlLogin.Hide();
-                    pnlMain.Show();
-
-                    // clear txtUserName for next login
-                    txtUserName.Clear();
-                    // TODO: welcome user by name in main panel
+                    // reset curUserID to 0 if ReadUser() exited with an exception
+                    curUserID = 0;
                 }
             }
         }

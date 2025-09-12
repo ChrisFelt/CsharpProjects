@@ -104,14 +104,14 @@ namespace HabitLogger
         {
             // get userID given a userName
             int id = 0;
+            string temp = "";
             SQLiteCommand cmd = conn.CreateCommand();
             cmd.CommandText = $"SELECT userID AS 'User ID', userName AS 'User Name' FROM Users WHERE userName = '{userName}';";
+            SQLiteDataReader read = cmd.ExecuteReader();
             try
             {
-                SQLiteDataReader read = cmd.ExecuteReader();
-
                 // return userID if userName found
-                // Read() gets the next matching record, but only one record can match given unique userName constraint
+                // Read() feeds the next matching record into the data reader
                 if (read.Read())
                 {
                     id = Convert.ToInt32(read["User ID"]);
@@ -120,8 +120,10 @@ namespace HabitLogger
             catch (Exception ex)
             {
                 MessageBox.Show($"{ex.Message}", "Read User Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                // return error value to calling function
+                return -1;
             }
-
+            Console.WriteLine("No exceptions caught in ReadUser()");
             return id;  // returns 0 when no match found
         }
 
