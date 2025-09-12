@@ -86,6 +86,7 @@
             this.btnLogout.TabIndex = 11;
             this.btnLogout.Text = "Logout";
             this.btnLogout.UseVisualStyleBackColor = true;
+            this.btnLogout.Click += new System.EventHandler(this.btnLogout_Click);
             // 
             // lblMain
             // 
@@ -94,9 +95,9 @@
             this.lblMain.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblMain.Location = new System.Drawing.Point(33, 283);
             this.lblMain.Name = "lblMain";
-            this.lblMain.Size = new System.Drawing.Size(197, 31);
+            this.lblMain.Size = new System.Drawing.Size(181, 31);
             this.lblMain.TabIndex = 10;
-            this.lblMain.Text = "Habbit Logger";
+            this.lblMain.Text = "Habit Logger";
             // 
             // lblHabitDesc
             // 
@@ -230,7 +231,7 @@
             this.btnLogin.TabIndex = 3;
             this.btnLogin.Text = "Login";
             this.btnLogin.UseVisualStyleBackColor = true;
-            this.btnLogin.Click += new System.EventHandler(this.btnStart_Click);
+            this.btnLogin.Click += new System.EventHandler(this.btnLogin_Click);
             // 
             // btnExit
             // 
@@ -284,8 +285,8 @@
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.pnlLogin);
             this.Controls.Add(this.pnlMain);
+            this.Controls.Add(this.pnlLogin);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MainMenuStrip = this.menuStrip;
             this.Name = "main";

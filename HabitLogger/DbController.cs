@@ -122,7 +122,6 @@ namespace HabitLogger
                 // return error value to calling function
                 return -1;
             }
-            Console.WriteLine("No exceptions caught in ReadUser()");
             return id;  // returns 0 when no match found
         }
 
