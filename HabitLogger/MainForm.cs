@@ -47,7 +47,8 @@ namespace HabitLogger
 
                     // clear txtUserName for next login
                     txtUserName.Clear();
-                    // TODO: welcome user by name in main panel
+                    // display current username on pnlMain
+                    lblDisplayUser.Text = inputTxt;
                 }
                 else if (curUserID == 0)
                 {
@@ -83,6 +84,7 @@ namespace HabitLogger
             pnlMain.Hide();
             curUserID = 0;
             txtUserName.Select();
+            lblDisplayUser.Text = "";
         }
 
     }

@@ -31,7 +31,7 @@
             this.components = new System.ComponentModel.Container();
             this.pnlMain = new System.Windows.Forms.Panel();
             this.btnLogout = new System.Windows.Forms.Button();
-            this.lblMain = new System.Windows.Forms.Label();
+            this.lblGreet = new System.Windows.Forms.Label();
             this.lblHabitDesc = new System.Windows.Forms.Label();
             this.btnDelete = new System.Windows.Forms.Button();
             this.btnEdit = new System.Windows.Forms.Button();
@@ -51,6 +51,7 @@
             this.lblUserName = new System.Windows.Forms.Label();
             this.lblNewUser = new System.Windows.Forms.Label();
             this.pnlLogin = new System.Windows.Forms.Panel();
+            this.lblDisplayUser = new System.Windows.Forms.Label();
             this.pnlMain.SuspendLayout();
             this.menuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).BeginInit();
@@ -60,8 +61,9 @@
             // pnlMain
             // 
             this.pnlMain.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.pnlMain.Controls.Add(this.lblDisplayUser);
             this.pnlMain.Controls.Add(this.btnLogout);
-            this.pnlMain.Controls.Add(this.lblMain);
+            this.pnlMain.Controls.Add(this.lblGreet);
             this.pnlMain.Controls.Add(this.lblHabitDesc);
             this.pnlMain.Controls.Add(this.btnDelete);
             this.pnlMain.Controls.Add(this.btnEdit);
@@ -88,16 +90,16 @@
             this.btnLogout.UseVisualStyleBackColor = true;
             this.btnLogout.Click += new System.EventHandler(this.btnLogout_Click);
             // 
-            // lblMain
+            // lblGreet
             // 
-            this.lblMain.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.lblMain.AutoSize = true;
-            this.lblMain.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblMain.Location = new System.Drawing.Point(33, 283);
-            this.lblMain.Name = "lblMain";
-            this.lblMain.Size = new System.Drawing.Size(181, 31);
-            this.lblMain.TabIndex = 10;
-            this.lblMain.Text = "Habit Logger";
+            this.lblGreet.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.lblGreet.AutoSize = true;
+            this.lblGreet.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblGreet.Location = new System.Drawing.Point(59, 249);
+            this.lblGreet.Name = "lblGreet";
+            this.lblGreet.Size = new System.Drawing.Size(142, 31);
+            this.lblGreet.TabIndex = 10;
+            this.lblGreet.Text = "Welcome,";
             // 
             // lblHabitDesc
             // 
@@ -281,6 +283,15 @@
             this.pnlLogin.Size = new System.Drawing.Size(800, 450);
             this.pnlLogin.TabIndex = 0;
             // 
+            // lblDisplayUser
+            // 
+            this.lblDisplayUser.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDisplayUser.Location = new System.Drawing.Point(18, 280);
+            this.lblDisplayUser.Name = "lblDisplayUser";
+            this.lblDisplayUser.Size = new System.Drawing.Size(227, 31);
+            this.lblDisplayUser.TabIndex = 12;
+            this.lblDisplayUser.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // main
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -323,8 +334,9 @@
         private System.Windows.Forms.Button btnDelete;
         private System.Windows.Forms.Button btnEdit;
         private System.Windows.Forms.RichTextBox rtxtHabitDesc;
-        private System.Windows.Forms.Label lblMain;
+        private System.Windows.Forms.Label lblGreet;
         private System.Windows.Forms.Button btnLogout;
+        private System.Windows.Forms.Label lblDisplayUser;
     }
 }
 
