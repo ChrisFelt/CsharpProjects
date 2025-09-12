@@ -5,6 +5,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Windows.Forms;
+using System.Collections.Generic;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 /*
@@ -145,6 +146,54 @@ namespace HabitLogger
 
         // ReadHabit method
         // returns a list of habits given a userID; for use with btnAdd in MainForm
+        public List<(int habitID, string name, string description)> ReadHabit(int userID, string date = "")
+        {
+            // prepare list of tuples
+            List<(int habitID, string name, string description)> returnList = new List<(int habitID, string name, string description)>();
+
+            // when date is empty, get habits by userID
+            // USED TO POPULATE LIST OF HABITS IN ADD DIALOGUE
+            SQLiteCommand cmd = conn.CreateCommand();
+            if (date == "")
+            { 
+                cmd.CommandText = $"SELECT habitID AS 'Habit ID', name AS 'Name', description AS 'Description' FROM Habits WHERE userID = {userID};";
+            }
+
+            // when date is specified, pull up habit by date and userID
+            // USED TO POPULATE HABIT LIST VIEW IN MAIN WINDOW
+            else
+            {
+                // TODO:
+                // SQL query here - need a new DML query that joins Habits, Dates, and Habits_has_Dates and selects:
+                // 1) habitID: used for edit and delete buttons,
+                // 2) name: displayed in the list view,
+                // 3) description: displayed in the description view,
+                // 4) habitHasDateID: used to edit quantity,
+                // 5) quantity: displayed in the list view along with name
+
+                // TODO:
+                // There is currently no way to delete a date. Add delete date option?
+            }
+            SQLiteDataReader read = cmd.ExecuteReader();
+
+            // populate the return list from data reader
+            try
+            {
+                while (read.Read())
+                {
+                    returnList.Add(
+                        (habitID: Convert.ToInt32(read["Habit ID"]),
+                        name: Convert.ToString(read["Name"]),
+                        description: Convert.ToString(read["Description"]))
+                        );
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"{ex.Message}", "Read User Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            return returnList;
+        }
 
         // UpdateHabit method
         // updates habit name or description given a habitID
