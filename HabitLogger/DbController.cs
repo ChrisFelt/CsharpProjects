@@ -104,7 +104,6 @@ namespace HabitLogger
         {
             // get userID given a userName
             int id = 0;
-            string temp = "";
             SQLiteCommand cmd = conn.CreateCommand();
             cmd.CommandText = $"SELECT userID AS 'User ID', userName AS 'User Name' FROM Users WHERE userName = '{userName}';";
             SQLiteDataReader read = cmd.ExecuteReader();
