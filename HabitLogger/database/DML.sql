@@ -12,8 +12,8 @@ VALUES (userNameInput);  -- userNameInput variable value determined by user inpu
 
 -- READ
 -- get UserID with userName
-SELECT userID			AS 'User ID',
-	   userName			AS 'User Name'
+SELECT userID				AS 'User ID',
+	   userName				AS 'User Name'
 FROM Users
 WHERE userName = userNameInput;
 
@@ -66,12 +66,26 @@ VALUES (nameInput,
 		userIDInput);
 
 -- READ
--- only get Habits info for the current User
-SELECT	habitID			AS 'Habit ID',
-		name			AS 'Name',
-		description		AS 'Description'
+-- Option 1. get all Habits info for the current User
+SELECT	habitID				AS 'Habit ID',
+		name				AS 'Name',
+		description			AS 'Description'
 FROM Habits
 WHERE userID = userIDInput;
+-- Option 2. get Habits info for the current User on a given Date
+SELECT	h.habitID			AS 'Habit ID',  -- included for easy access with btnEdit
+		h.name				AS 'Name',
+		h.description		AS 'Description',
+		hd.note				AS 'Note',
+		hd.quantity			AS 'Quantity',
+		hd.habitHasDateID	AS 'Update ID'
+FROM Dates AS d
+INNER JOIN Habits_has_Dates AS hd
+	ON d.dateID = hd.dateID
+INNER JOIN Habits AS h
+	ON hd.habitID = h.habitID
+WHERE d.date = dateInput
+	AND h.UserID = userIDInput;
 
 -- UPDATE
 -- display the Habit that will be updated
