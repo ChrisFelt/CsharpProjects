@@ -20,7 +20,7 @@ Entities:
     - Attributes:
         1. Unique KEY
         2. Name
-        3. Description
+        3. Description (optional)
 
 3. Dates
     - Relationships: 
@@ -36,4 +36,5 @@ Entities:
     - Attributes:
         1. Habits KEY
         2. Dates KEY
+        3. Note (optional)
         3. Quantity - number of times the habit occurred on this date

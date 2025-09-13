@@ -45,6 +45,7 @@ CREATE TABLE Dates (
 -- -----------------------------------------------------
 CREATE TABLE Habits_has_Dates (
 	habitHasDateID	INTEGER PRIMARY KEY NOT NULL UNIQUE,
+	note			VARCHAR(200),
 	quantity		INTEGER NOT NULL,
 	habitID			INTEGER NOT NULL,
 	dateID			INTEGER NOT NULL,
@@ -139,41 +140,49 @@ VALUES (
 -- Habits_has_Dates Table
 -- -----------------------------------------------------
 INSERT INTO Habits_has_Dates (
+	note,
 	quantity,
 	habitID,
 	dateID
 )
 VALUES (
+	'finished reading äÒê∂èb',
 	7,
 	(SELECT habitID FROM Habits WHERE name='pages read' 
 	AND userID=(SELECT userID FROM Users WHERE userName='anonymous123')),  -- match habit name to the correct user
 	(SELECT dateID FROM Dates WHERE date='2025-08-21')
 ), (
+	NULL,
 	21,
 	(SELECT habitID FROM Habits WHERE name='miles biked' 
 	AND userID=(SELECT userID FROM Users WHERE userName='anonymous123')),
 	(SELECT dateID FROM Dates WHERE date='2025-08-21')
 ), (
+	NULL,
 	1337,
 	(SELECT habitID FROM Habits WHERE name='lines coded' 
 	AND userID=(SELECT userID FROM Users WHERE userName='powerUser')),
 	(SELECT dateID FROM Dates WHERE date='2025-08-21')
 ), (
+	NULL,
 	1,
 	(SELECT habitID FROM Habits WHERE name='popped knuckles' 
 	AND userID=(SELECT userID FROM Users WHERE userName='powerUser')),
 	(SELECT dateID FROM Dates WHERE date='2025-08-21')
 ), (
+	'ate a box of gingersnaps',
 	12,
 	(SELECT habitID FROM Habits WHERE name='cookies eaten' 
 	AND userID=(SELECT userID FROM Users WHERE userName='ilikehabits')),
 	(SELECT dateID FROM Dates WHERE date='2025-08-22')
 ), (
+	'i can''t sleep :(',
 	8,
 	(SELECT habitID FROM Habits WHERE name='cups of coffee' 
 	AND userID=(SELECT userID FROM Users WHERE userName='ilikehabits')),
 	(SELECT dateID FROM Dates WHERE date='2025-08-22')
 ), (
+	'need to brush more',
 	0,
 	(SELECT habitID FROM Habits WHERE name='brush teeth' 
 	AND userID=(SELECT userID FROM Users WHERE userName='ilikehabits')),
