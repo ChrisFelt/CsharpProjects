@@ -131,7 +131,7 @@ namespace HabitLogger
         // -----------------------------------------------------
         public void CreateHabit(string habitName, string habitDesc, int userID)
         {
-            // Add User record with userName to Users table
+            // Add Habit record to Habits with name, description (optional), and user ID
             SQLiteCommand cmd = conn.CreateCommand();
             cmd.CommandText = $"INSERT INTO Habits (name, description, userID) VALUES ('{habitName}', '{habitDesc}', '{userID}');";
             try
@@ -144,36 +144,15 @@ namespace HabitLogger
             }
         }
 
-        // ReadHabit method
-        // returns a list of habits given a userID; for use with btnAdd in MainForm
-        public List<(int habitID, string name, string description)> ReadHabit(int userID, string date = "")
+        public List<(int habitID, string name, string description)> ReadHabitByUser(int userID)
         {
-            // prepare list of tuples
+            // CreateHabit option 1: used to list habits in AddHabitForm
+            // prepare list of tuples to return
             List<(int habitID, string name, string description)> returnList = new List<(int habitID, string name, string description)>();
 
             // when date is empty, get habits by userID
-            // USED TO POPULATE LIST OF HABITS IN ADD DIALOGUE
             SQLiteCommand cmd = conn.CreateCommand();
-            if (date == "")
-            { 
-                cmd.CommandText = $"SELECT habitID AS 'Habit ID', name AS 'Name', description AS 'Description' FROM Habits WHERE userID = {userID};";
-            }
-
-            // when date is specified, pull up habit by date and userID
-            // USED TO POPULATE HABIT LIST VIEW IN MAIN WINDOW
-            else
-            {
-                // TODO:
-                // SQL query here - need a new DML query that joins Habits, Dates, and Habits_has_Dates and selects:
-                // 1) habitID: used for edit and delete buttons,
-                // 2) name: displayed in the list view,
-                // 3) description: displayed in the description view,
-                // 4) habitHasDateID: used to edit quantity,
-                // 5) quantity: displayed in the list view along with name
-
-                // TODO:
-                // There is currently no way to delete a date. Add delete date option?
-            }
+            cmd.CommandText = $"SELECT habitID AS 'Habit ID', name AS 'Name', description AS 'Description' FROM Habits WHERE userID = {userID};";
             SQLiteDataReader read = cmd.ExecuteReader();
 
             // populate the return list from data reader
@@ -190,7 +169,45 @@ namespace HabitLogger
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"{ex.Message}", "Read User Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"{ex.Message}", "Read Habit Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            return returnList;
+        }
+
+        public List<(int habitID, string name, string description, int habitHasDateID, string quantity)> ReadHabitByDate(int userID, string date)
+        {
+            // CreateHabit option 2: used to list habits in lblMain of MainForm
+            // prepare list of tuples to return
+            List<(int habitID, string name, string description, int habitHasDateID, string quantity)> returnList = new List<(int habitID, string name, string description, int habitHasDateID, string quantity)>();
+
+            SQLiteCommand cmd = conn.CreateCommand();
+            cmd.CommandText = $"SELECT habitID AS 'Habit ID', name AS 'Name', description AS 'Description' FROM Habits WHERE userID = {userID};";
+
+
+            // pull up habit by date and userID
+                // TODO:
+                // SQL query here - need a new DML query that joins Habits, Dates, and Habits_has_Dates and selects:
+                // 1) habitID: used for edit and delete buttons,
+                // 2) name: displayed in the list view,
+                // 3) description: displayed in the description view,
+                // 4) habitHasDateID: used to edit quantity,
+                // 5) quantity: displayed in the list view along with name
+
+                // TODO:
+                // There is currently no way to delete a date. Add delete date option?
+            SQLiteDataReader read = cmd.ExecuteReader();
+
+            // populate the return list from data reader
+            try
+            {
+                while (read.Read())
+                {
+
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"{ex.Message}", "Read Habit Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             return returnList;
         }
