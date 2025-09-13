@@ -108,7 +108,7 @@
             this.Controls.Add(this.btnNew);
             this.Controls.Add(this.lstAddHabit);
             this.Name = "AddHabitForm";
-            this.Text = "Form1";
+            this.Text = "Add your habit!";
             this.ResumeLayout(false);
             this.PerformLayout();
 
