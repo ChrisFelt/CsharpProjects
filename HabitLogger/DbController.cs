@@ -114,7 +114,7 @@ namespace HabitLogger
                 // Read() feeds the next matching record into the data reader
                 if (read.Read())
                 {
-                    id = Convert.ToInt32(read["User ID"]);
+                    id = Convert.ToInt32(read["userID"]);
                 }
             }
             catch (Exception ex)
@@ -161,7 +161,7 @@ namespace HabitLogger
                 while (read.Read())
                 {
                     returnList.Add(
-                        (habitID: Convert.ToInt32(read["Habit ID"]),
+                        (habitID: Convert.ToInt32(read["habitID"]),
                         name: Convert.ToString(read["Name"]),
                         description: Convert.ToString(read["Description"]))
                         );
