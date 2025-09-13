@@ -69,8 +69,7 @@ VALUES (nameInput,
 -- only get Habits info for the current User
 SELECT	habitID			AS 'Habit ID',
 		name			AS 'Name',
-		description		AS 'Description',
-		userID			AS 'User ID'
+		description		AS 'Description'
 FROM Habits
 WHERE userID = userIDInput;
 
@@ -127,6 +126,7 @@ VALUES (quantityInput,
 -- READ
 -- Read from Dates and Habits_has_Dates simultaneously given an input Date
 SELECT	d.date				AS 'Date',
+		hd.note				AS 'Note',
 		hd.quantity			AS 'Quantity',
 		hd.habitHasDateID	AS 'updateID'  -- make available for easier quantity update
 FROM Dates AS d
