@@ -30,6 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             this.pnlMain = new System.Windows.Forms.Panel();
+            this.lblDisplayUser = new System.Windows.Forms.Label();
             this.btnLogout = new System.Windows.Forms.Button();
             this.lblGreet = new System.Windows.Forms.Label();
             this.lblHabitDesc = new System.Windows.Forms.Label();
@@ -39,11 +40,9 @@
             this.btnAdd = new System.Windows.Forms.Button();
             this.lblSelectHabit = new System.Windows.Forms.Label();
             this.lblSelectDate = new System.Windows.Forms.Label();
-            this.lstHabits = new System.Windows.Forms.ListBox();
             this.monthCalendar = new System.Windows.Forms.MonthCalendar();
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
             this.txtUserName = new System.Windows.Forms.TextBox();
             this.lblWelcome = new System.Windows.Forms.Label();
             this.btnLogin = new System.Windows.Forms.Button();
@@ -51,11 +50,15 @@
             this.lblUserName = new System.Windows.Forms.Label();
             this.lblNewUser = new System.Windows.Forms.Label();
             this.pnlLogin = new System.Windows.Forms.Panel();
-            this.lblDisplayUser = new System.Windows.Forms.Label();
+            this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
+            this.lstHabits = new System.Windows.Forms.ListView();
+            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.pnlMain.SuspendLayout();
             this.menuStrip.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).BeginInit();
             this.pnlLogin.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).BeginInit();
             this.SuspendLayout();
             // 
             // pnlMain
@@ -71,13 +74,22 @@
             this.pnlMain.Controls.Add(this.btnAdd);
             this.pnlMain.Controls.Add(this.lblSelectHabit);
             this.pnlMain.Controls.Add(this.lblSelectDate);
-            this.pnlMain.Controls.Add(this.lstHabits);
             this.pnlMain.Controls.Add(this.monthCalendar);
             this.pnlMain.Controls.Add(this.menuStrip);
-            this.pnlMain.Location = new System.Drawing.Point(0, 0);
+            this.pnlMain.Controls.Add(this.lstHabits);
+            this.pnlMain.Location = new System.Drawing.Point(8, 19);
             this.pnlMain.Name = "pnlMain";
             this.pnlMain.Size = new System.Drawing.Size(800, 450);
             this.pnlMain.TabIndex = 0;
+            // 
+            // lblDisplayUser
+            // 
+            this.lblDisplayUser.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDisplayUser.Location = new System.Drawing.Point(18, 280);
+            this.lblDisplayUser.Name = "lblDisplayUser";
+            this.lblDisplayUser.Size = new System.Drawing.Size(227, 31);
+            this.lblDisplayUser.TabIndex = 12;
+            this.lblDisplayUser.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // btnLogout
             // 
@@ -150,6 +162,7 @@
             this.btnAdd.TabIndex = 5;
             this.btnAdd.Text = "Add";
             this.btnAdd.UseVisualStyleBackColor = true;
+            this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
             // 
             // lblSelectHabit
             // 
@@ -170,15 +183,6 @@
             this.lblSelectDate.Size = new System.Drawing.Size(73, 13);
             this.lblSelectDate.TabIndex = 3;
             this.lblSelectDate.Text = "Select a date:";
-            // 
-            // lstHabits
-            // 
-            this.lstHabits.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.lstHabits.FormattingEnabled = true;
-            this.lstHabits.Location = new System.Drawing.Point(292, 62);
-            this.lstHabits.Name = "lstHabits";
-            this.lstHabits.Size = new System.Drawing.Size(489, 199);
-            this.lstHabits.TabIndex = 2;
             // 
             // monthCalendar
             // 
@@ -208,7 +212,7 @@
             // txtUserName
             // 
             this.txtUserName.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.txtUserName.Location = new System.Drawing.Point(282, 201);
+            this.txtUserName.Location = new System.Drawing.Point(290, 220);
             this.txtUserName.Name = "txtUserName";
             this.txtUserName.Size = new System.Drawing.Size(236, 20);
             this.txtUserName.TabIndex = 1;
@@ -218,7 +222,7 @@
             this.lblWelcome.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblWelcome.AutoSize = true;
             this.lblWelcome.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblWelcome.Location = new System.Drawing.Point(225, 88);
+            this.lblWelcome.Location = new System.Drawing.Point(233, 107);
             this.lblWelcome.Name = "lblWelcome";
             this.lblWelcome.Size = new System.Drawing.Size(350, 31);
             this.lblWelcome.TabIndex = 2;
@@ -227,7 +231,7 @@
             // btnLogin
             // 
             this.btnLogin.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.btnLogin.Location = new System.Drawing.Point(360, 244);
+            this.btnLogin.Location = new System.Drawing.Point(368, 263);
             this.btnLogin.Name = "btnLogin";
             this.btnLogin.Size = new System.Drawing.Size(76, 37);
             this.btnLogin.TabIndex = 3;
@@ -238,7 +242,7 @@
             // btnExit
             // 
             this.btnExit.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.btnExit.Location = new System.Drawing.Point(443, 244);
+            this.btnExit.Location = new System.Drawing.Point(451, 263);
             this.btnExit.Name = "btnExit";
             this.btnExit.Size = new System.Drawing.Size(76, 37);
             this.btnExit.TabIndex = 4;
@@ -251,7 +255,7 @@
             this.lblUserName.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblUserName.AutoSize = true;
             this.lblUserName.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblUserName.Location = new System.Drawing.Point(285, 179);
+            this.lblUserName.Location = new System.Drawing.Point(293, 198);
             this.lblUserName.Name = "lblUserName";
             this.lblUserName.Size = new System.Drawing.Size(93, 20);
             this.lblUserName.TabIndex = 5;
@@ -262,7 +266,7 @@
             this.lblNewUser.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblNewUser.AutoSize = true;
             this.lblNewUser.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblNewUser.Location = new System.Drawing.Point(278, 315);
+            this.lblNewUser.Location = new System.Drawing.Point(286, 334);
             this.lblNewUser.Name = "lblNewUser";
             this.lblNewUser.Size = new System.Drawing.Size(244, 16);
             this.lblNewUser.TabIndex = 6;
@@ -280,22 +284,42 @@
             this.pnlLogin.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlLogin.Location = new System.Drawing.Point(0, 0);
             this.pnlLogin.Name = "pnlLogin";
-            this.pnlLogin.Size = new System.Drawing.Size(800, 450);
+            this.pnlLogin.Size = new System.Drawing.Size(816, 489);
             this.pnlLogin.TabIndex = 0;
             // 
-            // lblDisplayUser
+            // lstHabits
             // 
-            this.lblDisplayUser.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDisplayUser.Location = new System.Drawing.Point(18, 280);
-            this.lblDisplayUser.Name = "lblDisplayUser";
-            this.lblDisplayUser.Size = new System.Drawing.Size(227, 31);
-            this.lblDisplayUser.TabIndex = 12;
-            this.lblDisplayUser.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lstHabits.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader1,
+            this.columnHeader2,
+            this.columnHeader3});
+            this.lstHabits.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lstHabits.HideSelection = false;
+            this.lstHabits.Location = new System.Drawing.Point(292, 62);
+            this.lstHabits.Name = "lstHabits";
+            this.lstHabits.Size = new System.Drawing.Size(489, 199);
+            this.lstHabits.TabIndex = 13;
+            this.lstHabits.UseCompatibleStateImageBehavior = false;
+            this.lstHabits.View = System.Windows.Forms.View.Details;
+            // 
+            // columnHeader1
+            // 
+            this.columnHeader1.Text = "Name";
+            this.columnHeader1.Width = 120;
+            // 
+            // columnHeader2
+            // 
+            this.columnHeader2.Text = "Frequency";
+            // 
+            // columnHeader3
+            // 
+            this.columnHeader3.Text = "Note";
+            this.columnHeader3.Width = 306;
             // 
             // main
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(816, 489);
             this.Controls.Add(this.pnlMain);
             this.Controls.Add(this.pnlLogin);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -306,9 +330,9 @@
             this.pnlMain.PerformLayout();
             this.menuStrip.ResumeLayout(false);
             this.menuStrip.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).EndInit();
             this.pnlLogin.ResumeLayout(false);
             this.pnlLogin.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -323,7 +347,6 @@
         private System.Windows.Forms.Label lblUserName;
         private System.Windows.Forms.Label lblNewUser;
         private System.Windows.Forms.Panel pnlLogin;
-        private System.Windows.Forms.ListBox lstHabits;
         private System.Windows.Forms.MonthCalendar monthCalendar;
         private System.Windows.Forms.MenuStrip menuStrip;
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
@@ -337,6 +360,10 @@
         private System.Windows.Forms.Label lblGreet;
         private System.Windows.Forms.Button btnLogout;
         private System.Windows.Forms.Label lblDisplayUser;
+        private System.Windows.Forms.ListView lstHabits;
+        private System.Windows.Forms.ColumnHeader columnHeader1;
+        private System.Windows.Forms.ColumnHeader columnHeader2;
+        private System.Windows.Forms.ColumnHeader columnHeader3;
     }
 }
 

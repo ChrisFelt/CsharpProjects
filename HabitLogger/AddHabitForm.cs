@@ -12,9 +12,16 @@ namespace HabitLogger
 {
     public partial class AddHabitForm : Form
     {
-        public AddHabitForm()
+        DbController sqliteDb;
+        int curUserID = 0;
+        public AddHabitForm(int userID, DbController db)
         {
             InitializeComponent();
+            curUserID = userID;
+            sqliteDb = db;
+            // populate list view with this user's habits
+
         }
+
     }
 }

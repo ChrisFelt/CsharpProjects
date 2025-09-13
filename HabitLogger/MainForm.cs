@@ -87,5 +87,11 @@ namespace HabitLogger
             lblDisplayUser.Text = "";
         }
 
+        private void btnAdd_Click(object sender, EventArgs e)
+        {
+            // show AddHabitForm
+            AddHabitForm addHabit = new AddHabitForm(curUserID, sqliteDb);
+            addHabit.Show();
+        }
     }
 }

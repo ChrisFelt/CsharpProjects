@@ -28,21 +28,15 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.lstAddHabit = new System.Windows.Forms.ListBox();
             this.btnNew = new System.Windows.Forms.Button();
             this.btnDelete = new System.Windows.Forms.Button();
             this.btnOk = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.lblAddHabit = new System.Windows.Forms.Label();
+            this.lstAddHabit = new System.Windows.Forms.ListView();
+            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.SuspendLayout();
-            // 
-            // lstAddHabit
-            // 
-            this.lstAddHabit.FormattingEnabled = true;
-            this.lstAddHabit.Location = new System.Drawing.Point(12, 64);
-            this.lstAddHabit.Name = "lstAddHabit";
-            this.lstAddHabit.Size = new System.Drawing.Size(496, 251);
-            this.lstAddHabit.TabIndex = 0;
             // 
             // btnNew
             // 
@@ -96,17 +90,41 @@
             this.lblAddHabit.TabIndex = 10;
             this.lblAddHabit.Text = "Choose a habit to add:";
             // 
+            // lstAddHabit
+            // 
+            this.lstAddHabit.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader1,
+            this.columnHeader2});
+            this.lstAddHabit.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lstAddHabit.HideSelection = false;
+            this.lstAddHabit.Location = new System.Drawing.Point(12, 66);
+            this.lstAddHabit.Name = "lstAddHabit";
+            this.lstAddHabit.Size = new System.Drawing.Size(496, 246);
+            this.lstAddHabit.TabIndex = 11;
+            this.lstAddHabit.UseCompatibleStateImageBehavior = false;
+            this.lstAddHabit.View = System.Windows.Forms.View.Details;
+            // 
+            // columnHeader1
+            // 
+            this.columnHeader1.Text = "Name";
+            this.columnHeader1.Width = 120;
+            // 
+            // columnHeader2
+            // 
+            this.columnHeader2.Text = "Description";
+            this.columnHeader2.Width = 372;
+            // 
             // AddHabitForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(520, 419);
+            this.Controls.Add(this.lstAddHabit);
             this.Controls.Add(this.lblAddHabit);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnOk);
             this.Controls.Add(this.btnDelete);
             this.Controls.Add(this.btnNew);
-            this.Controls.Add(this.lstAddHabit);
             this.Name = "AddHabitForm";
             this.Text = "Add your habit!";
             this.ResumeLayout(false);
@@ -115,12 +133,13 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.ListBox lstAddHabit;
         private System.Windows.Forms.Button btnNew;
         private System.Windows.Forms.Button btnDelete;
         private System.Windows.Forms.Button btnOk;
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Label lblAddHabit;
+        private System.Windows.Forms.ListView lstAddHabit;
+        private System.Windows.Forms.ColumnHeader columnHeader1;
+        private System.Windows.Forms.ColumnHeader columnHeader2;
     }
 }
