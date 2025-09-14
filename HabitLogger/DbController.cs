@@ -106,7 +106,7 @@ namespace HabitLogger
             // get userID given a userName
             int id = 0;
             SQLiteCommand cmd = conn.CreateCommand();
-            cmd.CommandText = $"SELECT userID AS 'User ID', userName AS 'User Name' FROM Users WHERE userName = '{userName}';";
+            cmd.CommandText = $"SELECT userID AS 'userID', userName AS 'User Name' FROM Users WHERE userName = '{userName}';";
             SQLiteDataReader read = cmd.ExecuteReader();
             try
             {
@@ -152,7 +152,7 @@ namespace HabitLogger
 
             // when date is empty, get habits by userID
             SQLiteCommand cmd = conn.CreateCommand();
-            cmd.CommandText = $"SELECT habitID AS 'Habit ID', name AS 'Name', description AS 'Description' FROM Habits WHERE userID = {userID};";
+            cmd.CommandText = $"SELECT habitID AS 'habitID', name AS 'Name', description AS 'Description' FROM Habits WHERE userID = {userID};";
             SQLiteDataReader read = cmd.ExecuteReader();
 
             // populate the return list from data reader
@@ -181,7 +181,7 @@ namespace HabitLogger
             List<(int habitID, string name, string description, int habitHasDateID, string quantity)> returnList = new List<(int habitID, string name, string description, int habitHasDateID, string quantity)>();
 
             SQLiteCommand cmd = conn.CreateCommand();
-            cmd.CommandText = $"SELECT habitID AS 'Habit ID', name AS 'Name', description AS 'Description' FROM Habits WHERE userID = {userID};";
+            cmd.CommandText = $"SELECT habitID AS 'habitID', name AS 'Name', description AS 'Description' FROM Habits WHERE userID = {userID};";
 
 
             // pull up habit by date and userID
