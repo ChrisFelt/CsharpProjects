@@ -91,6 +91,8 @@ namespace HabitLogger
             SQLiteCommand cmd = conn.CreateCommand();
             cmd.CommandText = "INSERT INTO Users (userName) VALUES (:userName);";
             cmd.Parameters.AddWithValue(":userName", userName);
+
+            // execute query
             try
             {
                 cmd.ExecuteNonQuery();
@@ -109,9 +111,11 @@ namespace HabitLogger
             SQLiteCommand cmd = conn.CreateCommand();
             cmd.CommandText = $"SELECT userID AS 'userID', userName AS 'User Name' FROM Users WHERE userName = :userName;";
             cmd.Parameters.AddWithValue(":userName", userName);
-            SQLiteDataReader read = cmd.ExecuteReader();
+
+            // execute query
             try
             {
+                SQLiteDataReader read = cmd.ExecuteReader();
                 // return userID if userName found
                 // Read() feeds the next matching record into the data reader
                 if (read.Read())
@@ -136,6 +140,8 @@ namespace HabitLogger
             // Add Habit record to Habits with name, description (optional), and user ID
             SQLiteCommand cmd = conn.CreateCommand();
             cmd.CommandText = $"INSERT INTO Habits (name, description, userID) VALUES (:habitName, :habitDesc, :userID);";
+
+            // add parameterized values
             cmd.Parameters.AddWithValue(":habitName", habitName);
             // insert NULL for description if it is blank
             if (habitDesc == "")
@@ -147,6 +153,8 @@ namespace HabitLogger
                 cmd.Parameters.AddWithValue(":habitDesc", habitDesc);
             }
             cmd.Parameters.AddWithValue(":userID", userID);
+
+            // execute query
             try
             {
                 cmd.ExecuteNonQuery();
@@ -167,11 +175,12 @@ namespace HabitLogger
             SQLiteCommand cmd = conn.CreateCommand();
             cmd.CommandText = $"SELECT habitID AS 'habitID', name AS 'Name', description AS 'Description' FROM Habits WHERE userID = :userID;";
             cmd.Parameters.AddWithValue(":userID", userID);
-            SQLiteDataReader read = cmd.ExecuteReader();
+
 
             // populate the return list from data reader
             try
             {
+                SQLiteDataReader read = cmd.ExecuteReader();
                 while (read.Read())
                 {
                     returnList.Add(
@@ -209,11 +218,11 @@ namespace HabitLogger
 
             // TODO:
             // There is currently no way to delete a date. Add delete date option?
-            SQLiteDataReader read = cmd.ExecuteReader();
 
             // populate the return list from data reader
             try
             {
+                SQLiteDataReader read = cmd.ExecuteReader();
                 while (read.Read())
                 {
 
