@@ -89,7 +89,8 @@ namespace HabitLogger
         {
             // Add User record with userName to Users table
             SQLiteCommand cmd = conn.CreateCommand();
-            cmd.CommandText = $"INSERT INTO Users (userName) VALUES ('{userName}');";
+            cmd.CommandText = "INSERT INTO Users (userName) VALUES (:userName);";
+            cmd.Parameters.AddWithValue(":userName", userName);
             try
             {
                 cmd.ExecuteNonQuery();
@@ -106,7 +107,8 @@ namespace HabitLogger
             // get userID given a userName
             int id = 0;
             SQLiteCommand cmd = conn.CreateCommand();
-            cmd.CommandText = $"SELECT userID AS 'userID', userName AS 'User Name' FROM Users WHERE userName = '{userName}';";
+            cmd.CommandText = $"SELECT userID AS 'userID', userName AS 'User Name' FROM Users WHERE userName = :userName;";
+            cmd.Parameters.AddWithValue(":userName", userName);
             SQLiteDataReader read = cmd.ExecuteReader();
             try
             {
@@ -133,7 +135,18 @@ namespace HabitLogger
         {
             // Add Habit record to Habits with name, description (optional), and user ID
             SQLiteCommand cmd = conn.CreateCommand();
-            cmd.CommandText = $"INSERT INTO Habits (name, description, userID) VALUES ('{habitName}', '{habitDesc}', '{userID}');";
+            cmd.CommandText = $"INSERT INTO Habits (name, description, userID) VALUES (:habitName, :habitDesc, :userID);";
+            cmd.Parameters.AddWithValue(":habitName", habitName);
+            // insert NULL for description if it is blank
+            if (habitDesc == "")
+            {
+                cmd.Parameters.AddWithValue(":habitDesc", DBNull.Value);
+            }
+            else
+            {
+                cmd.Parameters.AddWithValue(":habitDesc", habitDesc);
+            }
+            cmd.Parameters.AddWithValue(":userID", userID);
             try
             {
                 cmd.ExecuteNonQuery();
@@ -152,7 +165,8 @@ namespace HabitLogger
 
             // when date is empty, get habits by userID
             SQLiteCommand cmd = conn.CreateCommand();
-            cmd.CommandText = $"SELECT habitID AS 'habitID', name AS 'Name', description AS 'Description' FROM Habits WHERE userID = {userID};";
+            cmd.CommandText = $"SELECT habitID AS 'habitID', name AS 'Name', description AS 'Description' FROM Habits WHERE userID = :userID;";
+            cmd.Parameters.AddWithValue(":userID", userID);
             SQLiteDataReader read = cmd.ExecuteReader();
 
             // populate the return list from data reader
@@ -181,20 +195,20 @@ namespace HabitLogger
             List<(int habitID, string name, string description, int habitHasDateID, string quantity)> returnList = new List<(int habitID, string name, string description, int habitHasDateID, string quantity)>();
 
             SQLiteCommand cmd = conn.CreateCommand();
-            cmd.CommandText = $"SELECT habitID AS 'habitID', name AS 'Name', description AS 'Description' FROM Habits WHERE userID = {userID};";
-
+            cmd.CommandText = $"SELECT habitID AS 'habitID', name AS 'Name', description AS 'Description' FROM Habits WHERE userID = :userID;";
+            cmd.Parameters.AddWithValue(":userID", userID);
 
             // pull up habit by date and userID
-                // TODO:
-                // SQL query here - need a new DML query that joins Habits, Dates, and Habits_has_Dates and selects:
-                // 1) habitID: used for edit and delete buttons,
-                // 2) name: displayed in the list view,
-                // 3) description: displayed in the description view,
-                // 4) habitHasDateID: used to edit quantity,
-                // 5) quantity: displayed in the list view along with name
+            // TODO:
+            // SQL query here - need a new DML query that joins Habits, Dates, and Habits_has_Dates and selects:
+            // 1) habitID: used for edit and delete buttons,
+            // 2) name: displayed in the list view,
+            // 3) description: displayed in the description view,
+            // 4) habitHasDateID: used to edit quantity,
+            // 5) quantity: displayed in the list view along with name
 
-                // TODO:
-                // There is currently no way to delete a date. Add delete date option?
+            // TODO:
+            // There is currently no way to delete a date. Add delete date option?
             SQLiteDataReader read = cmd.ExecuteReader();
 
             // populate the return list from data reader
