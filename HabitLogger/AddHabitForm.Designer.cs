@@ -41,7 +41,7 @@
             // btnNew
             // 
             this.btnNew.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.btnNew.Location = new System.Drawing.Point(350, 28);
+            this.btnNew.Location = new System.Drawing.Point(271, 28);
             this.btnNew.Name = "btnNew";
             this.btnNew.Size = new System.Drawing.Size(76, 30);
             this.btnNew.TabIndex = 6;
@@ -51,7 +51,7 @@
             // btnDelete
             // 
             this.btnDelete.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.btnDelete.Location = new System.Drawing.Point(432, 28);
+            this.btnDelete.Location = new System.Drawing.Point(353, 28);
             this.btnDelete.Name = "btnDelete";
             this.btnDelete.Size = new System.Drawing.Size(76, 30);
             this.btnDelete.TabIndex = 7;
@@ -62,20 +62,21 @@
             // 
             this.btnOk.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.btnOk.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnOk.Location = new System.Drawing.Point(149, 334);
+            this.btnOk.Location = new System.Drawing.Point(109, 326);
             this.btnOk.Name = "btnOk";
-            this.btnOk.Size = new System.Drawing.Size(106, 62);
+            this.btnOk.Size = new System.Drawing.Size(106, 51);
             this.btnOk.TabIndex = 8;
             this.btnOk.Text = "Ok";
             this.btnOk.UseVisualStyleBackColor = true;
+            this.btnOk.Click += new System.EventHandler(this.btnOk_Click);
             // 
             // btnCancel
             // 
             this.btnCancel.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.btnCancel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnCancel.Location = new System.Drawing.Point(261, 334);
+            this.btnCancel.Location = new System.Drawing.Point(221, 326);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(106, 62);
+            this.btnCancel.Size = new System.Drawing.Size(106, 51);
             this.btnCancel.TabIndex = 9;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
@@ -99,7 +100,7 @@
             this.lstAddHabit.HideSelection = false;
             this.lstAddHabit.Location = new System.Drawing.Point(12, 66);
             this.lstAddHabit.Name = "lstAddHabit";
-            this.lstAddHabit.Size = new System.Drawing.Size(496, 246);
+            this.lstAddHabit.Size = new System.Drawing.Size(417, 244);
             this.lstAddHabit.TabIndex = 11;
             this.lstAddHabit.UseCompatibleStateImageBehavior = false;
             this.lstAddHabit.View = System.Windows.Forms.View.Details;
@@ -112,13 +113,13 @@
             // columnHeader2
             // 
             this.columnHeader2.Text = "Description";
-            this.columnHeader2.Width = 372;
+            this.columnHeader2.Width = 294;
             // 
             // AddHabitForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(520, 419);
+            this.ClientSize = new System.Drawing.Size(441, 393);
             this.Controls.Add(this.lstAddHabit);
             this.Controls.Add(this.lblAddHabit);
             this.Controls.Add(this.btnCancel);
