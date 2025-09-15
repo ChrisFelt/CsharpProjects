@@ -35,6 +35,7 @@ namespace HabitLogger
             }
             else
             {
+                // TODO: remove all whitespace?
                 // create new user, notify the user, and close NewUserForm
                 inputTxt = inputTxt.Trim(' ');
                 sqliteDb.CreateUser(inputTxt);
