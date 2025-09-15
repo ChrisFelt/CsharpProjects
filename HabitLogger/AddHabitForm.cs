@@ -17,11 +17,28 @@ namespace HabitLogger
         public AddHabitForm(int userID, DbController db)
         {
             InitializeComponent();
+            CenterToScreen();
             curUserID = userID;
             sqliteDb = db;
             // populate list view with this user's habits
+            UpdateLstAddHabit();
+        }
+
+        private void btnOk_Click(object sender, EventArgs e)
+        {
 
         }
 
+        private void UpdateLstAddHabit()
+        {
+            List<(int habitID, string name, string description)> habitsLst = sqliteDb.ReadHabitByUser(curUserID);
+            foreach (var habit in habitsLst)
+            {
+                // add items from the tuple as a row to lstAddHabit
+                string[] items = new string[] {habit.name, habit.description};
+                ListViewItem row = new ListViewItem(items);
+                lstAddHabit.Items.Add(row);
+            }
+        }
     }
 }
