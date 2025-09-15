@@ -67,6 +67,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DbController.cs" />
+    <Compile Include="AddHabitForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AddHabitForm.Designer.cs">
+      <DependentUpon>AddHabitForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="NewUserForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -81,6 +87,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="AddHabitForm.resx">
+      <DependentUpon>AddHabitForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="NewUserForm.resx">
       <DependentUpon>NewUserForm.cs</DependentUpon>
     </EmbeddedResource>

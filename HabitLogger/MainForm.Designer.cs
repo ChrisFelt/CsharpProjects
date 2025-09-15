@@ -77,15 +77,15 @@
             this.pnlMain.Controls.Add(this.monthCalendar);
             this.pnlMain.Controls.Add(this.menuStrip);
             this.pnlMain.Controls.Add(this.lstHabits);
-            this.pnlMain.Location = new System.Drawing.Point(8, 19);
+            this.pnlMain.Location = new System.Drawing.Point(0, 0);
             this.pnlMain.Name = "pnlMain";
-            this.pnlMain.Size = new System.Drawing.Size(800, 450);
+            this.pnlMain.Size = new System.Drawing.Size(816, 489);
             this.pnlMain.TabIndex = 0;
             // 
             // lblDisplayUser
             // 
             this.lblDisplayUser.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDisplayUser.Location = new System.Drawing.Point(18, 280);
+            this.lblDisplayUser.Location = new System.Drawing.Point(25, 284);
             this.lblDisplayUser.Name = "lblDisplayUser";
             this.lblDisplayUser.Size = new System.Drawing.Size(227, 31);
             this.lblDisplayUser.TabIndex = 12;
@@ -94,7 +94,7 @@
             // btnLogout
             // 
             this.btnLogout.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.btnLogout.Location = new System.Drawing.Point(69, 335);
+            this.btnLogout.Location = new System.Drawing.Point(77, 354);
             this.btnLogout.Name = "btnLogout";
             this.btnLogout.Size = new System.Drawing.Size(124, 55);
             this.btnLogout.TabIndex = 11;
@@ -107,7 +107,7 @@
             this.lblGreet.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblGreet.AutoSize = true;
             this.lblGreet.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblGreet.Location = new System.Drawing.Point(59, 249);
+            this.lblGreet.Location = new System.Drawing.Point(69, 249);
             this.lblGreet.Name = "lblGreet";
             this.lblGreet.Size = new System.Drawing.Size(142, 31);
             this.lblGreet.TabIndex = 10;
@@ -117,16 +117,17 @@
             // 
             this.lblHabitDesc.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblHabitDesc.AutoSize = true;
-            this.lblHabitDesc.Location = new System.Drawing.Point(295, 326);
+            this.lblHabitDesc.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblHabitDesc.Location = new System.Drawing.Point(303, 345);
             this.lblHabitDesc.Name = "lblHabitDesc";
-            this.lblHabitDesc.Size = new System.Drawing.Size(89, 13);
+            this.lblHabitDesc.Size = new System.Drawing.Size(111, 16);
             this.lblHabitDesc.TabIndex = 9;
             this.lblHabitDesc.Text = "Habit description:";
             // 
             // btnDelete
             // 
             this.btnDelete.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.btnDelete.Location = new System.Drawing.Point(705, 274);
+            this.btnDelete.Location = new System.Drawing.Point(713, 299);
             this.btnDelete.Name = "btnDelete";
             this.btnDelete.Size = new System.Drawing.Size(76, 30);
             this.btnDelete.TabIndex = 8;
@@ -136,7 +137,7 @@
             // btnEdit
             // 
             this.btnEdit.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.btnEdit.Location = new System.Drawing.Point(623, 274);
+            this.btnEdit.Location = new System.Drawing.Point(631, 299);
             this.btnEdit.Name = "btnEdit";
             this.btnEdit.Size = new System.Drawing.Size(76, 30);
             this.btnEdit.TabIndex = 7;
@@ -146,17 +147,17 @@
             // rtxtHabitDesc
             // 
             this.rtxtHabitDesc.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.rtxtHabitDesc.Location = new System.Drawing.Point(292, 349);
+            this.rtxtHabitDesc.Location = new System.Drawing.Point(300, 368);
             this.rtxtHabitDesc.Name = "rtxtHabitDesc";
             this.rtxtHabitDesc.ReadOnly = true;
-            this.rtxtHabitDesc.Size = new System.Drawing.Size(489, 77);
+            this.rtxtHabitDesc.Size = new System.Drawing.Size(489, 99);
             this.rtxtHabitDesc.TabIndex = 6;
             this.rtxtHabitDesc.Text = "";
             // 
             // btnAdd
             // 
             this.btnAdd.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.btnAdd.Location = new System.Drawing.Point(541, 274);
+            this.btnAdd.Location = new System.Drawing.Point(549, 299);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(76, 30);
             this.btnAdd.TabIndex = 5;
@@ -168,9 +169,10 @@
             // 
             this.lblSelectHabit.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblSelectHabit.AutoSize = true;
-            this.lblSelectHabit.Location = new System.Drawing.Point(295, 39);
+            this.lblSelectHabit.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblSelectHabit.Location = new System.Drawing.Point(299, 47);
             this.lblSelectHabit.Name = "lblSelectHabit";
-            this.lblSelectHabit.Size = new System.Drawing.Size(75, 13);
+            this.lblSelectHabit.Size = new System.Drawing.Size(91, 16);
             this.lblSelectHabit.TabIndex = 4;
             this.lblSelectHabit.Text = "Select a habit:";
             // 
@@ -178,16 +180,17 @@
             // 
             this.lblSelectDate.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblSelectDate.AutoSize = true;
-            this.lblSelectDate.Location = new System.Drawing.Point(22, 40);
+            this.lblSelectDate.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblSelectDate.Location = new System.Drawing.Point(23, 47);
             this.lblSelectDate.Name = "lblSelectDate";
-            this.lblSelectDate.Size = new System.Drawing.Size(73, 13);
+            this.lblSelectDate.Size = new System.Drawing.Size(89, 16);
             this.lblSelectDate.TabIndex = 3;
             this.lblSelectDate.Text = "Select a date:";
             // 
             // monthCalendar
             // 
             this.monthCalendar.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.monthCalendar.Location = new System.Drawing.Point(18, 62);
+            this.monthCalendar.Location = new System.Drawing.Point(26, 70);
             this.monthCalendar.Name = "monthCalendar";
             this.monthCalendar.TabIndex = 1;
             // 
@@ -197,7 +200,7 @@
             this.menuStrip.Dock = System.Windows.Forms.DockStyle.None;
             this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.helpToolStripMenuItem});
-            this.menuStrip.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip.Location = new System.Drawing.Point(8, 0);
             this.menuStrip.Name = "menuStrip";
             this.menuStrip.Size = new System.Drawing.Size(52, 24);
             this.menuStrip.TabIndex = 0;
@@ -295,9 +298,9 @@
             this.columnHeader3});
             this.lstHabits.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lstHabits.HideSelection = false;
-            this.lstHabits.Location = new System.Drawing.Point(292, 62);
+            this.lstHabits.Location = new System.Drawing.Point(302, 69);
             this.lstHabits.Name = "lstHabits";
-            this.lstHabits.Size = new System.Drawing.Size(489, 199);
+            this.lstHabits.Size = new System.Drawing.Size(489, 224);
             this.lstHabits.TabIndex = 13;
             this.lstHabits.UseCompatibleStateImageBehavior = false;
             this.lstHabits.View = System.Windows.Forms.View.Details;
