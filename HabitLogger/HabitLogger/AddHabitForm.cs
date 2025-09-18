@@ -26,7 +26,12 @@ namespace HabitLogger
 
         private void btnOk_Click(object sender, EventArgs e)
         {
+            // todo: connect the habit with currently selected date
+        }
 
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            Close();
         }
 
         private void UpdateLstAddHabit()
@@ -40,5 +45,6 @@ namespace HabitLogger
                 lstAddHabit.Items.Add(row);
             }
         }
+
     }
 }
