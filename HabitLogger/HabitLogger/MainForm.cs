@@ -24,6 +24,10 @@ namespace HabitLogger
             pnlMain.Hide();
         }
 
+        // -----------------------------------------------------
+        // pnlLogin Events
+        // -----------------------------------------------------
+
         private void btnLogin_Click(object sender, EventArgs e)
         {
             // validate username input
@@ -77,6 +81,10 @@ namespace HabitLogger
             newUser.Show();
         }
 
+        // -----------------------------------------------------
+        // pnlMain Events
+        // -----------------------------------------------------
+
         private void btnLogout_Click(object sender, EventArgs e)
         {
             // logout user and swap back to login panel
@@ -92,6 +100,16 @@ namespace HabitLogger
             // show AddHabitForm
             AddHabitForm addHabit = new AddHabitForm(curUserID, sqliteDb);
             addHabit.Show();
+        }
+
+        private void monthCalendar_DateSelected(object sender, DateRangeEventArgs e)
+        {
+            // when pnlMain is visible, invoke UpdateLstHabitsByDate() when a date is selected
+        }
+
+        private void UpdateLstHabitsByDate()
+        {
+            // populate LstHabitsByDate using ReadHabitsByDate()
         }
     }
 }
