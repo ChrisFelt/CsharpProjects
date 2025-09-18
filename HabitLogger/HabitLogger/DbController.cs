@@ -109,7 +109,7 @@ namespace HabitLogger
             // get userID given a userName
             int id = 0;
             SQLiteCommand cmd = conn.CreateCommand();
-            cmd.CommandText = $"SELECT userID AS 'userID', userName AS 'User Name' FROM Users WHERE userName = :userName;";
+            cmd.CommandText = "SELECT userID AS 'userID', userName AS 'User Name' FROM Users WHERE userName = :userName;";
             cmd.Parameters.AddWithValue(":userName", userName);
 
             // execute query
@@ -139,7 +139,7 @@ namespace HabitLogger
         {
             // Add Habit record to Habits with name, description (optional), and user ID
             SQLiteCommand cmd = conn.CreateCommand();
-            cmd.CommandText = $"INSERT INTO Habits (name, description, userID) VALUES (:habitName, :habitDesc, :userID);";
+            cmd.CommandText = "INSERT INTO Habits (name, description, userID) VALUES (:habitName, :habitDesc, :userID);";
 
             // add parameterized values
             cmd.Parameters.AddWithValue(":habitName", habitName);
@@ -173,7 +173,7 @@ namespace HabitLogger
 
             // when date is empty, get habits by userID
             SQLiteCommand cmd = conn.CreateCommand();
-            cmd.CommandText = $"SELECT habitID AS 'habitID', name AS 'Name', description AS 'Description' FROM Habits WHERE userID = :userID;";
+            cmd.CommandText = "SELECT habitID AS 'habitID', name AS 'Name', description AS 'Description' FROM Habits WHERE userID = :userID;";
             cmd.Parameters.AddWithValue(":userID", userID);
 
 
@@ -203,21 +203,23 @@ namespace HabitLogger
             // prepare list of tuples to return
             List<(int habitID, string name, string description, int habitHasDateID, string quantity)> returnList = new List<(int habitID, string name, string description, int habitHasDateID, string quantity)>();
 
-            SQLiteCommand cmd = conn.CreateCommand();
-            cmd.CommandText = $"SELECT habitID AS 'habitID', name AS 'Name', description AS 'Description' FROM Habits WHERE userID = :userID;";
-            cmd.Parameters.AddWithValue(":userID", userID);
-
             // pull up habit by date and userID
-            // TODO:
-            // SQL query here - need a new DML query that joins Habits, Dates, and Habits_has_Dates and selects:
-            // 1) habitID: used for edit and delete buttons,
-            // 2) name: displayed in the list view,
-            // 3) description: displayed in the description view,
-            // 4) habitHasDateID: used to edit quantity,
-            // 5) quantity: displayed in the list view along with name
-
-            // TODO:
-            // There is currently no way to delete a date. Add delete date option?
+            SQLiteCommand cmd = conn.CreateCommand();
+            cmd.CommandText =   "SELECT h.habitID AS 'habitID', " +
+                                       "h.name AS 'Name', " +
+                                       "h.description AS 'Description', " +
+                                       "hd.note AS 'Note', " +
+                                       "hd.quantity AS 'Quantity', " +
+                                       "hd.habitHasDateID AS 'habitHasDateID' " +
+                                "FROM Dates AS d " +
+                                "INNER JOIN Habits_has_Dates AS hd " +
+                                    "ON d.dateID = hd.dateID " +
+                                "INNER JOIN Habits AS h " +
+                                    "ON hd.habitID = h.habitID " +
+                                "WHERE d.date = :date " +
+                                    "AND h.UserID = :userID;";
+            cmd.Parameters.AddWithValue(":date", date);
+            cmd.Parameters.AddWithValue(":userID", userID);
 
             // populate the return list from data reader
             try
@@ -225,7 +227,13 @@ namespace HabitLogger
                 SQLiteDataReader read = cmd.ExecuteReader();
                 while (read.Read())
                 {
-
+                    returnList.Add(
+                        (habitID: Convert.ToInt32(read["habitID"]),
+                        name: Convert.ToString(read["Name"]),
+                        description: Convert.ToString(read["Description"]),
+                        habitHasDateID: Convert.ToInt32(read["habitHasDateID"]),
+                        quantity: Convert.ToString(read["Quantity"]))
+                        );
                 }
             }
             catch (Exception ex)
