@@ -193,6 +193,8 @@
             this.monthCalendar.Location = new System.Drawing.Point(26, 70);
             this.monthCalendar.Name = "monthCalendar";
             this.monthCalendar.TabIndex = 1;
+            this.monthCalendar.DateSelected += new System.Windows.Forms.DateRangeEventHandler(this.monthCalendar_DateSelected);
+            this.monthCalendar.DateChanged += new System.Windows.Forms.DateRangeEventHandler(this.monthCalendar_DateChanged);
             // 
             // menuStrip
             // 

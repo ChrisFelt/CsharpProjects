@@ -105,11 +105,18 @@ namespace HabitLogger
         private void monthCalendar_DateSelected(object sender, DateRangeEventArgs e)
         {
             // when pnlMain is visible, invoke UpdateLstHabitsByDate() when a date is selected
+            // TODO: There is currently no way to delete a date. Add delete date option?
+            Console.WriteLine($"Date selected: {e.Start.ToShortDateString()}");
         }
 
         private void UpdateLstHabitsByDate()
         {
             // populate LstHabitsByDate using ReadHabitsByDate()
+        }
+
+        private void monthCalendar_DateChanged(object sender, DateRangeEventArgs e)
+        {
+            Console.WriteLine($"Date changed: {e.Start.ToShortDateString()}");
         }
     }
 }
