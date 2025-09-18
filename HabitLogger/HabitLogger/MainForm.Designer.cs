@@ -43,6 +43,10 @@
             this.monthCalendar = new System.Windows.Forms.MonthCalendar();
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.lstHabitsByDate = new System.Windows.Forms.ListView();
+            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.txtUserName = new System.Windows.Forms.TextBox();
             this.lblWelcome = new System.Windows.Forms.Label();
             this.btnLogin = new System.Windows.Forms.Button();
@@ -51,10 +55,6 @@
             this.lblNewUser = new System.Windows.Forms.Label();
             this.pnlLogin = new System.Windows.Forms.Panel();
             this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
-            this.lstHabits = new System.Windows.Forms.ListView();
-            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.pnlMain.SuspendLayout();
             this.menuStrip.SuspendLayout();
             this.pnlLogin.SuspendLayout();
@@ -76,7 +76,7 @@
             this.pnlMain.Controls.Add(this.lblSelectDate);
             this.pnlMain.Controls.Add(this.monthCalendar);
             this.pnlMain.Controls.Add(this.menuStrip);
-            this.pnlMain.Controls.Add(this.lstHabits);
+            this.pnlMain.Controls.Add(this.lstHabitsByDate);
             this.pnlMain.Location = new System.Drawing.Point(0, 0);
             this.pnlMain.Name = "pnlMain";
             this.pnlMain.Size = new System.Drawing.Size(816, 489);
@@ -212,6 +212,37 @@
             this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.helpToolStripMenuItem.Text = "Help";
             // 
+            // lstHabitsByDate
+            // 
+            this.lstHabitsByDate.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader1,
+            this.columnHeader2,
+            this.columnHeader3});
+            this.lstHabitsByDate.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lstHabitsByDate.FullRowSelect = true;
+            this.lstHabitsByDate.HideSelection = false;
+            this.lstHabitsByDate.Location = new System.Drawing.Point(300, 70);
+            this.lstHabitsByDate.Name = "lstHabitsByDate";
+            this.lstHabitsByDate.Size = new System.Drawing.Size(489, 224);
+            this.lstHabitsByDate.TabIndex = 13;
+            this.lstHabitsByDate.UseCompatibleStateImageBehavior = false;
+            this.lstHabitsByDate.View = System.Windows.Forms.View.Details;
+            // 
+            // columnHeader1
+            // 
+            this.columnHeader1.Text = "Name";
+            this.columnHeader1.Width = 120;
+            // 
+            // columnHeader2
+            // 
+            this.columnHeader2.Text = "Frequency";
+            this.columnHeader2.Width = 76;
+            // 
+            // columnHeader3
+            // 
+            this.columnHeader3.Text = "Note";
+            this.columnHeader3.Width = 289;
+            // 
             // txtUserName
             // 
             this.txtUserName.Anchor = System.Windows.Forms.AnchorStyles.None;
@@ -290,35 +321,6 @@
             this.pnlLogin.Size = new System.Drawing.Size(816, 489);
             this.pnlLogin.TabIndex = 0;
             // 
-            // lstHabits
-            // 
-            this.lstHabits.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader1,
-            this.columnHeader2,
-            this.columnHeader3});
-            this.lstHabits.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lstHabits.HideSelection = false;
-            this.lstHabits.Location = new System.Drawing.Point(302, 69);
-            this.lstHabits.Name = "lstHabits";
-            this.lstHabits.Size = new System.Drawing.Size(489, 224);
-            this.lstHabits.TabIndex = 13;
-            this.lstHabits.UseCompatibleStateImageBehavior = false;
-            this.lstHabits.View = System.Windows.Forms.View.Details;
-            // 
-            // columnHeader1
-            // 
-            this.columnHeader1.Text = "Name";
-            this.columnHeader1.Width = 120;
-            // 
-            // columnHeader2
-            // 
-            this.columnHeader2.Text = "Frequency";
-            // 
-            // columnHeader3
-            // 
-            this.columnHeader3.Text = "Note";
-            this.columnHeader3.Width = 306;
-            // 
             // main
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -363,7 +365,7 @@
         private System.Windows.Forms.Label lblGreet;
         private System.Windows.Forms.Button btnLogout;
         private System.Windows.Forms.Label lblDisplayUser;
-        private System.Windows.Forms.ListView lstHabits;
+        private System.Windows.Forms.ListView lstHabitsByDate;
         private System.Windows.Forms.ColumnHeader columnHeader1;
         private System.Windows.Forms.ColumnHeader columnHeader2;
         private System.Windows.Forms.ColumnHeader columnHeader3;
