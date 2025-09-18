@@ -97,6 +97,7 @@
             this.columnHeader1,
             this.columnHeader2});
             this.lstAddHabit.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lstAddHabit.FullRowSelect = true;
             this.lstAddHabit.HideSelection = false;
             this.lstAddHabit.Location = new System.Drawing.Point(12, 66);
             this.lstAddHabit.Name = "lstAddHabit";
