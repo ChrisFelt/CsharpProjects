@@ -35,7 +35,7 @@ namespace HabitLogger
             foreach (var habit in habitsLst)
             {
                 // add items from the tuple as a row to lstAddHabit
-                string[] items = new string[] {habit.name, habit.description};
+                string[] items = new string[] {habit.name, habit.description, habit.habitID.ToString()};
                 ListViewItem row = new ListViewItem(items);
                 lstAddHabit.Items.Add(row);
             }
