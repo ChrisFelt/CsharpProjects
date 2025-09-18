@@ -89,7 +89,8 @@ namespace HabitLogger
         {
             // Add User record with userName to Users table
             SQLiteCommand cmd = conn.CreateCommand();
-            cmd.CommandText = "INSERT INTO Users (userName) VALUES (:userName);";
+            cmd.CommandText =   "INSERT INTO Users (userName) " +
+                                "VALUES (:userName);";
             cmd.Parameters.AddWithValue(":userName", userName);
 
             // execute query
@@ -109,7 +110,10 @@ namespace HabitLogger
             // get userID given a userName
             int id = 0;
             SQLiteCommand cmd = conn.CreateCommand();
-            cmd.CommandText = "SELECT userID AS 'userID', userName AS 'User Name' FROM Users WHERE userName = :userName;";
+            cmd.CommandText =   "SELECT userID AS 'userID', " +
+                                       "userName AS 'User Name' " +
+                                "FROM Users " +
+                                "WHERE userName = :userName;";
             cmd.Parameters.AddWithValue(":userName", userName);
 
             // execute query
@@ -139,7 +143,10 @@ namespace HabitLogger
         {
             // Add Habit record to Habits with name, description (optional), and user ID
             SQLiteCommand cmd = conn.CreateCommand();
-            cmd.CommandText = "INSERT INTO Habits (name, description, userID) VALUES (:habitName, :habitDesc, :userID);";
+            cmd.CommandText =   "INSERT INTO Habits (name, description, userID) " +
+                                "VALUES (:habitName, " +
+                                        ":habitDesc, " +
+                                        ":userID);";
 
             // add parameterized values
             cmd.Parameters.AddWithValue(":habitName", habitName);
@@ -173,7 +180,11 @@ namespace HabitLogger
 
             // when date is empty, get habits by userID
             SQLiteCommand cmd = conn.CreateCommand();
-            cmd.CommandText = "SELECT habitID AS 'habitID', name AS 'Name', description AS 'Description' FROM Habits WHERE userID = :userID;";
+            cmd.CommandText =   "SELECT habitID AS 'habitID', " +
+                                       "name AS 'Name', " +
+                                       "description AS 'Description' " +
+                                "FROM Habits " +
+                                "WHERE userID = :userID;";
             cmd.Parameters.AddWithValue(":userID", userID);
 
 
