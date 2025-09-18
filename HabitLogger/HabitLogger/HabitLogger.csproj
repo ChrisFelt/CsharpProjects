@@ -66,34 +66,34 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DbController.cs" />
-    <Compile Include="AddHabitForm.cs">
+    <Compile Include="Controllers\DbController.cs" />
+    <Compile Include="Forms\AddHabitForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AddHabitForm.Designer.cs">
+    <Compile Include="Forms\AddHabitForm.Designer.cs">
       <DependentUpon>AddHabitForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="NewUserForm.cs">
+    <Compile Include="Forms\NewUserForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="NewUserForm.Designer.cs">
+    <Compile Include="Forms\NewUserForm.Designer.cs">
       <DependentUpon>NewUserForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="MainForm.cs">
+    <Compile Include="Forms\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MainForm.Designer.cs">
+    <Compile Include="Forms\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="AddHabitForm.resx">
+    <EmbeddedResource Include="Forms\AddHabitForm.resx">
       <DependentUpon>AddHabitForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="NewUserForm.resx">
+    <EmbeddedResource Include="Forms\NewUserForm.resx">
       <DependentUpon>NewUserForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MainForm.resx">
+    <EmbeddedResource Include="Forms\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -105,7 +105,7 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <None Include="database\DbOutline.md" />
+    <None Include="Database\DbOutline.md" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -121,9 +121,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="database\DDL.sql" />
-    <Content Include="database\DML.sql" />
+    <EmbeddedResource Include="Database\DDL.sql" />
+    <Content Include="Database\DML.sql" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

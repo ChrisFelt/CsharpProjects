@@ -19,10 +19,10 @@ namespace HabitLogger
         public SQLiteConnection conn;
 
         // default constructor
-        public DbController(string dbFile = "../../database/HabitLoggerDb.db", string ddlFile = "DDL.sql")
+        public DbController(string dbFile = "../../Database/HabitLoggerDb.db", string ddlFile = "DDL.sql")
         {
             // TODO: move db to project directory
-            DbConnect("../../database/HabitLoggerDb.db");
+            DbConnect(dbFile);
             // TODO: only execute this method if the database is empty
             RunDdlFromResourceFile(ddlFile);
         }
