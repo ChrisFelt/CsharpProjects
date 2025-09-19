@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -93,6 +94,7 @@ namespace HabitLogger
             curUserID = 0;
             txtUserName.Select();
             lblDisplayUser.Text = "";
+            // TODO: populate lstHabitsByDate with today's date
         }
 
         private void btnAdd_Click(object sender, EventArgs e)
@@ -102,21 +104,26 @@ namespace HabitLogger
             addHabit.Show();
         }
 
-        private void monthCalendar_DateSelected(object sender, DateRangeEventArgs e)
+        private void UpdateLstHabitsByDate(string date)
         {
-            // when pnlMain is visible, invoke UpdateLstHabitsByDate() when a date is selected
-            // TODO: There is currently no way to delete a date. Add delete date option?
-            Console.WriteLine($"Date selected: {e.Start.ToShortDateString()}");
-        }
 
-        private void UpdateLstHabitsByDate()
-        {
             // populate LstHabitsByDate using ReadHabitsByDate()
+            List<(int habitID, string name, string description, int habitHasDateID, string quantity)> habitsLst = sqliteDb.ReadHabitByDate(curUserID, date);
+            foreach (var habit in habitsLst)
+            {
+                // add items from the tuple as a row to lstHabitsByDate
+                string[] items = new string[] { habit.name, habit.quantity, habit.description, habit.habitID.ToString(), habit.habitHasDateID.ToString() };
+                ListViewItem row = new ListViewItem(items);
+                lstHabitsByDate.Items.Add(row);
+            }
         }
 
         private void monthCalendar_DateChanged(object sender, DateRangeEventArgs e)
         {
-            Console.WriteLine($"Date changed: {e.Start.ToShortDateString()}");
+            // invoke UpdateLstHabitsByDate() when a date is selected
+            // TODO: There is currently no way to delete a date. Add delete date option?
+            UpdateLstHabitsByDate(e.Start.ToString("yyyy-MM-dd"));
+
         }
     }
 }
