@@ -12,9 +12,9 @@ namespace HabitLogger
 {
     public partial class AddHabitForm : Form
     {
-        DbController sqliteDb;
+        DbModel sqliteDb;
         int curUserID = 0;
-        public AddHabitForm(int userID, DbController db)
+        public AddHabitForm(int userID, DbModel db)
         {
             InitializeComponent();
             CenterToScreen();

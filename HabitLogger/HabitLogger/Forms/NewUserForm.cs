@@ -12,8 +12,8 @@ namespace HabitLogger
 {
     public partial class NewUserForm : Form
     {
-        DbController sqliteDb;
-        public NewUserForm(DbController db)
+        DbModel sqliteDb;
+        public NewUserForm(DbModel db)
         {
             sqliteDb = db;
             InitializeComponent();

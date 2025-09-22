@@ -9,17 +9,17 @@ using System.Collections.Generic;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 /*
-Database Controller class.
+Database Model class.
 Allows access to the database with CRUD operations.
 */
 namespace HabitLogger
 {
-    public class DbController
+    public class DbModel
     {
         public SQLiteConnection conn;
 
         // default constructor
-        public DbController(string dbFile = "../../Database/HabitLoggerDb.db", string ddlFile = "DDL.sql")
+        public DbModel(string dbFile = "../../Database/HabitLoggerDb.db", string ddlFile = "DDL.sql")
         {
             // TODO: move db to project directory
             DbConnect(dbFile);

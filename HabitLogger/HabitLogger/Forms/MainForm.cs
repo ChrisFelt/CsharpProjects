@@ -14,7 +14,7 @@ namespace HabitLogger
 {
     public partial class main : Form
     {
-        DbController sqliteDb = new DbController();
+        DbModel sqliteDb = new DbModel();
         int curUserID = 0;  // user not logged in
         public main()
         {
