@@ -35,7 +35,7 @@ namespace HabitLogger
             // TODO: close db on program exit
             // reference on design choice: https://stackoverflow.com/questions/5474646/is-it-okay-to-always-leave-a-database-connection-open
             // create db connection and attempt to open
-            conn = new SQLiteConnection($"Data Source={path}; Version=3; New=True;Compress=True");
+            conn = new SQLiteConnection($"Data Source={path}; Version=3; New=True ; Compress=True");
             try
             {
                 conn.Open();
@@ -260,6 +260,7 @@ namespace HabitLogger
         // DeleteHabit method
         // delete a Habit given its ID, also deletes Dates and intermediate Habits_has_Dates records where appropriate
 
+
         // -----------------------------------------------------
         // Dates and Habits_has_Dates Table Queries
         // -----------------------------------------------------
@@ -275,6 +276,23 @@ namespace HabitLogger
 
         // DeleteHabitHasDate method
         // deletes a Habits_has_Dates record given habitHasDateID and also deletes Dates record if appropriate
+        public void DeleteHabitHasDate(int habitHasDateID)
+        {
+            SQLiteCommand cmd = conn.CreateCommand();
+            cmd.CommandText = "DELETE FROM Habits_has_Dates " +
+                              "WHERE habitHasDateID = :habitHasDateID; ";
+            cmd.Parameters.AddWithValue(":habitHasDateID", habitHasDateID);
+
+            // execute query
+            try
+            {
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"{ex.Message}", "Delete HabitHasDate Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
 
         // DeleteDate method
         // deletes Dates record given a date
