@@ -16,6 +16,7 @@ namespace HabitLogger
     {
         DbModel sqliteDb = new DbModel();
         int curUserID = 0;  // user not logged in
+        int indexHabitHasDateID = 4;  // ListViewItem index for habitHasDateID
         public main()
         {
             InitializeComponent();
@@ -137,7 +138,19 @@ namespace HabitLogger
         {
             // delete the currently selected habit from the current date ONLY
             // confirmation popup allows user to change their mind
+            DialogResult confirm = MessageBox.Show("Remove habit from this date permanently?", "Delete Confirmation", MessageBoxButtons.YesNo);
+            if (confirm == DialogResult.Yes)
+            {
+                // delete habitHasDate for each item selected in the listview
+                foreach (ListViewItem habit in lstHabitsByDate.SelectedItems)
+                {
+                    Console.WriteLine($"Deleting ID: {int.Parse(habit.SubItems[indexHabitHasDateID].Text)}");
+                    sqliteDb.DeleteHabitHasDate(int.Parse(habit.SubItems[indexHabitHasDateID].Text));
 
+                    // remove habit from lstHabitsByDate display
+                    lstHabitsByDate.Items.Remove(habit);
+                }
+            }
         }
     }
 }
