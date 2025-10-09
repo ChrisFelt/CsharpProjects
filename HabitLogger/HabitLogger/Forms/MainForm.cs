@@ -148,6 +148,7 @@ namespace HabitLogger
                     sqliteDb.DeleteHabitHasDate(int.Parse(habit.SubItems[indexHabitHasDateID].Text));
 
                     // remove habit from lstHabitsByDate display
+                    // TODO: test with large selection of habits
                     lstHabitsByDate.Items.Remove(habit);
                 }
             }
