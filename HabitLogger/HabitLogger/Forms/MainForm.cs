@@ -120,9 +120,23 @@ namespace HabitLogger
 
         private void monthCalendar_DateChanged(object sender, DateRangeEventArgs e)
         {
-            // invoke UpdateLstHabitsByDate() when a date is selected
-            // TODO: There is currently no way to delete a date. Add delete date option?
+            // first clear the list view
+            lstHabitsByDate.Items.Clear();
+
+            // then update the list view by invoking UpdateLstHabitsByDate() 
             UpdateLstHabitsByDate(e.Start.ToString("yyyy-MM-dd"));
+            // TODO: There is currently no way to delete a date. Add delete date option?
+        }
+
+        private void btnEdit_Click(object sender, EventArgs e)
+        {
+            // open new window that allows the user to edit the current habit
+        }
+
+        private void btnDelete_Click(object sender, EventArgs e)
+        {
+            // delete the currently selected habit from the current date ONLY
+            // confirmation popup allows user to change their mind
 
         }
     }
