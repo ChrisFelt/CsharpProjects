@@ -149,10 +149,9 @@ namespace HabitLogger
         }
 
         // DataGridView Cell click event
-        // Updates Description to the selected habit
         private void gridViewHabitsByDate_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-
+            // TODO: update Description to the selected habit
         }
 
         // -----------------------------------------------------
