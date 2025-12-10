@@ -30,6 +30,7 @@ namespace HabitLogger
         // pnlLogin Events
         // -----------------------------------------------------
 
+        // Login button click event
         private void btnLogin_Click(object sender, EventArgs e)
         {
             // validate username input
@@ -71,11 +72,13 @@ namespace HabitLogger
             }
         }
 
+        // Exit button click event
         private void btnExit_Click(object sender, EventArgs e)
         {
             Close();
         }
 
+        // New User label click event
         private void lblNewUser_Click(object sender, EventArgs e)
         {
             // open NewUserForm window
@@ -86,7 +89,7 @@ namespace HabitLogger
         // -----------------------------------------------------
         // pnlMain Events
         // -----------------------------------------------------
-
+        // Logout button click event
         private void btnLogout_Click(object sender, EventArgs e)
         {
             // logout user and swap back to login panel
@@ -98,6 +101,7 @@ namespace HabitLogger
             // TODO: populate lstHabitsByDate with today's date
         }
 
+        // Add button click event
         private void btnAdd_Click(object sender, EventArgs e)
         {
             // show AddHabitForm
@@ -105,31 +109,7 @@ namespace HabitLogger
             addHabit.Show();
         }
 
-        private void UpdateLstHabitsByDate(string date)
-        {
-
-            // populate LstHabitsByDate using ReadHabitsByDate()
-            List<(int habitID, string name, string note, int habitHasDateID, string quantity)> habitsLst = sqliteDb.ReadHabitByDate(curUserID, date);
-            foreach (var habit in habitsLst)
-            {
-                // add items from the tuple as a row to lstHabitsByDate
-                string[] items = new string[] { habit.name, habit.quantity, habit.note, habit.habitID.ToString(), habit.habitHasDateID.ToString() };
-                ListViewItem row = new ListViewItem(items);
-                lstHabitsByDate.Items.Add(row);
-            }
-        }
-
-        private void UpdateGridHabitsByDate(string date)
-        {
-            // get populated DataTable from db for this date
-            gridViewHabitsByDate.DataSource = sqliteDb.ReadHabitByDateDT(curUserID, date);
-
-            // hide IDs and description
-            gridViewHabitsByDate.Columns["habitID"].Visible = false;
-            gridViewHabitsByDate.Columns["Description"].Visible = false;
-            gridViewHabitsByDate.Columns["habitHasDateID"].Visible = false;
-        }
-
+        // Date click event
         private void monthCalendar_DateChanged(object sender, DateRangeEventArgs e)
         {
             // first clear the list view
@@ -141,11 +121,13 @@ namespace HabitLogger
             // TODO: There is currently no way to delete a date. Add delete date option?
         }
 
+        // Edit button click event
         private void btnEdit_Click(object sender, EventArgs e)
         {
             // open new window that allows the user to edit the current habit
         }
 
+        // Delete button click event
         private void btnDelete_Click(object sender, EventArgs e)
         {
             // delete the currently selected habit from the current date ONLY
@@ -166,9 +148,41 @@ namespace HabitLogger
             }
         }
 
+        // DataGridView Cell click event
+        // Updates Description to the selected habit
         private void gridViewHabitsByDate_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
 
+        }
+
+        // -----------------------------------------------------
+        // pnlMain General Use Methods
+        // -----------------------------------------------------
+        // refresh ListView
+        private void UpdateLstHabitsByDate(string date)
+        {
+
+            // populate LstHabitsByDate using ReadHabitsByDate()
+            List<(int habitID, string name, string note, int habitHasDateID, string quantity)> habitsLst = sqliteDb.ReadHabitByDate(curUserID, date);
+            foreach (var habit in habitsLst)
+            {
+                // add items from the tuple as a row to lstHabitsByDate
+                string[] items = new string[] { habit.name, habit.quantity, habit.note, habit.habitID.ToString(), habit.habitHasDateID.ToString() };
+                ListViewItem row = new ListViewItem(items);
+                lstHabitsByDate.Items.Add(row);
+            }
+        }
+
+        // refresh DataGridView
+        private void UpdateGridHabitsByDate(string date)
+        {
+            // get populated DataTable from db for this date
+            gridViewHabitsByDate.DataSource = sqliteDb.ReadHabitByDateDT(curUserID, date);
+
+            // hide IDs and description
+            gridViewHabitsByDate.Columns["habitID"].Visible = false;
+            gridViewHabitsByDate.Columns["Description"].Visible = false;
+            gridViewHabitsByDate.Columns["habitHasDateID"].Visible = false;
         }
     }
 }
