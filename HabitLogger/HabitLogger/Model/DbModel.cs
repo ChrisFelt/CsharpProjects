@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using System.Data.SQLite;
 using System.IO;
 using System.Linq;
@@ -6,7 +7,6 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Windows.Forms;
 using System.Collections.Generic;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 /*
 Database Model class.
@@ -208,11 +208,13 @@ namespace HabitLogger
             return returnList;
         }
 
-        public List<(int habitID, string name, string description, int habitHasDateID, string quantity)> ReadHabitByDate(int userID, string date)
+        
+        // Depricated READ operation for ListView 
+        public List<(int habitID, string name, string note, int habitHasDateID, string quantity)> ReadHabitByDate(int userID, string date)
         {
             // CreateHabit option 2: used to list habits in lblMain of MainForm
             // prepare list of tuples to return
-            List<(int habitID, string name, string description, int habitHasDateID, string quantity)> returnList = new List<(int habitID, string name, string description, int habitHasDateID, string quantity)>();
+            List<(int habitID, string name, string note, int habitHasDateID, string quantity)> returnList = new List<(int habitID, string name, string description, int habitHasDateID, string quantity)>();
 
             // pull up habit by date and userID
             SQLiteCommand cmd = conn.CreateCommand();
@@ -241,7 +243,7 @@ namespace HabitLogger
                     returnList.Add(
                         (habitID: Convert.ToInt32(read["habitID"]),
                         name: Convert.ToString(read["Name"]),
-                        description: Convert.ToString(read["Description"]),
+                        note: Convert.ToString(read["Note"]),
                         habitHasDateID: Convert.ToInt32(read["habitHasDateID"]),
                         quantity: Convert.ToString(read["Quantity"]))
                         );
@@ -252,6 +254,47 @@ namespace HabitLogger
                 MessageBox.Show($"{ex.Message}", "Read Habit Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             return returnList;
+        }
+        
+        // READ operation for DataGridView
+        public DataTable ReadHabitByDateDT(int userID, string date)
+        {
+            // CreateHabit option 2: used to populate grid view of habits in lblMain of MainForm
+            // initialize return DataTable 
+            DataTable data = new DataTable();
+
+            // pull up habit by date and userID
+            SQLiteCommand cmd = conn.CreateCommand();
+            cmd.CommandText = "SELECT h.habitID AS 'habitID', " +
+                                       "h.name AS 'Habit', " +
+                                       "h.description AS 'Description', " +
+                                       "hd.note AS 'Note', " +
+                                       "hd.quantity AS 'Frequency', " +
+                                       "hd.habitHasDateID AS 'habitHasDateID' " +
+                                "FROM Dates AS d " +
+                                "INNER JOIN Habits_has_Dates AS hd " +
+                                    "ON d.dateID = hd.dateID " +
+                                "INNER JOIN Habits AS h " +
+                                    "ON hd.habitID = h.habitID " +
+                                "WHERE d.date = :date " +
+                                    "AND h.UserID = :userID;";
+            cmd.Parameters.AddWithValue(":date", date);
+            cmd.Parameters.AddWithValue(":userID", userID);
+
+            // populate the DataTable
+            try
+            {
+                // instantiate adapter with SQLiteCommand constructor
+                using (SQLiteDataAdapter adapter = new SQLiteDataAdapter(cmd))
+                {
+                    adapter.Fill(data); // todo: test why order of columns breaks the DataTable
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"{ex.Message}", "Read Habit Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            return data;
         }
 
         // UpdateHabit method
