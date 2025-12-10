@@ -111,6 +111,7 @@
             dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.gridViewHabitsByDate.DefaultCellStyle = dataGridViewCellStyle2;
+            this.gridViewHabitsByDate.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnKeystroke;
             this.gridViewHabitsByDate.Location = new System.Drawing.Point(297, 70);
             this.gridViewHabitsByDate.Name = "gridViewHabitsByDate";
             dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
@@ -121,7 +122,7 @@
             dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.gridViewHabitsByDate.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
-            this.gridViewHabitsByDate.RowHeadersVisible = false;
+            this.gridViewHabitsByDate.RowHeadersWidth = 25;
             this.gridViewHabitsByDate.RowTemplate.Height = 28;
             this.gridViewHabitsByDate.Size = new System.Drawing.Size(492, 105);
             this.gridViewHabitsByDate.TabIndex = 14;
