@@ -109,14 +109,25 @@ namespace HabitLogger
         {
 
             // populate LstHabitsByDate using ReadHabitsByDate()
-            List<(int habitID, string name, string description, int habitHasDateID, string quantity)> habitsLst = sqliteDb.ReadHabitByDate(curUserID, date);
+            List<(int habitID, string name, string note, int habitHasDateID, string quantity)> habitsLst = sqliteDb.ReadHabitByDate(curUserID, date);
             foreach (var habit in habitsLst)
             {
                 // add items from the tuple as a row to lstHabitsByDate
-                string[] items = new string[] { habit.name, habit.quantity, habit.description, habit.habitID.ToString(), habit.habitHasDateID.ToString() };
+                string[] items = new string[] { habit.name, habit.quantity, habit.note, habit.habitID.ToString(), habit.habitHasDateID.ToString() };
                 ListViewItem row = new ListViewItem(items);
                 lstHabitsByDate.Items.Add(row);
             }
+        }
+
+        private void UpdateGridHabitsByDate(string date)
+        {
+            // get populated DataTable from db for this date
+            gridViewHabitsByDate.DataSource = sqliteDb.ReadHabitByDateDT(curUserID, date);
+
+            // hide IDs and description
+            gridViewHabitsByDate.Columns["habitID"].Visible = false;
+            gridViewHabitsByDate.Columns["Description"].Visible = false;
+            gridViewHabitsByDate.Columns["habitHasDateID"].Visible = false;
         }
 
         private void monthCalendar_DateChanged(object sender, DateRangeEventArgs e)
@@ -126,6 +137,7 @@ namespace HabitLogger
 
             // then update the list view by invoking UpdateLstHabitsByDate() 
             UpdateLstHabitsByDate(e.Start.ToString("yyyy-MM-dd"));
+            UpdateGridHabitsByDate(e.Start.ToString("yyyy-MM-dd"));
             // TODO: There is currently no way to delete a date. Add delete date option?
         }
 
@@ -152,6 +164,11 @@ namespace HabitLogger
                     lstHabitsByDate.Items.Remove(habit);
                 }
             }
+        }
+
+        private void gridViewHabitsByDate_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
         }
     }
 }

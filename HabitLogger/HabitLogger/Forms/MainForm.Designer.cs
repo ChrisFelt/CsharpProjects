@@ -28,8 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.pnlMain = new System.Windows.Forms.Panel();
+            this.gridViewHabitsByDate = new System.Windows.Forms.DataGridView();
             this.lblDisplayUser = new System.Windows.Forms.Label();
             this.btnLogout = new System.Windows.Forms.Button();
             this.lblGreet = new System.Windows.Forms.Label();
@@ -54,16 +57,19 @@
             this.lblUserName = new System.Windows.Forms.Label();
             this.lblNewUser = new System.Windows.Forms.Label();
             this.pnlLogin = new System.Windows.Forms.Panel();
-            this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
+            this.Habit = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Frequency = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Note = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.pnlMain.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.gridViewHabitsByDate)).BeginInit();
             this.menuStrip.SuspendLayout();
             this.pnlLogin.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).BeginInit();
             this.SuspendLayout();
             // 
             // pnlMain
             // 
             this.pnlMain.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.pnlMain.Controls.Add(this.gridViewHabitsByDate);
             this.pnlMain.Controls.Add(this.lblDisplayUser);
             this.pnlMain.Controls.Add(this.btnLogout);
             this.pnlMain.Controls.Add(this.lblGreet);
@@ -77,10 +83,49 @@
             this.pnlMain.Controls.Add(this.monthCalendar);
             this.pnlMain.Controls.Add(this.menuStrip);
             this.pnlMain.Controls.Add(this.lstHabitsByDate);
-            this.pnlMain.Location = new System.Drawing.Point(0, 0);
+            this.pnlMain.Location = new System.Drawing.Point(8, 20);
             this.pnlMain.Name = "pnlMain";
             this.pnlMain.Size = new System.Drawing.Size(816, 489);
             this.pnlMain.TabIndex = 0;
+            // 
+            // gridViewHabitsByDate
+            // 
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.gridViewHabitsByDate.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            this.gridViewHabitsByDate.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.gridViewHabitsByDate.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Habit,
+            this.Frequency,
+            this.Note});
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.gridViewHabitsByDate.DefaultCellStyle = dataGridViewCellStyle2;
+            this.gridViewHabitsByDate.Location = new System.Drawing.Point(297, 70);
+            this.gridViewHabitsByDate.Name = "gridViewHabitsByDate";
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.gridViewHabitsByDate.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            this.gridViewHabitsByDate.RowHeadersVisible = false;
+            this.gridViewHabitsByDate.RowTemplate.Height = 28;
+            this.gridViewHabitsByDate.Size = new System.Drawing.Size(492, 105);
+            this.gridViewHabitsByDate.TabIndex = 14;
+            this.gridViewHabitsByDate.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.gridViewHabitsByDate_CellContentClick);
             // 
             // lblDisplayUser
             // 
@@ -133,6 +178,7 @@
             this.btnDelete.TabIndex = 8;
             this.btnDelete.Text = "Delete";
             this.btnDelete.UseVisualStyleBackColor = true;
+            this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
             // 
             // btnEdit
             // 
@@ -143,6 +189,7 @@
             this.btnEdit.TabIndex = 7;
             this.btnEdit.Text = "Edit";
             this.btnEdit.UseVisualStyleBackColor = true;
+            this.btnEdit.Click += new System.EventHandler(this.btnEdit_Click);
             // 
             // rtxtHabitDesc
             // 
@@ -201,7 +248,7 @@
             this.menuStrip.Dock = System.Windows.Forms.DockStyle.None;
             this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.helpToolStripMenuItem});
-            this.menuStrip.Location = new System.Drawing.Point(8, 0);
+            this.menuStrip.Location = new System.Drawing.Point(14, 0);
             this.menuStrip.Name = "menuStrip";
             this.menuStrip.Size = new System.Drawing.Size(52, 24);
             this.menuStrip.TabIndex = 0;
@@ -222,9 +269,9 @@
             this.lstHabitsByDate.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lstHabitsByDate.FullRowSelect = true;
             this.lstHabitsByDate.HideSelection = false;
-            this.lstHabitsByDate.Location = new System.Drawing.Point(300, 70);
+            this.lstHabitsByDate.Location = new System.Drawing.Point(300, 181);
             this.lstHabitsByDate.Name = "lstHabitsByDate";
-            this.lstHabitsByDate.Size = new System.Drawing.Size(489, 224);
+            this.lstHabitsByDate.Size = new System.Drawing.Size(489, 113);
             this.lstHabitsByDate.TabIndex = 13;
             this.lstHabitsByDate.UseCompatibleStateImageBehavior = false;
             this.lstHabitsByDate.View = System.Windows.Forms.View.Details;
@@ -247,9 +294,9 @@
             // txtUserName
             // 
             this.txtUserName.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.txtUserName.Location = new System.Drawing.Point(290, 220);
+            this.txtUserName.Location = new System.Drawing.Point(298, 240);
             this.txtUserName.Name = "txtUserName";
-            this.txtUserName.Size = new System.Drawing.Size(236, 20);
+            this.txtUserName.Size = new System.Drawing.Size(236, 26);
             this.txtUserName.TabIndex = 1;
             // 
             // lblWelcome
@@ -257,7 +304,7 @@
             this.lblWelcome.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblWelcome.AutoSize = true;
             this.lblWelcome.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblWelcome.Location = new System.Drawing.Point(233, 107);
+            this.lblWelcome.Location = new System.Drawing.Point(241, 127);
             this.lblWelcome.Name = "lblWelcome";
             this.lblWelcome.Size = new System.Drawing.Size(350, 31);
             this.lblWelcome.TabIndex = 2;
@@ -266,7 +313,7 @@
             // btnLogin
             // 
             this.btnLogin.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.btnLogin.Location = new System.Drawing.Point(368, 263);
+            this.btnLogin.Location = new System.Drawing.Point(376, 283);
             this.btnLogin.Name = "btnLogin";
             this.btnLogin.Size = new System.Drawing.Size(76, 37);
             this.btnLogin.TabIndex = 3;
@@ -277,7 +324,7 @@
             // btnExit
             // 
             this.btnExit.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.btnExit.Location = new System.Drawing.Point(451, 263);
+            this.btnExit.Location = new System.Drawing.Point(459, 283);
             this.btnExit.Name = "btnExit";
             this.btnExit.Size = new System.Drawing.Size(76, 37);
             this.btnExit.TabIndex = 4;
@@ -290,7 +337,7 @@
             this.lblUserName.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblUserName.AutoSize = true;
             this.lblUserName.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblUserName.Location = new System.Drawing.Point(293, 198);
+            this.lblUserName.Location = new System.Drawing.Point(301, 218);
             this.lblUserName.Name = "lblUserName";
             this.lblUserName.Size = new System.Drawing.Size(93, 20);
             this.lblUserName.TabIndex = 5;
@@ -301,7 +348,7 @@
             this.lblNewUser.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblNewUser.AutoSize = true;
             this.lblNewUser.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblNewUser.Location = new System.Drawing.Point(286, 334);
+            this.lblNewUser.Location = new System.Drawing.Point(294, 354);
             this.lblNewUser.Name = "lblNewUser";
             this.lblNewUser.Size = new System.Drawing.Size(244, 16);
             this.lblNewUser.TabIndex = 6;
@@ -319,13 +366,34 @@
             this.pnlLogin.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlLogin.Location = new System.Drawing.Point(0, 0);
             this.pnlLogin.Name = "pnlLogin";
-            this.pnlLogin.Size = new System.Drawing.Size(816, 489);
+            this.pnlLogin.Size = new System.Drawing.Size(832, 528);
             this.pnlLogin.TabIndex = 0;
+            // 
+            // Habit
+            // 
+            this.Habit.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Habit.DataPropertyName = "Habit";
+            this.Habit.HeaderText = "Habit";
+            this.Habit.Name = "Habit";
+            // 
+            // Frequency
+            // 
+            this.Frequency.DataPropertyName = "Frequency";
+            this.Frequency.HeaderText = "Frequency";
+            this.Frequency.Name = "Frequency";
+            this.Frequency.Width = 109;
+            // 
+            // Note
+            // 
+            this.Note.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Note.DataPropertyName = "Note";
+            this.Note.HeaderText = "Note";
+            this.Note.Name = "Note";
             // 
             // main
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.ClientSize = new System.Drawing.Size(816, 489);
+            this.ClientSize = new System.Drawing.Size(832, 528);
             this.Controls.Add(this.pnlMain);
             this.Controls.Add(this.pnlLogin);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -334,18 +402,17 @@
             this.Text = "Habit Logger";
             this.pnlMain.ResumeLayout(false);
             this.pnlMain.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.gridViewHabitsByDate)).EndInit();
             this.menuStrip.ResumeLayout(false);
             this.menuStrip.PerformLayout();
             this.pnlLogin.ResumeLayout(false);
             this.pnlLogin.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).EndInit();
             this.ResumeLayout(false);
 
         }
 
         #endregion
         private System.Windows.Forms.Panel pnlMain;
-        private System.Windows.Forms.BindingSource bindingSource1;
         private System.Windows.Forms.TextBox txtUserName;
         private System.Windows.Forms.Label lblWelcome;
         private System.Windows.Forms.Button btnLogin;
@@ -354,8 +421,6 @@
         private System.Windows.Forms.Label lblNewUser;
         private System.Windows.Forms.Panel pnlLogin;
         private System.Windows.Forms.MonthCalendar monthCalendar;
-        private System.Windows.Forms.MenuStrip menuStrip;
-        private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
         private System.Windows.Forms.Label lblSelectDate;
         private System.Windows.Forms.Label lblSelectHabit;
         private System.Windows.Forms.Button btnAdd;
@@ -370,6 +435,12 @@
         private System.Windows.Forms.ColumnHeader columnHeader1;
         private System.Windows.Forms.ColumnHeader columnHeader2;
         private System.Windows.Forms.ColumnHeader columnHeader3;
+        private System.Windows.Forms.MenuStrip menuStrip;
+        private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
+        private System.Windows.Forms.DataGridView gridViewHabitsByDate;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Habit;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Frequency;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Note;
     }
 }
 
