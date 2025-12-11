@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
 using System.IO;
@@ -6,7 +7,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Windows.Forms;
-using System.Collections.Generic;
+using System.Xml.Linq;
 
 /*
 Database Model class.
@@ -209,7 +210,7 @@ namespace HabitLogger
         }
 
         
-        // Depricated READ operation for ListView 
+        // Deprecated READ operation for ListView 
         public List<(int habitID, string name, string note, int habitHasDateID, string quantity)> ReadHabitByDate(int userID, string date)
         {
             // CreateHabit option 2: used to list habits in lblMain of MainForm
@@ -265,7 +266,7 @@ namespace HabitLogger
 
             // pull up habit by date and userID
             SQLiteCommand cmd = conn.CreateCommand();
-            cmd.CommandText = "SELECT h.habitID AS 'habitID', " +
+            cmd.CommandText =   "SELECT h.habitID AS 'habitID', " +
                                        "h.name AS 'Habit', " +
                                        "h.description AS 'Description', " +
                                        "hd.note AS 'Note', " +
@@ -299,6 +300,39 @@ namespace HabitLogger
 
         // UpdateHabit method
         // updates habit name or description given a habitID
+        public void UpdateHabit(string habitName, string habitDesc, int habitID)
+        {
+            // Update 
+            SQLiteCommand cmd = conn.CreateCommand();
+            cmd.CommandText =   "UPDATE Habits " +
+                                "SET Habits.name = :habitName, " +
+                                    "Habits.description = :habitDesc " +
+                                "WHERE Habits.habitID = :habitID;";
+
+            // add parameterized values
+            cmd.Parameters.AddWithValue(":habitName", habitName);
+            // insert NULL for description if it is blank
+            if (habitDesc == "")
+            {
+                cmd.Parameters.AddWithValue(":habitDesc", DBNull.Value);
+            }
+            else
+            {
+                cmd.Parameters.AddWithValue(":habitDesc", habitDesc);
+            }
+            cmd.Parameters.AddWithValue(":habitID", habitID);
+
+            // execute query
+            try
+            {
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"{ex.Message}", "Update Habit Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
 
         // DeleteHabit method
         // delete a Habit given its ID, also deletes Dates and intermediate Habits_has_Dates records where appropriate
