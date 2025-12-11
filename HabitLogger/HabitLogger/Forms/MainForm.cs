@@ -154,6 +154,27 @@ namespace HabitLogger
             // TODO: update Description to the selected habit
         }
 
+        // TODO:
+        // Save button click event
+        // confirmation popup to ask user if they want to save current edits
+        // create general use SaveData method that does the following:
+        // loop through each row in the GridView
+        // see: https://stackoverflow.com/questions/19737436/looping-through-each-row-in-a-datagridview
+        // for each row, check habitHasID column
+        // if habitHasID empty AND habit name is unique, add new habit to db AND add new Habit_Has_Date/Date to db
+        // if habitHasID empty AND habit name is not unique, add new Habit_Has_Date/Date to db
+        // if habitHasID not empty, skip
+
+        // TODO:
+        // Cell value changed event in DataGridView
+        // see: https://stackoverflow.com/questions/19537784/datagridview-event-to-catch-when-cell-value-has-been-changed-by-user
+        // add modified flag bool to class variables with default value false
+        // when event is called, set flag to true
+        // problem: if user deletes changes, this flag will still be set to true
+        // when date is changed, flag is checked
+        // if true, confirm with user if they want to save (call general use SaveData method if yes)
+        // if false, continue with operation
+
         // -----------------------------------------------------
         // pnlMain General Use Methods
         // -----------------------------------------------------
