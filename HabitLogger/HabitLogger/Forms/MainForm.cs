@@ -162,6 +162,7 @@ namespace HabitLogger
         // see: https://stackoverflow.com/questions/19737436/looping-through-each-row-in-a-datagridview
         // for each row, check habitHasID column
         // if habitHasID empty AND habit name is unique, add new habit to db AND add new Habit_Has_Date/Date to db
+        // dialogue popup requests description of new habit
         // if habitHasID empty AND habit name is not unique, add new Habit_Has_Date/Date to db
         // if habitHasID not empty, skip
 
@@ -174,6 +175,13 @@ namespace HabitLogger
         // when date is changed, flag is checked
         // if true, confirm with user if they want to save (call general use SaveData method if yes)
         // if false, continue with operation
+
+        // TODO: 
+        // replace rtxtHabitDesc with DataGridView of all existing habits
+        // allow double-click event to add current selection to the DataGridView as a new row
+        // update whenever a new habit is created
+        // allow creation of new habit within the DataGriView, and editing the habit and its description
+        // use RowLeave event to strictly control edits, with confirmation popups each time a cell is edited
 
         // -----------------------------------------------------
         // pnlMain General Use Methods
