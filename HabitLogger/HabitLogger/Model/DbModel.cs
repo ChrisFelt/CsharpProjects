@@ -302,7 +302,7 @@ namespace HabitLogger
         // updates habit name or description given a habitID
         public void UpdateHabit(string habitName, string habitDesc, int habitID)
         {
-            // Update 
+            // Update name and description for the habit with the given habitID
             SQLiteCommand cmd = conn.CreateCommand();
             cmd.CommandText =   "UPDATE Habits " +
                                 "SET Habits.name = :habitName, " +
