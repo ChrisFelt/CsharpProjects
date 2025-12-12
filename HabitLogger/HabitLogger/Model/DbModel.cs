@@ -343,7 +343,7 @@ namespace HabitLogger
         // -----------------------------------------------------
 
         // CreateDate method
-        // creates a Dates record if it doesn't already exist and establishes relationship to Habits via intermediate table Habits_has_Dates
+        // creates a Dates record if it doesn't already exist
         public void CreateDate(string date)
         {
             // Add Date to Dates table if it does not exist
@@ -370,6 +370,32 @@ namespace HabitLogger
         // ReadDateAndHabit method
         // gets dateID given a date and returns all habits that occur on that date as a list to be viewed in the lstHabits form
 
+        // CreateHabitHasDate method
+        public void CreateHabitHasDate(int quantity, string habitName, string date)
+        {
+            // Add record to HabitsHasDates table
+            SQLiteCommand cmd = conn.CreateCommand();
+            cmd.CommandText =   "INSERT INTO Habits_has_Dates (quantity, habitID, dateID) " +
+                                "VALUES(:quantity, " +
+                                      "(SELECT habitID FROM Habits WHERE name = :habitName), " +
+                                      "(SELECT dateID FROM Dates WHERE date = :date));";
+
+            // add parametarized values
+            cmd.Parameters.AddWithValue(":quantity", quantity);
+            cmd.Parameters.AddWithValue(":habitName", habitName);
+            cmd.Parameters.AddWithValue(":date", date);
+
+            // execute query
+            try
+            {
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"{ex.Message}", "Create HabitHasDate Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         // UpdateHabitsHasDates method
         // given a habitHasDateID, updates the quantity column
 
@@ -379,7 +405,7 @@ namespace HabitLogger
         {
             SQLiteCommand cmd = conn.CreateCommand();
             cmd.CommandText = "DELETE FROM Habits_has_Dates " +
-                              "WHERE habitHasDateID = :habitHasDateID; ";
+                              "WHERE habitHasDateID = :habitHasDateID;";
             cmd.Parameters.AddWithValue(":habitHasDateID", habitHasDateID);
 
             // execute query
