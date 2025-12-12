@@ -164,7 +164,7 @@ namespace HabitLogger
         // if habitHasID empty AND habit name is unique, add new habit to db AND add new Habit_Has_Date/Date to db
         // dialogue popup requests description of new habit
         // if habitHasID empty AND habit name is not unique, add new Habit_Has_Date/Date to db
-        // if habitHasID not empty, skip
+        // if habitHasID not empty, check for updates
 
         // TODO:
         // Cell value changed event in DataGridView

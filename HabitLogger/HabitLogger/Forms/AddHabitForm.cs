@@ -46,5 +46,18 @@ namespace HabitLogger
             }
         }
 
+        private void btnNew_Click(object sender, EventArgs e)
+        {
+            // opens new window with 2 fields: 1) habit name and 2) description (optional)
+            // new window contains 2 buttons: "Ok" and "Cancel"
+            // "Ok" button: create new habit if input is validated successfully
+            // "Cancel" button: close window and return to AddHabitForm
+        }
+
+        private void btnDelete_Click(object sender, EventArgs e)
+        {
+            // delete the currently selected habit from the list view and the database
+            // a confirmation dialogue pops up as a new window to allow user to change their minds
+        }
     }
 }

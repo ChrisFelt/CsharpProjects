@@ -397,7 +397,29 @@ namespace HabitLogger
         }
 
         // UpdateHabitsHasDates method
-        // given a habitHasDateID, updates the quantity column
+
+        public void UpdateHabitHasDate(int quantity, int habitHasDateID)
+        {
+            // given a habitHasDateID, update the quantity column
+            SQLiteCommand cmd = conn.CreateCommand();
+            cmd.CommandText =   "UPDATE Habits_has_Dates " +
+                                "SET Habits_has_Dates.quantity = :quantity " +
+                                "WHERE Habits_has_Dates.habitHasDateID = :habitHasDateID; ";
+
+            // add parametarized values
+            cmd.Parameters.AddWithValue(":quantity", quantity);
+            cmd.Parameters.AddWithValue(":habitHasDateID", habitHasDateID);
+
+            // execute query
+            try
+            {
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"{ex.Message}", "Update HabitHasDate Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
 
         // DeleteHabitHasDate method
         // deletes a Habits_has_Dates record given habitHasDateID and also deletes Dates record if appropriate
