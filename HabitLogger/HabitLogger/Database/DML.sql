@@ -142,7 +142,7 @@ VALUES (dateInput);
 -- END
 INSERT INTO Dates (date)
 SELECT dateInput -- must use SELECT rather than VALUES when followed by the conditional
-WHERE NOT EXISTS (SELECT * FROM Dates WHERE date = dateInput);
+WHERE NOT EXISTS (SELECT * FROM Dates WHERE date=dateInput);
 
 -- 2. establish relationship with Habits via Habits_has_Dates intermediate table
 INSERT INTO Habits_has_Dates (quantity, habitID, dateID)
