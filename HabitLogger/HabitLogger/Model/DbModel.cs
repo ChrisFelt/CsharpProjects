@@ -8,6 +8,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Windows.Forms;
 using System.Xml.Linq;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 /*
 Database Model class.
@@ -333,7 +334,6 @@ namespace HabitLogger
             }
         }
 
-
         // DeleteHabit method
         // delete a Habit given its ID, also deletes Dates and intermediate Habits_has_Dates records where appropriate
 
@@ -344,7 +344,29 @@ namespace HabitLogger
 
         // CreateDate method
         // creates a Dates record if it doesn't already exist and establishes relationship to Habits via intermediate table Habits_has_Dates
+        public void CreateDate(string date)
+        {
+            // Add Date to Dates table if it does not exist
+            SQLiteCommand cmd = conn.CreateCommand();
+            cmd.CommandText =   "INSERT INTO Dates (date) " +
+                                "SELECT :date " +
+                                "WHERE NOT EXISTS (SELECT * FROM Dates WHERE date = :date);";
 
+            // add parametarized values (TODO: should replace all instances of :date with date, need to confirm)
+            cmd.Parameters.AddWithValue(":date", date);
+
+            // execute query
+            try
+            {
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"{ex.Message}", "Create Date Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        // TODO: don't need this method? delete if ReadHabitByDateDT sufficient
         // ReadDateAndHabit method
         // gets dateID given a date and returns all habits that occur on that date as a list to be viewed in the lstHabits form
 
