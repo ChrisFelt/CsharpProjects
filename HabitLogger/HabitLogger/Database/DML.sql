@@ -128,9 +128,22 @@ WHERE habitID = habitIDInput;
 -- and Habits_has_Dates Data Manipulation Queries
 -- -----------------------------------------------------
 -- CREATE
--- 1. insert new row into Dates
+-- 1.a. insert new row into Dates
 INSERT INTO Dates (date)
 VALUES (dateInput);
+-- 1.b. insert new row into Dates if it does not already exist 
+-- (conditionals in SQLite do NOT use IF!!!) see https://stackoverflow.com/questions/46349203/how-to-conditionally-insert-or-replace-a-row-in-sqlite
+-- IF ( SELECT COUNT(*)
+-- 	 FROM Dates
+-- 	 WHERE Dates.date = dateInput) = 0
+-- BEGIN
+-- 	INSERT INTO Dates (date)
+-- 	VALUES (dateInput);
+-- END
+INSERT INTO Dates (date)
+SELECT dateInput -- must use SELECT rather than VALUES when followed by the conditional
+WHERE NOT EXISTS (SELECT * FROM Dates WHERE date = dateInput);
+
 -- 2. establish relationship with Habits via Habits_has_Dates intermediate table
 INSERT INTO Habits_has_Dates (quantity, habitID, dateID)
 VALUES (quantityInput,
