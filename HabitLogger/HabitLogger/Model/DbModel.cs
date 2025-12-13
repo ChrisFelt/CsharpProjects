@@ -371,16 +371,26 @@ namespace HabitLogger
         // gets dateID given a date and returns all habits that occur on that date as a list to be viewed in the lstHabits form
 
         // CreateHabitHasDate method
-        public void CreateHabitHasDate(int quantity, string habitName, string date)
+        public void CreateHabitHasDate(string note, int quantity, string habitName, string date)
         {
             // Add record to HabitsHasDates table
             SQLiteCommand cmd = conn.CreateCommand();
             cmd.CommandText =   "INSERT INTO Habits_has_Dates (quantity, habitID, dateID) " +
-                                "VALUES(:quantity, " +
-                                      "(SELECT habitID FROM Habits WHERE name = :habitName), " +
-                                      "(SELECT dateID FROM Dates WHERE date = :date));";
+                                "VALUES(:note, " +
+                                       ":quantity, " +
+                                       "(SELECT habitID FROM Habits WHERE name = :habitName), " +
+                                       "(SELECT dateID FROM Dates WHERE date = :date));";
 
             // add parametarized values
+            // insert NULL for note if it is blank
+            if (note == "")
+            {
+                cmd.Parameters.AddWithValue(":note", DBNull.Value);
+            }
+            else
+            {
+                cmd.Parameters.AddWithValue(":note", note);
+            }
             cmd.Parameters.AddWithValue(":quantity", quantity);
             cmd.Parameters.AddWithValue(":habitName", habitName);
             cmd.Parameters.AddWithValue(":date", date);
@@ -397,16 +407,25 @@ namespace HabitLogger
         }
 
         // UpdateHabitsHasDates method
-
-        public void UpdateHabitHasDate(int quantity, int habitHasDateID)
+        public void UpdateHabitHasDate(string note, int quantity, int habitHasDateID)
         {
             // given a habitHasDateID, update the quantity column
             SQLiteCommand cmd = conn.CreateCommand();
             cmd.CommandText =   "UPDATE Habits_has_Dates " +
-                                "SET Habits_has_Dates.quantity = :quantity " +
+                                "SET Habits_has_Dates.note = :note" +
+                                "Habits_has_Dates.quantity = :quantity " +
                                 "WHERE Habits_has_Dates.habitHasDateID = :habitHasDateID; ";
 
             // add parametarized values
+            // insert NULL for note if it is blank
+            if (note == "")
+            {
+                cmd.Parameters.AddWithValue(":note", DBNull.Value);
+            }
+            else
+            {
+                cmd.Parameters.AddWithValue(":note", note);
+            }
             cmd.Parameters.AddWithValue(":quantity", quantity);
             cmd.Parameters.AddWithValue(":habitHasDateID", habitHasDateID);
 
