@@ -145,8 +145,15 @@ SELECT dateInput -- must use SELECT rather than VALUES when followed by the cond
 WHERE NOT EXISTS (SELECT * FROM Dates WHERE date = dateInput);
 
 -- 2. establish relationship with Habits via Habits_has_Dates intermediate table
-INSERT INTO Habits_has_Dates (quantity, habitID, dateID)
-VALUES (quantityInput,
+INSERT INTO Habits_has_Dates (note, quantity, habitID, dateID)
+VALUES (noteInput,
+		quantityInput,
+		(SELECT habitID FROM Habits WHERE name = nameInput),  -- pull nameInput from Habit selection when added to Date
+		(SELECT dateID FROM Dates WHERE date = dateInput));
+-- create Habits_has_Dates record with NULL note
+INSERT INTO Habits_has_Dates (note, quantity, habitID, dateID)
+VALUES (NULL,
+		quantityInput,
 		(SELECT habitID FROM Habits WHERE name = nameInput),  -- pull nameInput from Habit selection when added to Date
 		(SELECT dateID FROM Dates WHERE date = dateInput));
 
@@ -164,7 +171,13 @@ WHERE d.date = dateInput;
 -- UPDATE
 -- update frequency given a HabitHasDateID
 UPDATE Habits_has_Dates
-SET	Habits_has_Dates.quantity		= quantityInput
+SET	Habits_has_Dates.note			= noteInput,		
+	Habits_has_Dates.quantity		= quantityInput
+WHERE Habits_has_Dates.habitHasDateID = HabitHasDateIDInput;
+-- update with NULL note
+UPDATE Habits_has_Dates
+SET	Habits_has_Dates.note			= NULL,		
+	Habits_has_Dates.quantity		= quantityInput
 WHERE Habits_has_Dates.habitHasDateID = HabitHasDateIDInput;
 
 -- DELETE
