@@ -13,7 +13,7 @@ namespace HabitLogger
         // controls the activity history for a DataGridView 
         // history stacks contain tuple that begins with identifier "cell" or "row"
         // cell format: (string type, int row, int col, string contents)
-        // row format: (string type, int row, 
+        // row format: (string type, int row, string note, int quantity, int habitHasDateID)
         // C# stack data structure documentation: https://learn.microsoft.com/en-us/dotnet/api/system.collections.stack?view=net-10.0
         private Stack undoHistory = new Stack();
         private Stack redoHistory = new Stack();
@@ -47,8 +47,14 @@ namespace HabitLogger
         public void Commit(List<string> values)
         {
             // clear redoHistory stack
+            redoHistory.Clear();
+
             // check length of values 
             // if 3, push tuple into undoHistory with first value "cell"
+            if (values.Count == 3)
+            {
+
+            }
             // otherwise, push tuple into undoHistory with first value "row"
             // the latter case should only occur during a delete
             // write changes to database
