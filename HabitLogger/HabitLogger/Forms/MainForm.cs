@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
@@ -16,6 +17,13 @@ namespace HabitLogger
         DbModel sqliteDb = new DbModel();
         int curUserID = 0;  // user not logged in
         int indexHabitHasDateID = 4;  // ListViewItem index for habitHasDateID
+
+        DataTable dt = new DataTable();
+
+        // track history for gridViewHabitsByDate
+        Stack undoHistory = new Stack();
+        Stack redoHistory = new Stack();
+
         public main()
         {
             InitializeComponent();
@@ -124,6 +132,7 @@ namespace HabitLogger
         private void btnEdit_Click(object sender, EventArgs e)
         {
             // open new window that allows the user to edit the current habit
+            dt.Rows[0][1] = "New value";
         }
 
         // Delete button click event
@@ -154,17 +163,16 @@ namespace HabitLogger
         }
 
         // TODO:
-        // add undoHistory and redoHistory LIFO stack variables
-        // add text beneath DataGridView that is invisible until a change is made, then clickable "undo" is displayed
+        // marry up event handlers with DataGridViewHistory
         // Cell value changed event in DataGridView for gridViewHabitsByDate
         // see: https://stackoverflow.com/questions/19537784/datagridview-event-to-catch-when-cell-value-has-been-changed-by-user
         // call UpdateHabitHasDate with the new values
-        // add action to undoHistory and set undo text to visible and bring to front (set redo text to invisible and push to back)
+        // call Commit method from DataGridViewHistory with new values
         // gridViewHabitsByDate will NOT allow creation of new rows - new habits will be added by double clicking habits in the new DataGridView below
 
         // TODO:
-        // add overlapping Undo and Redo text under gridViewHabitsByDate, set to invisible by default
-        // add separate click events to both texts
+        // add Undo and Redo buttons (replace Add/Edit?) under gridViewHabitsByDate
+        // add separate click events to both buttons
         // Undo click event:
         // 1. pops top value off of undoHistory and replaces the current value of that cell with the undoHistory value
         // 2. pushes the value into redoHistory
@@ -199,7 +207,8 @@ namespace HabitLogger
         private void UpdateGridHabitsByDate(string date)
         {
             // get populated DataTable from db for this date
-            gridViewHabitsByDate.DataSource = sqliteDb.ReadHabitByDateDT(curUserID, date);
+            dt = sqliteDb.ReadHabitByDateDT(curUserID, date);
+            gridViewHabitsByDate.DataSource = dt;
 
             // hide IDs and description
             gridViewHabitsByDate.Columns["habitID"].Visible = false;
