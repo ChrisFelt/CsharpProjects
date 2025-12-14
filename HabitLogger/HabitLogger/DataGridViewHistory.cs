@@ -12,6 +12,8 @@ namespace HabitLogger
     {
         // controls the activity history for a DataGridView 
         // history stacks contain tuple that begins with identifier "cell" or "row"
+        // cell format: (string type, int row, int col, string contents)
+        // row format: (string type, int row, 
         // C# stack data structure documentation: https://learn.microsoft.com/en-us/dotnet/api/system.collections.stack?view=net-10.0
         private Stack undoHistory = new Stack();
         private Stack redoHistory = new Stack();
@@ -19,9 +21,8 @@ namespace HabitLogger
         private DataTable dataGridViewdDt;
         private DbModel sqLiteDb;
 
-        public DataGridViewHistory(DataTable dt, DbModel db)
+        public DataGridViewHistory(DbModel db)
         {
-            dataGridViewdDt = dt;
             sqLiteDb = db;
         }
 
@@ -56,6 +57,11 @@ namespace HabitLogger
         public void ClearHistory()
         {
             // clear both history stacks with Clear()
+        }
+
+        public void SetDT(DataTable dt)
+        {
+            dataGridViewdDt = dt;
         }
     }
 }
