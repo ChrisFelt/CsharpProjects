@@ -106,6 +106,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataGridViewHistory.cs" />
     <Compile Include="Model\DbModel.cs" />
     <Compile Include="Forms\AddHabitForm.cs">
       <SubType>Form</SubType>
