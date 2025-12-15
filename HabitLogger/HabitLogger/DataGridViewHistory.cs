@@ -15,59 +15,47 @@ namespace HabitLogger
         // cell format: (string type, int row, int col, string contents)
         // row format: (string type, int row, string note, int quantity, int habitHasDateID)
         // C# stack data structure documentation: https://learn.microsoft.com/en-us/dotnet/api/system.collections.stack?view=net-10.0
-        private Stack undoHistory = new Stack();
-        private Stack redoHistory = new Stack();
+        private Stack<(string type, int row, string note, int quantity, int habitHasDateID)> undoHistory = new Stack<(string type, int row, string note, int quantity, int habitHasDateID)>();
+        private Stack<(string type, int row, string note, int quantity, int habitHasDateID)> redoHistory = new Stack<(string type, int row, string note, int quantity, int habitHasDateID)>();
 
-        private DataTable dataGridViewdDt;
-        private DbModel sqLiteDb;
+        public DataGridViewHistory() { }  // empty constructor
 
-        public DataGridViewHistory(DbModel db)
-        {
-            sqLiteDb = db;
-        }
-
-        public void Redo()
+        public (string type, int row, string note, int quantity, int habitHasDateID) Redo((string type, int row, string note, int quantity, int habitHasDateID) values)
         {
             // pop top value off redoHistory
+            (string type, int row, string note, int quantity, int habitHasDateID) returnValue = redoHistory.Pop();
             // find its destination cell(s) in the dt
             // push current values of those cell(s) into undoHistory
+            undoHistory.Push(values);
             // replace destination cell(s) with values from redoHistory
+            return returnValue;
+            // TODO: modify db/dt in calling function
             // write changes to database
         }
 
-        public void Undo()
+        public (string type, int row, string note, int quantity, int habitHasDateID) Undo((string type, int row, string note, int quantity, int habitHasDateID) values)
         {
             // pop top value off undoHistory
+            (string type, int row, string note, int quantity, int habitHasDateID) returnValue = undoHistory.Pop();
             // find its destination cell(s) in the dt
             // push current values of those cell(s) into redoHistory
+            redoHistory.Push(values);
             // replace destination cell(s) with values from undoHistory
+            return returnValue;
             // write changes to database
         }
 
-        public void Commit(List<string> values)
+        public void Commit((string type, int row, string note, int quantity, int habitHasDateID) values)
         {
-            // clear redoHistory stack
+            // clear redoHistory stack and push values on top of undoHistory
             redoHistory.Clear();
-
-            // check length of values 
-            // if 3, push tuple into undoHistory with first value "cell"
-            if (values.Count == 3)
-            {
-
-            }
-            // otherwise, push tuple into undoHistory with first value "row"
-            // the latter case should only occur during a delete
-            // write changes to database
+            undoHistory.Push(values);
         }
 
         public void ClearHistory()
         {
-            // clear both history stacks with Clear()
-        }
-
-        public void SetDT(DataTable dt)
-        {
-            dataGridViewdDt = dt;
+            redoHistory.Clear();
+            undoHistory.Clear();
         }
     }
 }
