@@ -18,11 +18,7 @@ namespace HabitLogger
         int curUserID = 0;  // user not logged in
         int indexHabitHasDateID = 4;  // ListViewItem index for habitHasDateID
 
-        DataTable dt = new DataTable();
-
-        // track history for gridViewHabitsByDate
-        Stack undoHistory = new Stack();
-        Stack redoHistory = new Stack();
+        DataTable dt;
 
         public main()
         {
@@ -160,6 +156,7 @@ namespace HabitLogger
         private void gridViewHabitsByDate_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             // TODO: update Description to the selected habit
+            Console.WriteLine("Cell content click event handler called.");
         }
 
         // TODO:
@@ -169,6 +166,18 @@ namespace HabitLogger
         // call UpdateHabitHasDate with the new values
         // call Commit method from DataGridViewHistory with new values
         // gridViewHabitsByDate will NOT allow creation of new rows - new habits will be added by double clicking habits in the new DataGridView below
+        private void gridViewHabitsByDate_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
+        {
+            Console.WriteLine("Cell validating event handler called.");
+            //gridViewHabitsByDate.Rows[e.RowIndex].ErrorText = "";
+            int intInput;
+
+            if (!int.TryParse(e.FormattedValue.ToString(), out intInput) || intInput < 0)
+            {
+                //e.Cancel = true;
+                //gridViewHabitsByDate.Rows[e.RowIndex].ErrorText = "Input must be >= 0";
+            }
+        }
 
         // TODO:
         // add Undo and Redo buttons (replace Add/Edit?) under gridViewHabitsByDate

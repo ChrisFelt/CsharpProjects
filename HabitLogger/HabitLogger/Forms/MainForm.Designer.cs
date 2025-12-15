@@ -127,6 +127,7 @@
             this.gridViewHabitsByDate.Size = new System.Drawing.Size(492, 105);
             this.gridViewHabitsByDate.TabIndex = 14;
             this.gridViewHabitsByDate.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.gridViewHabitsByDate_CellContentClick);
+            this.gridViewHabitsByDate.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.gridViewHabitsByDate_CellValidating);
             // 
             // lblDisplayUser
             // 
