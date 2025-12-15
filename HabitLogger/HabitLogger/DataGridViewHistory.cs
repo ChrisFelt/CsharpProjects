@@ -11,13 +11,11 @@ namespace HabitLogger
     public class DataGridViewHistory
     {
         // controls the activity history for a DataGridView 
-        // history stacks contain tuple that begins with identifier "cell" or "row"
-        // cell format: (string type, int row, int col, string contents)
-        // row format: (string type, int row, string note, int quantity, int habitHasDateID)
+        // history stacks contain tuple that begins with identifier "cell" or "row"  TODO: probably don't need identifier, delete?
         // C# stack data structure documentation: https://learn.microsoft.com/en-us/dotnet/api/system.collections.stack?view=net-10.0
         private Stack<(string type, int row, string note, int quantity, int habitHasDateID)> undoHistory = new Stack<(string type, int row, string note, int quantity, int habitHasDateID)>();
         private Stack<(string type, int row, string note, int quantity, int habitHasDateID)> redoHistory = new Stack<(string type, int row, string note, int quantity, int habitHasDateID)>();
-
+        
         public DataGridViewHistory() { }  // empty constructor
 
         public (string type, int row, string note, int quantity, int habitHasDateID) Redo((string type, int row, string note, int quantity, int habitHasDateID) values)
