@@ -128,6 +128,8 @@
             this.gridViewHabitsByDate.TabIndex = 14;
             this.gridViewHabitsByDate.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.gridViewHabitsByDate_CellContentClick);
             this.gridViewHabitsByDate.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.gridViewHabitsByDate_CellValidating);
+            this.gridViewHabitsByDate.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.gridViewHabitsByDate_CellBeginEdit);
+            this.gridViewHabitsByDate.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.gridViewHabitsByDate_CellEndEdit);
             // 
             // lblDisplayUser
             // 

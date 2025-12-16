@@ -17,6 +17,7 @@ namespace HabitLogger
         DbModel sqliteDb = new DbModel();
         int curUserID = 0;  // user not logged in
         int indexHabitHasDateID = 4;  // ListViewItem index for habitHasDateID
+        string contents;  // track contents of a cell before edit
 
         DataTable dt;
 
@@ -156,7 +157,7 @@ namespace HabitLogger
         private void gridViewHabitsByDate_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             // TODO: update Description to the selected habit
-            Console.WriteLine("Cell content click event handler called.");
+            //Console.WriteLine("Cell content click event handler called.");
         }
 
         // TODO:
@@ -168,7 +169,7 @@ namespace HabitLogger
         // gridViewHabitsByDate will NOT allow creation of new rows - new habits will be added by double clicking habits in the new DataGridView below
         private void gridViewHabitsByDate_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
         {
-            Console.WriteLine("Cell validating event handler called.");
+            //Console.WriteLine("Cell validating event handler called.");
             //gridViewHabitsByDate.Rows[e.RowIndex].ErrorText = "";
             int intInput;
 
@@ -177,6 +178,26 @@ namespace HabitLogger
                 //e.Cancel = true;
                 //gridViewHabitsByDate.Rows[e.RowIndex].ErrorText = "Input must be >= 0";
             }
+        }
+
+        // grab contents of the cell before user edits it
+        private void gridViewHabitsByDate_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
+        {
+            Console.WriteLine($"Editing cell at row {e.RowIndex} and column {e.ColumnIndex}");
+            contents = gridViewHabitsByDate.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
+            Console.WriteLine($"Contents: {contents}");
+            // save contents of cell to global string contents
+        }
+
+        // validate edits made to a cell and update DataGridViewHistory
+        private void gridViewHabitsByDate_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        {
+            Console.WriteLine($"Finished editing cell at row {e.RowIndex} and column {e.ColumnIndex}");
+            Console.WriteLine($"Previous contents were: '{contents}'. New contents are: '{gridViewHabitsByDate.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString()}'");
+            // validate edits based on column: column 3 can't be edited, column 4 MUST be an integer and can't be empty, column 5 can be empty or contain any combination of ASCII characters
+            // if validation fails, roll back contents to the previous value
+            // update DataGridViewHistory
+            // commit changes to db
         }
 
         // TODO:
