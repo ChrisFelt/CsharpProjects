@@ -17,7 +17,13 @@ namespace HabitLogger
         DbModel sqliteDb = new DbModel();
         int curUserID = 0;  // user not logged in
         int indexHabitHasDateID = 4;  // ListViewItem index for habitHasDateID
-        string contents;  // track contents of a cell before edit
+        string prevCellContents;  // track contents of a cell before edit
+
+        // gridViewHabitsByDate columns
+        int noteCol = 3;
+        int quantityCol = 4;
+        int habitHasDateIDCol = 5;
+
 
         DataTable dt;
 
@@ -184,8 +190,8 @@ namespace HabitLogger
         private void gridViewHabitsByDate_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
         {
             Console.WriteLine($"Editing cell at row {e.RowIndex} and column {e.ColumnIndex}");
-            contents = gridViewHabitsByDate.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
-            Console.WriteLine($"Contents: {contents}");
+            prevCellContents = gridViewHabitsByDate.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
+            Console.WriteLine($"Contents: {prevCellContents}");
             // save contents of cell to global string contents
         }
 
@@ -193,11 +199,27 @@ namespace HabitLogger
         private void gridViewHabitsByDate_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
             Console.WriteLine($"Finished editing cell at row {e.RowIndex} and column {e.ColumnIndex}");
-            Console.WriteLine($"Previous contents were: '{contents}'. New contents are: '{gridViewHabitsByDate.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString()}'");
-            // validate edits based on column: column 3 can't be edited, column 4 MUST be an integer and can't be empty, column 5 can be empty or contain any combination of ASCII characters
+            Console.WriteLine($"Previous contents were: '{prevCellContents}'. New contents are: '{gridViewHabitsByDate.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString()}'");
+            string newCellContents = gridViewHabitsByDate.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
+            // validate edits based on column: column 1 can't be edited, column 4 MUST be an integer and can't be empty, column 3 can be empty or contain any combination of ASCII characters
+            if (e.ColumnIndex == quantityCol)
+            {
+                // validate input - if not integer, revert to previous value and notify user
+                if (!int.TryParse(newCellContents, out int intInput))
+                {
+                    gridViewHabitsByDate.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = prevCellContents;
+                    MessageBox.Show($"Error, frequency must be an integer!\nYou entered: '{newCellContents}'.\nPlease try again.", "Frequency input failed.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                else 
+                {
+                    // success! write to db
+
+                }
+            }
             // if validation fails, roll back contents to the previous value
             // update DataGridViewHistory
             // commit changes to db
+            WriteRowToDb(e.RowIndex);
         }
 
         // TODO:
@@ -234,6 +256,7 @@ namespace HabitLogger
         }
 
         // refresh DataGridView
+        // TODO: change name to RefreshGridHabitsByDate?
         private void UpdateGridHabitsByDate(string date)
         {
             // get populated DataTable from db for this date
@@ -244,6 +267,18 @@ namespace HabitLogger
             gridViewHabitsByDate.Columns["habitID"].Visible = false;
             gridViewHabitsByDate.Columns["Description"].Visible = false;
             gridViewHabitsByDate.Columns["habitHasDateID"].Visible = false;
+        }
+
+        // call UpdateHabitHasDate on a given DataGridView row
+        private void WriteRowToDb(int row)
+        {
+            // get values from the given row
+            string note = gridViewHabitsByDate.Rows[row].Cells[noteCol].Value.ToString();
+            int quantity = Convert.ToInt32(gridViewHabitsByDate.Rows[row].Cells[quantityCol].Value.ToString());
+            int habitHasDateID = Convert.ToInt32(gridViewHabitsByDate.Rows[row].Cells[habitHasDateIDCol].Value.ToString());
+
+            // update db
+            sqliteDb.UpdateHabitHasDate(note, quantity, habitHasDateID);
         }
     }
 }
