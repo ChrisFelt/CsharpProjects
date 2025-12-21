@@ -210,11 +210,6 @@ namespace HabitLogger
                     gridViewHabitsByDate.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = prevCellContents;
                     MessageBox.Show($"Error, frequency must be an integer!\nYou entered: '{newCellContents}'.\nPlease try again.", "Frequency input failed.", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-                else 
-                {
-                    // success! write to db
-
-                }
             }
             // if validation fails, roll back contents to the previous value
             // update DataGridViewHistory
