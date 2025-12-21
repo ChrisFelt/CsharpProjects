@@ -306,8 +306,8 @@ namespace HabitLogger
             // Update name and description for the habit with the given habitID
             SQLiteCommand cmd = conn.CreateCommand();
             cmd.CommandText =   "UPDATE Habits " +
-                                "SET Habits.name = :habitName, " +
-                                    "Habits.description = :habitDesc " +
+                                "SET name = :habitName, " +
+                                    "description = :habitDesc " +
                                 "WHERE Habits.habitID = :habitID;";
 
             // add parameterized values
@@ -412,9 +412,9 @@ namespace HabitLogger
             // given a habitHasDateID, update the quantity column
             SQLiteCommand cmd = conn.CreateCommand();
             cmd.CommandText =   "UPDATE Habits_has_Dates " +
-                                "SET Habits_has_Dates.note = :note" +
-                                "Habits_has_Dates.quantity = :quantity " +
-                                "WHERE Habits_has_Dates.habitHasDateID = :habitHasDateID; ";
+                                "SET note = :note, " +
+                                    "quantity = :quantity " +
+                                "WHERE Habits_has_Dates.habitHasDateID = :habitHasDateID;";
 
             // add parametarized values
             // insert NULL for note if it is blank
