@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
@@ -8,7 +9,6 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Windows.Forms;
 using System.Xml.Linq;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 /*
 Database Model class.
@@ -19,12 +19,14 @@ namespace HabitLogger
     public class DbModel
     {
         public SQLiteConnection conn;
+        private string connString = ConfigurationManager.ConnectionStrings["Default"].ConnectionString;
+        private string dbFilePath = "../../Database/HabitLoggerDb.db";
 
         // default constructor
         public DbModel(string dbFile = "../../Database/HabitLoggerDb.db", string ddlFile = "DDL.sql")
         {
             // TODO: move db to project directory
-            DbConnect(dbFile);
+            // DbConnect(dbFile);
             // TODO: only execute this method if the database is empty
             RunDdlFromResourceFile(ddlFile);
         }
@@ -32,23 +34,28 @@ namespace HabitLogger
         // -----------------------------------------------------
         // Initialize database
         // -----------------------------------------------------
+        /*
         public void DbConnect(string path)
         {
-            // TODO: close db on program exit
-            // reference on design choice: https://stackoverflow.com/questions/5474646/is-it-okay-to-always-leave-a-database-connection-open
             // create db connection and attempt to open
-            conn = new SQLiteConnection($"Data Source={path}; Version=3; New=True ; Compress=True");
-            try
+            if (!File.Exists(dbFilePath))
             {
-                conn.Open();
-            }
-            catch (Exception ex)
-            {
-                // notify user and exit the program (Application.Exit() does not work here)
-                MessageBox.Show($"{ex.Message}", "DB Connect Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                Environment.Exit(1);
+                using (SQLiteConnection conn = new SQLiteConnection(connString))
+                {
+                    try
+                    {
+                        conn.Open();
+                    }
+                    catch (Exception ex)
+                    {
+                        // notify user and exit the program (Application.Exit() does not work here)
+                        MessageBox.Show($"{ex.Message}", "DB Connect Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        Environment.Exit(1);
+                    }
+                }
             }
         }
+        */
 
         public void RunDdlFromResourceFile(string fileName)
         {
@@ -56,31 +63,40 @@ namespace HabitLogger
             Create database tables and optionally run sample inserts from a given DDL file name
             Assumes fileName exists as a resource in the project AND that it contains valid DDL for creating a database
             */
-            SQLiteCommand cmd = conn.CreateCommand();
-
-            // get array of resource names from the assembly and find matching resource to fileName
-            Assembly assembly = Assembly.GetExecutingAssembly();
-            string[] resourceArray = assembly.GetManifestResourceNames();
-            string resourceName = resourceArray.FirstOrDefault(str => str.EndsWith($"{fileName}"));
-
-            // read contents of resource to cmd
-            using (Stream stream = assembly.GetManifestResourceStream(resourceName))
+            if (!File.Exists(dbFilePath))
             {
-                using (StreamReader reader = new StreamReader(stream))
+                using (SQLiteConnection conn = new SQLiteConnection(connString))
                 {
-                    cmd.CommandText = reader.ReadToEnd();
+                    SQLiteCommand cmd = conn.CreateCommand();
+
+                    // get array of resource names from the assembly and find matching resource to fileName
+                    Assembly assembly = Assembly.GetExecutingAssembly();
+                    string[] resourceArray = assembly.GetManifestResourceNames();
+                    string resourceName = resourceArray.FirstOrDefault(str => str.EndsWith($"{fileName}"));
+
+                    // read contents of resource to cmd
+                    using (Stream stream = assembly.GetManifestResourceStream(resourceName))
+                    {
+                        using (StreamReader reader = new StreamReader(stream))
+                        {
+                            cmd.CommandText = reader.ReadToEnd();
+                        }
+                    }
+
+                    // execute DDL
+                    try
+                    {
+                        cmd.ExecuteNonQuery();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"{ex.Message}", "DDL Read Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
             }
+                
 
-            // execute DDL
-            try
-            {
-                cmd.ExecuteNonQuery();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"{ex.Message}", "DDL Read Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+
         }
 
         // -----------------------------------------------------
