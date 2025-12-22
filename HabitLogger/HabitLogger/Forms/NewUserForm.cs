@@ -39,6 +39,7 @@ namespace HabitLogger
                 // create new user, notify the user, and close NewUserForm
                 inputTxt = inputTxt.Trim(' ');
                 sqliteDb.CreateUser(inputTxt);
+                // TODO: only show this message when CreateUser is successful
                 MessageBox.Show($"New user: '{inputTxt}' added.", "Success!", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Close();
             }
