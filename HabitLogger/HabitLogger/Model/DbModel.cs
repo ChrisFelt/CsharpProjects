@@ -27,7 +27,6 @@ namespace HabitLogger
         {
             // TODO: move db to project directory
             // DbConnect(dbFile);
-            // TODO: only execute this method if the database is empty
             RunDdlFromResourceFile(ddlFile);
         }
 
