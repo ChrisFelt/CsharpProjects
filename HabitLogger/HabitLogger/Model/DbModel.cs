@@ -20,6 +20,7 @@ namespace HabitLogger
     {
         public SQLiteConnection conn;
         private string connString = ConfigurationManager.ConnectionStrings["Default"].ConnectionString;
+        //private string connString = "Data Source=../../Database/HabitLoggerDb.db; Version=3; New=True; Compress=True;";
 
         // default constructor
         public DbModel(string dbFilePath = "../../Database/HabitLoggerDb.db", string ddlFile = "DDL.sql")
@@ -27,6 +28,7 @@ namespace HabitLogger
             // TODO: move db to project directory
             // DbConnect(dbFile);
             RunDdlFromResourceFile(dbFilePath, ddlFile);
+            Console.WriteLine(connString);
         }
 
         // -----------------------------------------------------
@@ -68,6 +70,7 @@ namespace HabitLogger
                 // establish db connection
                 using (SQLiteConnection conn = new SQLiteConnection(connString))
                 {
+                    conn.Open();
                     SQLiteCommand cmd = conn.CreateCommand();
 
                     // get array of resource names from the assembly and find matching resource to fileName
@@ -108,21 +111,24 @@ namespace HabitLogger
         {
             using (SQLiteConnection conn = new SQLiteConnection(connString))
             {
+                conn.Open();
                 // Add User record with userName to Users table
-                SQLiteCommand cmd = conn.CreateCommand();
-                cmd.CommandText = "INSERT INTO Users (userName) " +
-                                  "VALUES (:userName);";
-                cmd.Parameters.AddWithValue(":userName", userName);
+                using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                {
+                    cmd.CommandText = "INSERT INTO Users (userName) " +
+                                      "VALUES (:userName);";
+                    cmd.Parameters.AddWithValue(":userName", userName);
 
-                // execute query
-                try
-                {
-                    cmd.ExecuteNonQuery();
-                }
-                catch (Exception ex)
-                {
-                    // TODO: make error popup messages more user friendly
-                    MessageBox.Show($"{ex.Message}", "Create User Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    // execute query
+                    try
+                    {
+                        cmd.ExecuteNonQuery();
+                    }
+                    catch (Exception ex)
+                    {
+                        // TODO: make error popup messages more user friendly
+                        MessageBox.Show($"{ex.Message}", "Create User Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
             }
 
