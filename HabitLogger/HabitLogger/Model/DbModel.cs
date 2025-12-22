@@ -20,14 +20,13 @@ namespace HabitLogger
     {
         public SQLiteConnection conn;
         private string connString = ConfigurationManager.ConnectionStrings["Default"].ConnectionString;
-        private string dbFilePath = "../../Database/HabitLoggerDb.db";
 
         // default constructor
-        public DbModel(string dbFile = "../../Database/HabitLoggerDb.db", string ddlFile = "DDL.sql")
+        public DbModel(string dbFilePath = "../../Database/HabitLoggerDb.db", string ddlFile = "DDL.sql")
         {
             // TODO: move db to project directory
             // DbConnect(dbFile);
-            RunDdlFromResourceFile(ddlFile);
+            RunDdlFromResourceFile(dbFilePath, ddlFile);
         }
 
         // -----------------------------------------------------
@@ -56,14 +55,17 @@ namespace HabitLogger
         }
         */
 
-        public void RunDdlFromResourceFile(string fileName)
+        public void RunDdlFromResourceFile(string dbFilePath, string fileName)
         {
             /*
             Create database tables and optionally run sample inserts from a given DDL file name
             Assumes fileName exists as a resource in the project AND that it contains valid DDL for creating a database
             */
+
+            // exit method if db file already exists
             if (!File.Exists(dbFilePath))
             {
+                // establish db connection
                 using (SQLiteConnection conn = new SQLiteConnection(connString))
                 {
                     SQLiteCommand cmd = conn.CreateCommand();
@@ -104,22 +106,26 @@ namespace HabitLogger
 
         public void CreateUser(string userName)
         {
-            // Add User record with userName to Users table
-            SQLiteCommand cmd = conn.CreateCommand();
-            cmd.CommandText =   "INSERT INTO Users (userName) " +
-                                "VALUES (:userName);";
-            cmd.Parameters.AddWithValue(":userName", userName);
+            using (SQLiteConnection conn = new SQLiteConnection(connString))
+            {
+                // Add User record with userName to Users table
+                SQLiteCommand cmd = conn.CreateCommand();
+                cmd.CommandText = "INSERT INTO Users (userName) " +
+                                  "VALUES (:userName);";
+                cmd.Parameters.AddWithValue(":userName", userName);
 
-            // execute query
-            try
-            {
-                cmd.ExecuteNonQuery();
+                // execute query
+                try
+                {
+                    cmd.ExecuteNonQuery();
+                }
+                catch (Exception ex)
+                {
+                    // TODO: make error popup messages more user friendly
+                    MessageBox.Show($"{ex.Message}", "Create User Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
-            catch (Exception ex)
-            {
-                // TODO: make error popup messages more user friendly
-                MessageBox.Show($"{ex.Message}", "Create User Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+
         }
 
         public int ReadUser(string userName)
