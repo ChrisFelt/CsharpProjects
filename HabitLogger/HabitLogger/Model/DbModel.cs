@@ -267,46 +267,51 @@ namespace HabitLogger
         // Deprecated READ operation for ListView 
         public List<(int habitID, string name, string note, int habitHasDateID, string quantity)> ReadHabitByDate(int userID, string date)
         {
-            // CreateHabit option 2: used to list habits in lblMain of MainForm
             // prepare list of tuples to return
             List<(int habitID, string name, string note, int habitHasDateID, string quantity)> returnList = new List<(int habitID, string name, string description, int habitHasDateID, string quantity)>();
 
-            // pull up habit by date and userID
-            SQLiteCommand cmd = conn.CreateCommand();
-            cmd.CommandText =   "SELECT h.habitID AS 'habitID', " +
-                                       "h.name AS 'Name', " +
-                                       "h.description AS 'Description', " +
-                                       "hd.note AS 'Note', " +
-                                       "hd.quantity AS 'Quantity', " +
-                                       "hd.habitHasDateID AS 'habitHasDateID' " +
-                                "FROM Dates AS d " +
-                                "INNER JOIN Habits_has_Dates AS hd " +
-                                    "ON d.dateID = hd.dateID " +
-                                "INNER JOIN Habits AS h " +
-                                    "ON hd.habitID = h.habitID " +
-                                "WHERE d.date = :date " +
-                                    "AND h.UserID = :userID;";
-            cmd.Parameters.AddWithValue(":date", date);
-            cmd.Parameters.AddWithValue(":userID", userID);
-
-            // populate the return list from data reader
-            try
+            // CreateHabit option 2: used to list habits in lblMain of MainForm
+            using (SQLiteConnection conn = new SQLiteConnection(connString))
             {
-                SQLiteDataReader read = cmd.ExecuteReader();
-                while (read.Read())
+                // pull up habit by date and userID
+                using (SQLiteCommand cmd = new SQLiteCommand(conn))
                 {
-                    returnList.Add(
-                        (habitID: Convert.ToInt32(read["habitID"]),
-                        name: Convert.ToString(read["Name"]),
-                        note: Convert.ToString(read["Note"]),
-                        habitHasDateID: Convert.ToInt32(read["habitHasDateID"]),
-                        quantity: Convert.ToString(read["Quantity"]))
-                        );
+                    cmd.CommandText = "SELECT h.habitID AS 'habitID', " +
+                                               "h.name AS 'Name', " +
+                                               "h.description AS 'Description', " +
+                                               "hd.note AS 'Note', " +
+                                               "hd.quantity AS 'Quantity', " +
+                                               "hd.habitHasDateID AS 'habitHasDateID' " +
+                                        "FROM Dates AS d " +
+                                        "INNER JOIN Habits_has_Dates AS hd " +
+                                            "ON d.dateID = hd.dateID " +
+                                        "INNER JOIN Habits AS h " +
+                                            "ON hd.habitID = h.habitID " +
+                                        "WHERE d.date = :date " +
+                                            "AND h.UserID = :userID;";
+                    cmd.Parameters.AddWithValue(":date", date);
+                    cmd.Parameters.AddWithValue(":userID", userID);
+
+                    // populate the return list from data reader
+                    try
+                    {
+                        SQLiteDataReader read = cmd.ExecuteReader();
+                        while (read.Read())
+                        {
+                            returnList.Add(
+                                (habitID: Convert.ToInt32(read["habitID"]),
+                                name: Convert.ToString(read["Name"]),
+                                note: Convert.ToString(read["Note"]),
+                                habitHasDateID: Convert.ToInt32(read["habitHasDateID"]),
+                                quantity: Convert.ToString(read["Quantity"]))
+                                );
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"{ex.Message}", "Read Habit Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"{ex.Message}", "Read Habit Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             return returnList;
         }
