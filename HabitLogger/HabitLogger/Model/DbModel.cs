@@ -230,31 +230,34 @@ namespace HabitLogger
                 List<(int habitID, string name, string description)> returnList = new List<(int habitID, string name, string description)>();
 
                 // when date is empty, get habits by userID
-                SQLiteCommand cmd = conn.CreateCommand();
-                cmd.CommandText = "SELECT habitID AS 'habitID', " +
-                                           "name AS 'Name', " +
-                                           "description AS 'Description' " +
-                                    "FROM Habits " +
-                                    "WHERE userID = :userID;";
-                cmd.Parameters.AddWithValue(":userID", userID);
-
-
-                // populate the return list from data reader
-                try
+                using (SQLiteCommand cmd = new SQLiteCommand(conn))
                 {
-                    SQLiteDataReader read = cmd.ExecuteReader();
-                    while (read.Read())
+
+                    cmd.CommandText = "SELECT habitID AS 'habitID', " +
+                                               "name AS 'Name', " +
+                                               "description AS 'Description' " +
+                                        "FROM Habits " +
+                                        "WHERE userID = :userID;";
+                    cmd.Parameters.AddWithValue(":userID", userID);
+
+
+                    // populate the return list from data reader
+                    try
                     {
-                        returnList.Add(
-                            (habitID: Convert.ToInt32(read["habitID"]),
-                            name: Convert.ToString(read["Name"]),
-                            description: Convert.ToString(read["Description"]))
-                            );
+                        SQLiteDataReader read = cmd.ExecuteReader();
+                        while (read.Read())
+                        {
+                            returnList.Add(
+                                (habitID: Convert.ToInt32(read["habitID"]),
+                                name: Convert.ToString(read["Name"]),
+                                description: Convert.ToString(read["Description"]))
+                                );
+                        }
                     }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"{ex.Message}", "Read Habit Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"{ex.Message}", "Read Habit Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
                 return returnList;
             }
