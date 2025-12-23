@@ -273,6 +273,7 @@ namespace HabitLogger
             // CreateHabit option 2: used to list habits in lblMain of MainForm
             using (SQLiteConnection conn = new SQLiteConnection(connString))
             {
+                DbConnect(conn);
                 // pull up habit by date and userID
                 using (SQLiteCommand cmd = new SQLiteCommand(conn))
                 {
@@ -319,40 +320,46 @@ namespace HabitLogger
         // READ operation for DataGridView
         public DataTable ReadHabitByDateDT(int userID, string date)
         {
-            // CreateHabit option 2: used to populate grid view of habits in lblMain of MainForm
             // initialize return DataTable 
             DataTable data = new DataTable();
 
-            // pull up habit by date and userID
-            SQLiteCommand cmd = conn.CreateCommand();
-            cmd.CommandText =   "SELECT h.habitID AS 'habitID', " +
-                                       "h.name AS 'Habit', " +
-                                       "h.description AS 'Description', " +
-                                       "hd.note AS 'Note', " +
-                                       "hd.quantity AS 'Frequency', " +
-                                       "hd.habitHasDateID AS 'habitHasDateID' " +
-                                "FROM Dates AS d " +
-                                "INNER JOIN Habits_has_Dates AS hd " +
-                                    "ON d.dateID = hd.dateID " +
-                                "INNER JOIN Habits AS h " +
-                                    "ON hd.habitID = h.habitID " +
-                                "WHERE d.date = :date " +
-                                    "AND h.UserID = :userID;";
-            cmd.Parameters.AddWithValue(":date", date);
-            cmd.Parameters.AddWithValue(":userID", userID);
-
-            // populate the DataTable
-            try
+            // CreateHabit option 2: used to populate grid view of habits in lblMain of MainForm
+            using (SQLiteConnection conn = new SQLiteConnection(connString))
             {
-                // instantiate adapter with SQLiteCommand constructor
-                using (SQLiteDataAdapter adapter = new SQLiteDataAdapter(cmd))
+                DbConnect(conn);
+                // pull up habit by date and userID
+                using (SQLiteCommand cmd = new SQLiteCommand(conn))
                 {
-                    adapter.Fill(data); // todo: test why order of columns breaks the DataTable
+                    cmd.CommandText = "SELECT h.habitID AS 'habitID', " +
+                                               "h.name AS 'Habit', " +
+                                               "h.description AS 'Description', " +
+                                               "hd.note AS 'Note', " +
+                                               "hd.quantity AS 'Frequency', " +
+                                               "hd.habitHasDateID AS 'habitHasDateID' " +
+                                        "FROM Dates AS d " +
+                                        "INNER JOIN Habits_has_Dates AS hd " +
+                                            "ON d.dateID = hd.dateID " +
+                                        "INNER JOIN Habits AS h " +
+                                            "ON hd.habitID = h.habitID " +
+                                        "WHERE d.date = :date " +
+                                            "AND h.UserID = :userID;";
+                    cmd.Parameters.AddWithValue(":date", date);
+                    cmd.Parameters.AddWithValue(":userID", userID);
+
+                    // populate the DataTable
+                    try
+                    {
+                        // instantiate adapter with SQLiteCommand constructor
+                        using (SQLiteDataAdapter adapter = new SQLiteDataAdapter(cmd))
+                        {
+                            adapter.Fill(data); // todo: test why order of columns breaks the DataTable
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"{ex.Message}", "Read Habit Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"{ex.Message}", "Read Habit Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             return data;
         }
@@ -361,34 +368,40 @@ namespace HabitLogger
         // updates habit name or description given a habitID
         public void UpdateHabit(string habitName, string habitDesc, int habitID)
         {
-            // Update name and description for the habit with the given habitID
-            SQLiteCommand cmd = conn.CreateCommand();
-            cmd.CommandText =   "UPDATE Habits " +
-                                "SET name = :habitName, " +
-                                    "description = :habitDesc " +
-                                "WHERE Habits.habitID = :habitID;";
+            using (SQLiteConnection conn = new SQLiteConnection(connString))
+            {
+                DbConnect(conn);
+                // Update name and description for the habit with the given habitID
+                using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                {
+                    cmd.CommandText = "UPDATE Habits " +
+                                        "SET name = :habitName, " +
+                                            "description = :habitDesc " +
+                                        "WHERE Habits.habitID = :habitID;";
 
-            // add parameterized values
-            cmd.Parameters.AddWithValue(":habitName", habitName);
-            // insert NULL for description if it is blank
-            if (habitDesc == "")
-            {
-                cmd.Parameters.AddWithValue(":habitDesc", DBNull.Value);
-            }
-            else
-            {
-                cmd.Parameters.AddWithValue(":habitDesc", habitDesc);
-            }
-            cmd.Parameters.AddWithValue(":habitID", habitID);
+                    // add parameterized values
+                    cmd.Parameters.AddWithValue(":habitName", habitName);
+                    // insert NULL for description if it is blank
+                    if (habitDesc == "")
+                    {
+                        cmd.Parameters.AddWithValue(":habitDesc", DBNull.Value);
+                    }
+                    else
+                    {
+                        cmd.Parameters.AddWithValue(":habitDesc", habitDesc);
+                    }
+                    cmd.Parameters.AddWithValue(":habitID", habitID);
 
-            // execute query
-            try
-            {
-                cmd.ExecuteNonQuery();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"{ex.Message}", "Update Habit Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    // execute query
+                    try
+                    {
+                        cmd.ExecuteNonQuery();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"{ex.Message}", "Update Habit Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
             }
         }
 
@@ -404,23 +417,29 @@ namespace HabitLogger
         // creates a Dates record if it doesn't already exist
         public void CreateDate(string date)
         {
-            // Add Date to Dates table if it does not exist
-            SQLiteCommand cmd = conn.CreateCommand();
-            cmd.CommandText =   "INSERT INTO Dates (date) " +
-                                "SELECT :date " +
-                                "WHERE NOT EXISTS (SELECT * FROM Dates WHERE date = :date);";
-
-            // add parametarized values (TODO: should replace all instances of :date with date, need to confirm)
-            cmd.Parameters.AddWithValue(":date", date);
-
-            // execute query
-            try
+            using (SQLiteConnection conn = new SQLiteConnection(connString))
             {
-                cmd.ExecuteNonQuery();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"{ex.Message}", "Create Date Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                DbConnect(conn);
+                // Add Date to Dates table if it does not exist
+                using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                {
+                    cmd.CommandText = "INSERT INTO Dates (date) " +
+                                        "SELECT :date " +
+                                        "WHERE NOT EXISTS (SELECT * FROM Dates WHERE date = :date);";
+
+                    // add parametarized values (TODO: should replace all instances of :date with date, need to confirm)
+                    cmd.Parameters.AddWithValue(":date", date);
+
+                    // execute query
+                    try
+                    {
+                        cmd.ExecuteNonQuery();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"{ex.Message}", "Create Date Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
             }
         }
 
@@ -431,70 +450,82 @@ namespace HabitLogger
         // CreateHabitHasDate method
         public void CreateHabitHasDate(string note, int quantity, string habitName, string date)
         {
-            // Add record to HabitsHasDates table
-            SQLiteCommand cmd = conn.CreateCommand();
-            cmd.CommandText =   "INSERT INTO Habits_has_Dates (quantity, habitID, dateID) " +
-                                "VALUES(:note, " +
-                                       ":quantity, " +
-                                       "(SELECT habitID FROM Habits WHERE name = :habitName), " +
-                                       "(SELECT dateID FROM Dates WHERE date = :date));";
+            using (SQLiteConnection conn = new SQLiteConnection(connString))
+            {
+                DbConnect(conn);
+                // Add record to HabitsHasDates table
+                using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                {
+                    cmd.CommandText = "INSERT INTO Habits_has_Dates (quantity, habitID, dateID) " +
+                                        "VALUES(:note, " +
+                                               ":quantity, " +
+                                               "(SELECT habitID FROM Habits WHERE name = :habitName), " +
+                                               "(SELECT dateID FROM Dates WHERE date = :date));";
 
-            // add parametarized values
-            // insert NULL for note if it is blank
-            if (note == "")
-            {
-                cmd.Parameters.AddWithValue(":note", DBNull.Value);
-            }
-            else
-            {
-                cmd.Parameters.AddWithValue(":note", note);
-            }
-            cmd.Parameters.AddWithValue(":quantity", quantity);
-            cmd.Parameters.AddWithValue(":habitName", habitName);
-            cmd.Parameters.AddWithValue(":date", date);
+                    // add parametarized values
+                    // insert NULL for note if it is blank
+                    if (note == "")
+                    {
+                        cmd.Parameters.AddWithValue(":note", DBNull.Value);
+                    }
+                    else
+                    {
+                        cmd.Parameters.AddWithValue(":note", note);
+                    }
+                    cmd.Parameters.AddWithValue(":quantity", quantity);
+                    cmd.Parameters.AddWithValue(":habitName", habitName);
+                    cmd.Parameters.AddWithValue(":date", date);
 
-            // execute query
-            try
-            {
-                cmd.ExecuteNonQuery();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"{ex.Message}", "Create HabitHasDate Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    // execute query
+                    try
+                    {
+                        cmd.ExecuteNonQuery();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"{ex.Message}", "Create HabitHasDate Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
             }
         }
 
         // UpdateHabitsHasDates method
         public void UpdateHabitHasDate(string note, int quantity, int habitHasDateID)
         {
-            // given a habitHasDateID, update the quantity column
-            SQLiteCommand cmd = conn.CreateCommand();
-            cmd.CommandText =   "UPDATE Habits_has_Dates " +
-                                "SET note = :note, " +
-                                    "quantity = :quantity " +
-                                "WHERE Habits_has_Dates.habitHasDateID = :habitHasDateID;";
+            using (SQLiteConnection conn = new SQLiteConnection(connString))
+            {
+                DbConnect(conn);
+                // given a habitHasDateID, update the quantity column
+                using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                {
+                    cmd.CommandText = "UPDATE Habits_has_Dates " +
+                                        "SET note = :note, " +
+                                            "quantity = :quantity " +
+                                        "WHERE Habits_has_Dates.habitHasDateID = :habitHasDateID;";
 
-            // add parametarized values
-            // insert NULL for note if it is blank
-            if (note == "")
-            {
-                cmd.Parameters.AddWithValue(":note", DBNull.Value);
-            }
-            else
-            {
-                cmd.Parameters.AddWithValue(":note", note);
-            }
-            cmd.Parameters.AddWithValue(":quantity", quantity);
-            cmd.Parameters.AddWithValue(":habitHasDateID", habitHasDateID);
+                    // add parametarized values
+                    // insert NULL for note if it is blank
+                    if (note == "")
+                    {
+                        cmd.Parameters.AddWithValue(":note", DBNull.Value);
+                    }
+                    else
+                    {
+                        cmd.Parameters.AddWithValue(":note", note);
+                    }
+                    cmd.Parameters.AddWithValue(":quantity", quantity);
+                    cmd.Parameters.AddWithValue(":habitHasDateID", habitHasDateID);
 
-            // execute query
-            try
-            {
-                cmd.ExecuteNonQuery();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"{ex.Message}", "Update HabitHasDate Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    // execute query
+                    try
+                    {
+                        cmd.ExecuteNonQuery();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"{ex.Message}", "Update HabitHasDate Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
             }
         }
 
@@ -502,19 +533,24 @@ namespace HabitLogger
         // deletes a Habits_has_Dates record given habitHasDateID and also deletes Dates record if appropriate
         public void DeleteHabitHasDate(int habitHasDateID)
         {
-            SQLiteCommand cmd = conn.CreateCommand();
-            cmd.CommandText = "DELETE FROM Habits_has_Dates " +
-                              "WHERE habitHasDateID = :habitHasDateID;";
-            cmd.Parameters.AddWithValue(":habitHasDateID", habitHasDateID);
+            using (SQLiteConnection conn = new SQLiteConnection(connString))
+            {
+                using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                {
+                    cmd.CommandText = "DELETE FROM Habits_has_Dates " +
+                                      "WHERE habitHasDateID = :habitHasDateID;";
+                    cmd.Parameters.AddWithValue(":habitHasDateID", habitHasDateID);
 
-            // execute query
-            try
-            {
-                cmd.ExecuteNonQuery();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"{ex.Message}", "Delete HabitHasDate Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    // execute query
+                    try
+                    {
+                        cmd.ExecuteNonQuery();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"{ex.Message}", "Delete HabitHasDate Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
             }
         }
 
