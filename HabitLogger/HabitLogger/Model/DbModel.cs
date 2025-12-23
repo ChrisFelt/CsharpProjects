@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using System.Configuration;
 using System.Collections.Generic;
 using System.Data;
@@ -34,28 +35,20 @@ namespace HabitLogger
         // -----------------------------------------------------
         // Initialize database
         // -----------------------------------------------------
-        /*
-        public void DbConnect(string path)
+        public void DbConnect(SQLiteConnection conn, [CallerMemberName] string callingMethod = null)
         {
-            // create db connection and attempt to open
-            if (!File.Exists(dbFilePath))
+            // attempt to open the connection
+            try
             {
-                using (SQLiteConnection conn = new SQLiteConnection(connString))
-                {
-                    try
-                    {
-                        conn.Open();
-                    }
-                    catch (Exception ex)
-                    {
-                        // notify user and exit the program (Application.Exit() does not work here)
-                        MessageBox.Show($"{ex.Message}", "DB Connect Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        Environment.Exit(1);
-                    }
-                }
+                conn.Open();
             }
+            catch (Exception ex)
+            {
+                // notify user and exit the program (Application.Exit() does not work here)
+                MessageBox.Show($"{ex.Message}.\nException occurred in {callingMethod}.", "DB Connect Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Environment.Exit(1);
+            }         
         }
-        */
 
         public void RunDdlFromResourceFile(string dbFilePath, string fileName)
         {
@@ -70,7 +63,7 @@ namespace HabitLogger
                 // establish db connection
                 using (SQLiteConnection conn = new SQLiteConnection(connString))
                 {
-                    conn.Open();
+                    DbConnect(conn);
                     SQLiteCommand cmd = conn.CreateCommand();
 
                     // get array of resource names from the assembly and find matching resource to fileName
@@ -111,7 +104,7 @@ namespace HabitLogger
         {
             using (SQLiteConnection conn = new SQLiteConnection(connString))
             {
-                conn.Open();
+                DbConnect(conn);
                 // Add User record with userName to Users table
                 using (SQLiteCommand cmd = new SQLiteCommand(conn))
                 {
@@ -138,7 +131,7 @@ namespace HabitLogger
         {
             using (SQLiteConnection conn = new SQLiteConnection(connString))
             {
-                conn.Open();
+                DbConnect(conn);
                 // get userID given a userName
                 using (SQLiteCommand cmd = new SQLiteCommand(conn))
                 {
@@ -179,6 +172,7 @@ namespace HabitLogger
             // TODO: need to test this method
             using (SQLiteConnection conn = new SQLiteConnection(connString))
             {
+                DbConnect(conn);
                 // Add Habit record to Habits with name, description (optional), and user ID
                 using (SQLiteCommand cmd = new SQLiteCommand(conn))
                 {
@@ -218,6 +212,7 @@ namespace HabitLogger
             // CreateHabit option 1: used to list habits in AddHabitForm
             using (SQLiteConnection conn = new SQLiteConnection(connString))
             {
+                DbConnect(conn);
                 // prepare list of tuples to return
                 List<(int habitID, string name, string description)> returnList = new List<(int habitID, string name, string description)>();
 
