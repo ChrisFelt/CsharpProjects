@@ -35,21 +35,6 @@ namespace HabitLogger
         // -----------------------------------------------------
         // Initialize database
         // -----------------------------------------------------
-        public void DbConnect(SQLiteConnection conn, [CallerMemberName] string callingMethod = null)
-        {
-            // attempt to open the connection
-            try
-            {
-                conn.Open();
-            }
-            catch (Exception ex)
-            {
-                // notify user and exit the program (Application.Exit() does not work here)
-                MessageBox.Show($"{ex.Message}.\nException occurred in {callingMethod}.", "DB Connect Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                Environment.Exit(1);
-            }         
-        }
-
         public void RunDdlFromResourceFile(string dbFilePath, string fileName)
         {
             /*
@@ -91,10 +76,27 @@ namespace HabitLogger
                     }
                 }
             }
-                
-
-
         }
+
+        // -----------------------------------------------------
+        // General Use Methods
+        // -----------------------------------------------------
+        public void DbConnect(SQLiteConnection conn, [CallerMemberName] string callingMethod = null)
+        {
+            // attempt to open the connection
+            try
+            {
+                conn.Open();
+            }
+            catch (Exception ex)
+            {
+                // notify user and exit the program (Application.Exit() does not work here)
+                MessageBox.Show($"{ex.Message}.\nException occurred in {callingMethod}.", "DB Connect Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Environment.Exit(1);
+            }
+        }
+
+        // TODO: pass all SQLiteCommand executions through a general use method too?
 
         // -----------------------------------------------------
         // Users Table Queries
