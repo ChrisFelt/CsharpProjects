@@ -136,32 +136,39 @@ namespace HabitLogger
 
         public int ReadUser(string userName)
         {
-            // get userID given a userName
             int id = 0;
-            SQLiteCommand cmd = conn.CreateCommand();
-            cmd.CommandText =   "SELECT userID AS 'userID', " +
-                                       "userName AS 'User Name' " +
-                                "FROM Users " +
-                                "WHERE userName = :userName;";
-            cmd.Parameters.AddWithValue(":userName", userName);
-
-            // execute query
-            try
+            using (SQLiteConnection conn = new SQLiteConnection(connString))
             {
-                SQLiteDataReader read = cmd.ExecuteReader();
-                // return userID if userName found
-                // Read() feeds the next matching record into the data reader
-                if (read.Read())
+                conn.Open();
+                // get userID given a userName
+                using (SQLiteCommand cmd = new SQLiteCommand(conn))
                 {
-                    id = Convert.ToInt32(read["userID"]);
+                    cmd.CommandText = "SELECT userID AS 'userID', " +
+                                               "userName AS 'User Name' " +
+                                        "FROM Users " +
+                                        "WHERE userName = :userName;";
+                    cmd.Parameters.AddWithValue(":userName", userName);
+
+                    // execute query
+                    try
+                    {
+                        SQLiteDataReader read = cmd.ExecuteReader();
+                        // return userID if userName found
+                        // Read() feeds the next matching record into the data reader
+                        if (read.Read())
+                        {
+                            id = Convert.ToInt32(read["userID"]);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"{ex.Message}", "Read User Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        // return error value to calling function
+                        return -1;
+                    }
                 }
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"{ex.Message}", "Read User Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                // return error value to calling function
-                return -1;
-            }
+
             return id;  // returns 0 when no match found
         }
 
