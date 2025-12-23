@@ -144,9 +144,9 @@ namespace HabitLogger
                 using (SQLiteCommand cmd = new SQLiteCommand(conn))
                 {
                     cmd.CommandText = "SELECT userID AS 'userID', " +
-                                               "userName AS 'User Name' " +
-                                        "FROM Users " +
-                                        "WHERE userName = :userName;";
+                                             "userName AS 'User Name' " +
+                                      "FROM Users " +
+                                      "WHERE userName = :userName;";
                     cmd.Parameters.AddWithValue(":userName", userName);
 
                     // execute query
