@@ -177,34 +177,40 @@ namespace HabitLogger
         // -----------------------------------------------------
         public void CreateHabit(string habitName, string habitDesc, int userID)
         {
-            // Add Habit record to Habits with name, description (optional), and user ID
-            SQLiteCommand cmd = conn.CreateCommand();
-            cmd.CommandText =   "INSERT INTO Habits (name, description, userID) " +
-                                "VALUES (:habitName, " +
-                                        ":habitDesc, " +
-                                        ":userID);";
+            // TODO: need to test this method
+            using (SQLiteConnection conn = new SQLiteConnection(connString))
+            {
+                // Add Habit record to Habits with name, description (optional), and user ID
+                using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                {
+                    cmd.CommandText = "INSERT INTO Habits (name, description, userID) " +
+                                      "VALUES (:habitName, " +
+                                              ":habitDesc, " +
+                                              ":userID);";
 
-            // add parameterized values
-            cmd.Parameters.AddWithValue(":habitName", habitName);
-            // insert NULL for description if it is blank
-            if (habitDesc == "")
-            {
-                cmd.Parameters.AddWithValue(":habitDesc", DBNull.Value);
-            }
-            else
-            {
-                cmd.Parameters.AddWithValue(":habitDesc", habitDesc);
-            }
-            cmd.Parameters.AddWithValue(":userID", userID);
+                    // add parameterized values
+                    cmd.Parameters.AddWithValue(":habitName", habitName);
+                    // insert NULL for description if it is blank
+                    if (habitDesc == "")
+                    {
+                        cmd.Parameters.AddWithValue(":habitDesc", DBNull.Value);
+                    }
+                    else
+                    {
+                        cmd.Parameters.AddWithValue(":habitDesc", habitDesc);
+                    }
+                    cmd.Parameters.AddWithValue(":userID", userID);
 
-            // execute query
-            try
-            {
-                cmd.ExecuteNonQuery();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"{ex.Message}", "Create Habit Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    // execute query
+                    try
+                    {
+                        cmd.ExecuteNonQuery();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"{ex.Message}", "Create Habit Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
             }
         }
 
