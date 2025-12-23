@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Runtime.CompilerServices;
+using System.Runtime.CompilerServices;  // allows access to [CallerMemberName] attribute
 using System.Configuration;
 using System.Collections.Generic;
 using System.Data;
@@ -84,6 +84,7 @@ namespace HabitLogger
         public void DbConnect(SQLiteConnection conn, [CallerMemberName] string callingMethod = null)
         {
             // attempt to open the connection
+            // callingMethod string populated as a literal at compile time
             try
             {
                 conn.Open();
@@ -101,7 +102,6 @@ namespace HabitLogger
         // -----------------------------------------------------
         // Users Table Queries
         // -----------------------------------------------------
-
         public void CreateUser(string userName)
         {
             using (SQLiteConnection conn = new SQLiteConnection(connString))
