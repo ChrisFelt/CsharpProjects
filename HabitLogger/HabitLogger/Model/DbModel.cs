@@ -136,13 +136,13 @@ namespace HabitLogger
 
         public int ReadUser(string userName)
         {
-            int id = 0;
             using (SQLiteConnection conn = new SQLiteConnection(connString))
             {
                 conn.Open();
                 // get userID given a userName
                 using (SQLiteCommand cmd = new SQLiteCommand(conn))
                 {
+                    int id = 0;
                     cmd.CommandText = "SELECT userID AS 'userID', " +
                                              "userName AS 'User Name' " +
                                       "FROM Users " +
@@ -166,10 +166,9 @@ namespace HabitLogger
                         // return error value to calling function
                         return -1;
                     }
+                    return id;  // returns 0 when no match found
                 }
             }
-
-            return id;  // returns 0 when no match found
         }
 
         // -----------------------------------------------------
@@ -217,37 +216,40 @@ namespace HabitLogger
         public List<(int habitID, string name, string description)> ReadHabitByUser(int userID)
         {
             // CreateHabit option 1: used to list habits in AddHabitForm
-            // prepare list of tuples to return
-            List<(int habitID, string name, string description)> returnList = new List<(int habitID, string name, string description)>();
-
-            // when date is empty, get habits by userID
-            SQLiteCommand cmd = conn.CreateCommand();
-            cmd.CommandText =   "SELECT habitID AS 'habitID', " +
-                                       "name AS 'Name', " +
-                                       "description AS 'Description' " +
-                                "FROM Habits " +
-                                "WHERE userID = :userID;";
-            cmd.Parameters.AddWithValue(":userID", userID);
-
-
-            // populate the return list from data reader
-            try
+            using (SQLiteConnection conn = new SQLiteConnection(connString))
             {
-                SQLiteDataReader read = cmd.ExecuteReader();
-                while (read.Read())
+                // prepare list of tuples to return
+                List<(int habitID, string name, string description)> returnList = new List<(int habitID, string name, string description)>();
+
+                // when date is empty, get habits by userID
+                SQLiteCommand cmd = conn.CreateCommand();
+                cmd.CommandText = "SELECT habitID AS 'habitID', " +
+                                           "name AS 'Name', " +
+                                           "description AS 'Description' " +
+                                    "FROM Habits " +
+                                    "WHERE userID = :userID;";
+                cmd.Parameters.AddWithValue(":userID", userID);
+
+
+                // populate the return list from data reader
+                try
                 {
-                    returnList.Add(
-                        (habitID: Convert.ToInt32(read["habitID"]),
-                        name: Convert.ToString(read["Name"]),
-                        description: Convert.ToString(read["Description"]))
-                        );
+                    SQLiteDataReader read = cmd.ExecuteReader();
+                    while (read.Read())
+                    {
+                        returnList.Add(
+                            (habitID: Convert.ToInt32(read["habitID"]),
+                            name: Convert.ToString(read["Name"]),
+                            description: Convert.ToString(read["Description"]))
+                            );
+                    }
                 }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"{ex.Message}", "Read Habit Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                return returnList;
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"{ex.Message}", "Read Habit Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            return returnList;
         }
 
         
