@@ -222,13 +222,13 @@ namespace HabitLogger
 
         public List<(int habitID, string name, string description)> ReadHabitByUser(int userID)
         {
+            // prepare list of tuples to return
+            List<(int habitID, string name, string description)> returnList = new List<(int habitID, string name, string description)>();
+
             // CreateHabit option 1: used to list habits in AddHabitForm
             using (SQLiteConnection conn = new SQLiteConnection(connString))
             {
                 DbConnect(conn);
-                // prepare list of tuples to return
-                List<(int habitID, string name, string description)> returnList = new List<(int habitID, string name, string description)>();
-
                 // when date is empty, get habits by userID
                 using (SQLiteCommand cmd = new SQLiteCommand(conn))
                 {
@@ -258,9 +258,9 @@ namespace HabitLogger
                     {
                         MessageBox.Show($"{ex.Message}", "Read Habit Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
-                }
-                return returnList;
+                }  
             }
+            return returnList;
         }
 
         
