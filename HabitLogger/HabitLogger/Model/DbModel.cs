@@ -234,10 +234,10 @@ namespace HabitLogger
                 {
 
                     cmd.CommandText = "SELECT habitID AS 'habitID', " +
-                                               "name AS 'Name', " +
-                                               "description AS 'Description' " +
-                                        "FROM Habits " +
-                                        "WHERE userID = :userID;";
+                                             "name AS 'Name', " +
+                                             "description AS 'Description' " +
+                                      "FROM Habits " +
+                                      "WHERE userID = :userID;";
                     cmd.Parameters.AddWithValue(":userID", userID);
 
 
@@ -278,18 +278,18 @@ namespace HabitLogger
                 using (SQLiteCommand cmd = new SQLiteCommand(conn))
                 {
                     cmd.CommandText = "SELECT h.habitID AS 'habitID', " +
-                                               "h.name AS 'Name', " +
-                                               "h.description AS 'Description', " +
-                                               "hd.note AS 'Note', " +
-                                               "hd.quantity AS 'Quantity', " +
-                                               "hd.habitHasDateID AS 'habitHasDateID' " +
-                                        "FROM Dates AS d " +
-                                        "INNER JOIN Habits_has_Dates AS hd " +
-                                            "ON d.dateID = hd.dateID " +
-                                        "INNER JOIN Habits AS h " +
-                                            "ON hd.habitID = h.habitID " +
-                                        "WHERE d.date = :date " +
-                                            "AND h.UserID = :userID;";
+                                             "h.name AS 'Name', " +
+                                             "h.description AS 'Description', " +
+                                             "hd.note AS 'Note', " +
+                                             "hd.quantity AS 'Quantity', " +
+                                             "hd.habitHasDateID AS 'habitHasDateID' " +
+                                      "FROM Dates AS d " +
+                                      "INNER JOIN Habits_has_Dates AS hd " +
+                                          "ON d.dateID = hd.dateID " +
+                                      "INNER JOIN Habits AS h " +
+                                          "ON hd.habitID = h.habitID " +
+                                      "WHERE d.date = :date " +
+                                          "AND h.UserID = :userID;";
                     cmd.Parameters.AddWithValue(":date", date);
                     cmd.Parameters.AddWithValue(":userID", userID);
 
@@ -331,18 +331,18 @@ namespace HabitLogger
                 using (SQLiteCommand cmd = new SQLiteCommand(conn))
                 {
                     cmd.CommandText = "SELECT h.habitID AS 'habitID', " +
-                                               "h.name AS 'Habit', " +
-                                               "h.description AS 'Description', " +
-                                               "hd.note AS 'Note', " +
-                                               "hd.quantity AS 'Frequency', " +
-                                               "hd.habitHasDateID AS 'habitHasDateID' " +
-                                        "FROM Dates AS d " +
-                                        "INNER JOIN Habits_has_Dates AS hd " +
-                                            "ON d.dateID = hd.dateID " +
-                                        "INNER JOIN Habits AS h " +
-                                            "ON hd.habitID = h.habitID " +
-                                        "WHERE d.date = :date " +
-                                            "AND h.UserID = :userID;";
+                                             "h.name AS 'Habit', " +
+                                             "h.description AS 'Description', " +
+                                             "hd.note AS 'Note', " +
+                                             "hd.quantity AS 'Frequency', " +
+                                             "hd.habitHasDateID AS 'habitHasDateID' " +
+                                      "FROM Dates AS d " +
+                                      "INNER JOIN Habits_has_Dates AS hd " +
+                                          "ON d.dateID = hd.dateID " +
+                                      "INNER JOIN Habits AS h " +
+                                          "ON hd.habitID = h.habitID " +
+                                      "WHERE d.date = :date " +
+                                          "AND h.UserID = :userID;";
                     cmd.Parameters.AddWithValue(":date", date);
                     cmd.Parameters.AddWithValue(":userID", userID);
 
@@ -375,9 +375,9 @@ namespace HabitLogger
                 using (SQLiteCommand cmd = new SQLiteCommand(conn))
                 {
                     cmd.CommandText = "UPDATE Habits " +
-                                        "SET name = :habitName, " +
-                                            "description = :habitDesc " +
-                                        "WHERE Habits.habitID = :habitID;";
+                                      "SET name = :habitName, " +
+                                          "description = :habitDesc " +
+                                      "WHERE Habits.habitID = :habitID;";
 
                     // add parameterized values
                     cmd.Parameters.AddWithValue(":habitName", habitName);
@@ -424,8 +424,8 @@ namespace HabitLogger
                 using (SQLiteCommand cmd = new SQLiteCommand(conn))
                 {
                     cmd.CommandText = "INSERT INTO Dates (date) " +
-                                        "SELECT :date " +
-                                        "WHERE NOT EXISTS (SELECT * FROM Dates WHERE date = :date);";
+                                      "SELECT :date " +
+                                      "WHERE NOT EXISTS (SELECT * FROM Dates WHERE date = :date);";
 
                     // add parametarized values (TODO: should replace all instances of :date with date, need to confirm)
                     cmd.Parameters.AddWithValue(":date", date);
@@ -457,10 +457,10 @@ namespace HabitLogger
                 using (SQLiteCommand cmd = new SQLiteCommand(conn))
                 {
                     cmd.CommandText = "INSERT INTO Habits_has_Dates (quantity, habitID, dateID) " +
-                                        "VALUES(:note, " +
-                                               ":quantity, " +
-                                               "(SELECT habitID FROM Habits WHERE name = :habitName), " +
-                                               "(SELECT dateID FROM Dates WHERE date = :date));";
+                                      "VALUES(:note, " +
+                                             ":quantity, " +
+                                             "(SELECT habitID FROM Habits WHERE name = :habitName), " +
+                                             "(SELECT dateID FROM Dates WHERE date = :date));";
 
                     // add parametarized values
                     // insert NULL for note if it is blank
@@ -499,9 +499,9 @@ namespace HabitLogger
                 using (SQLiteCommand cmd = new SQLiteCommand(conn))
                 {
                     cmd.CommandText = "UPDATE Habits_has_Dates " +
-                                        "SET note = :note, " +
-                                            "quantity = :quantity " +
-                                        "WHERE Habits_has_Dates.habitHasDateID = :habitHasDateID;";
+                                      "SET note = :note, " +
+                                          "quantity = :quantity " +
+                                      "WHERE Habits_has_Dates.habitHasDateID = :habitHasDateID;";
 
                     // add parametarized values
                     // insert NULL for note if it is blank
