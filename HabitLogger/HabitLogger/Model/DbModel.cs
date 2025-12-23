@@ -92,12 +92,23 @@ namespace HabitLogger
             catch (Exception ex)
             {
                 // notify user and exit the program (Application.Exit() does not work here)
-                MessageBox.Show($"{ex.Message}.\nException occurred in {callingMethod}.", "DB Connect Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Exception occurred in {callingMethod}.\n{ex.Message}.", "DB Connect Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Environment.Exit(1);
             }
         }
 
-        // TODO: pass all SQLiteCommand executions through a general use method too?
+        public void DbSimpleCommand(SQLiteCommand cmd, [CallerMemberName] string callingMethod = null)
+        {
+            // attempt to execute query
+            try
+            {
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"{ex.Message}", $"{callingMethod} Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
 
         // -----------------------------------------------------
         // Users Table Queries
