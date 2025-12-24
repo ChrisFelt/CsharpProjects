@@ -96,9 +96,9 @@ namespace HabitLogger
             }
         }
 
-        public void DbSimpleCommand(SQLiteCommand cmd, [CallerMemberName] string callingMethod = null)
+        public void DbCUDCommand(SQLiteCommand cmd, [CallerMemberName] string callingMethod = null)
         {
-            // attempt to execute query
+            // attempt to execute query for Create, Update, or Delete operations
             try
             {
                 cmd.ExecuteNonQuery();
@@ -125,15 +125,7 @@ namespace HabitLogger
                     cmd.Parameters.AddWithValue(":userName", userName);
 
                     // execute query
-                    try
-                    {
-                        cmd.ExecuteNonQuery();
-                    }
-                    catch (Exception ex)
-                    {
-                        // TODO: make error popup messages more user friendly
-                        MessageBox.Show($"{ex.Message}", "Create User Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
+                    DbCUDCommand(cmd);
                 }
             }
 
@@ -209,14 +201,7 @@ namespace HabitLogger
                     cmd.Parameters.AddWithValue(":userID", userID);
 
                     // execute query
-                    try
-                    {
-                        cmd.ExecuteNonQuery();
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show($"{ex.Message}", "Create Habit Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
+                    DbCUDCommand(cmd);
                 }
             }
         }
@@ -398,14 +383,7 @@ namespace HabitLogger
                     cmd.Parameters.AddWithValue(":habitID", habitID);
 
                     // execute query
-                    try
-                    {
-                        cmd.ExecuteNonQuery();
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show($"{ex.Message}", "Update Habit Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
+                    DbCUDCommand(cmd);
                 }
             }
         }
@@ -436,14 +414,7 @@ namespace HabitLogger
                     cmd.Parameters.AddWithValue(":date", date);
 
                     // execute query
-                    try
-                    {
-                        cmd.ExecuteNonQuery();
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show($"{ex.Message}", "Create Date Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
+                    DbCUDCommand(cmd);
                 }
             }
         }
@@ -482,14 +453,7 @@ namespace HabitLogger
                     cmd.Parameters.AddWithValue(":date", date);
 
                     // execute query
-                    try
-                    {
-                        cmd.ExecuteNonQuery();
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show($"{ex.Message}", "Create HabitHasDate Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
+                    DbCUDCommand(cmd);
                 }
             }
         }
@@ -522,14 +486,7 @@ namespace HabitLogger
                     cmd.Parameters.AddWithValue(":habitHasDateID", habitHasDateID);
 
                     // execute query
-                    try
-                    {
-                        cmd.ExecuteNonQuery();
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show($"{ex.Message}", "Update HabitHasDate Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
+                    DbCUDCommand(cmd);
                 }
             }
         }
@@ -547,14 +504,7 @@ namespace HabitLogger
                     cmd.Parameters.AddWithValue(":habitHasDateID", habitHasDateID);
 
                     // execute query
-                    try
-                    {
-                        cmd.ExecuteNonQuery();
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show($"{ex.Message}", "Delete HabitHasDate Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
+                    DbCUDCommand(cmd);
                 }
             }
         }
