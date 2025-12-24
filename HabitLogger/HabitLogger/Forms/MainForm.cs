@@ -212,6 +212,7 @@ namespace HabitLogger
                     MessageBox.Show($"Error, frequency must be an integer!\nYou entered: '{newCellContents}'.\nPlease try again.", "Frequency input failed.", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
+            // TODO: implement other columns
             // if validation fails, roll back contents to the previous value
             // update DataGridViewHistory
             // commit changes to db
@@ -274,8 +275,9 @@ namespace HabitLogger
             int habitHasDateID = Convert.ToInt32(gridViewHabitsByDate.Rows[row].Cells[habitHasDateIDCol].Value.ToString());
 
             // update db
-            Console.WriteLine($"Attempting to write note: {note}, quantity: {quantity}, habitHasDateID: {habitHasDateID}.");
+            Console.Write($"Attempting to write note: {note}, quantity: {quantity}, habitHasDateID: {habitHasDateID}... ");
             sqliteDb.UpdateHabitHasDate(note, quantity, habitHasDateID);
+            Console.WriteLine("Success!");
         }
     }
 }
