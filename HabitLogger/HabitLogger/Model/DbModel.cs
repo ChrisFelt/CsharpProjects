@@ -21,13 +21,11 @@ namespace HabitLogger
     {
         public SQLiteConnection conn;
         private string connString = ConfigurationManager.ConnectionStrings["Default"].ConnectionString;
-        //private string connString = "Data Source=../../Database/HabitLoggerDb.db; Version=3; New=True; Compress=True;";
 
         // default constructor
         public DbModel(string dbFilePath = "../../Database/HabitLoggerDb.db", string ddlFile = "DDL.sql")
         {
             // TODO: move db to project directory
-            // DbConnect(dbFile);
             RunDdlFromResourceFile(dbFilePath, ddlFile);
             Console.WriteLine(connString);
         }
