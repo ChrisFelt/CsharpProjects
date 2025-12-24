@@ -49,30 +49,31 @@ namespace HabitLogger
                 using (SQLiteConnection conn = new SQLiteConnection(connString))
                 {
                     DbConnect(conn);
-                    SQLiteCommand cmd = conn.CreateCommand();
-
-                    // get array of resource names from the assembly and find matching resource to fileName
-                    Assembly assembly = Assembly.GetExecutingAssembly();
-                    string[] resourceArray = assembly.GetManifestResourceNames();
-                    string resourceName = resourceArray.FirstOrDefault(str => str.EndsWith($"{fileName}"));
-
-                    // read contents of resource to cmd
-                    using (Stream stream = assembly.GetManifestResourceStream(resourceName))
+                    using (SQLiteCommand cmd = new SQLiteCommand(conn))
                     {
-                        using (StreamReader reader = new StreamReader(stream))
+                        // get array of resource names from the assembly and find matching resource to fileName
+                        Assembly assembly = Assembly.GetExecutingAssembly();
+                        string[] resourceArray = assembly.GetManifestResourceNames();
+                        string resourceName = resourceArray.FirstOrDefault(str => str.EndsWith($"{fileName}"));
+
+                        // read contents of resource to cmd
+                        using (Stream stream = assembly.GetManifestResourceStream(resourceName))
                         {
-                            cmd.CommandText = reader.ReadToEnd();
+                            using (StreamReader reader = new StreamReader(stream))
+                            {
+                                cmd.CommandText = reader.ReadToEnd();
+                            }
                         }
-                    }
 
-                    // execute DDL
-                    try
-                    {
-                        cmd.ExecuteNonQuery();
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show($"{ex.Message}", "DDL Read Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        // execute DDL
+                        try
+                        {
+                            cmd.ExecuteNonQuery();
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show($"{ex.Message}", "DDL Read Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
                     }
                 }
             }
@@ -158,12 +159,14 @@ namespace HabitLogger
                     // execute query
                     try
                     {
-                        SQLiteDataReader read = cmd.ExecuteReader();
-                        // return userID if userName found
-                        // Read() feeds the next matching record into the data reader
-                        if (read.Read())
+                        using (SQLiteDataReader read = cmd.ExecuteReader())
                         {
-                            id = Convert.ToInt32(read["userID"]);
+                            // return userID if userName found
+                            // Read() feeds the next matching record into the data reader
+                            if (read.Read())
+                            {
+                                id = Convert.ToInt32(read["userID"]);
+                            }
                         }
                     }
                     catch (Exception ex)
@@ -244,14 +247,16 @@ namespace HabitLogger
                     // populate the return list from data reader
                     try
                     {
-                        SQLiteDataReader read = cmd.ExecuteReader();
-                        while (read.Read())
+                        using (SQLiteDataReader read = cmd.ExecuteReader())
                         {
-                            returnList.Add(
-                                (habitID: Convert.ToInt32(read["habitID"]),
-                                name: Convert.ToString(read["Name"]),
-                                description: Convert.ToString(read["Description"]))
-                                );
+                            while (read.Read())
+                            {
+                                returnList.Add(
+                                    (habitID: Convert.ToInt32(read["habitID"]),
+                                    name: Convert.ToString(read["Name"]),
+                                    description: Convert.ToString(read["Description"]))
+                                    );
+                            }
                         }
                     }
                     catch (Exception ex)
@@ -296,16 +301,18 @@ namespace HabitLogger
                     // populate the return list from data reader
                     try
                     {
-                        SQLiteDataReader read = cmd.ExecuteReader();
-                        while (read.Read())
+                        using (SQLiteDataReader read = cmd.ExecuteReader())
                         {
-                            returnList.Add(
-                                (habitID: Convert.ToInt32(read["habitID"]),
-                                name: Convert.ToString(read["Name"]),
-                                note: Convert.ToString(read["Note"]),
-                                habitHasDateID: Convert.ToInt32(read["habitHasDateID"]),
-                                quantity: Convert.ToString(read["Quantity"]))
-                                );
+                            while (read.Read())
+                            {
+                                returnList.Add(
+                                    (habitID: Convert.ToInt32(read["habitID"]),
+                                    name: Convert.ToString(read["Name"]),
+                                    note: Convert.ToString(read["Note"]),
+                                    habitHasDateID: Convert.ToInt32(read["habitHasDateID"]),
+                                    quantity: Convert.ToString(read["Quantity"]))
+                                    );
+                            }
                         }
                     }
                     catch (Exception ex)
