@@ -20,10 +20,10 @@ namespace HabitLogger
         string prevCellContents;  // track contents of a cell before edit
 
         // gridViewHabitsByDate columns
+        int habitNameCol = 1;
         int noteCol = 3;
         int quantityCol = 4;
         int habitHasDateIDCol = 5;
-
 
         DataTable dt;
 
@@ -174,19 +174,6 @@ namespace HabitLogger
         // call UpdateHabitHasDate with the new values
         // call Commit method from DataGridViewHistory with new values
         // gridViewHabitsByDate will NOT allow creation of new rows - new habits will be added by double clicking habits in the new DataGridView below
-        private void gridViewHabitsByDate_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
-        {
-            //Console.WriteLine("Cell validating event handler called.");
-            //gridViewHabitsByDate.Rows[e.RowIndex].ErrorText = "";
-            int intInput;
-
-            if (!int.TryParse(e.FormattedValue.ToString(), out intInput) || intInput < 0)
-            {
-                //e.Cancel = true;
-                //gridViewHabitsByDate.Rows[e.RowIndex].ErrorText = "Input must be >= 0";
-            }
-        }
-
         // grab contents of the cell before user edits it
         private void gridViewHabitsByDate_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
         {
@@ -201,22 +188,42 @@ namespace HabitLogger
         {
             Console.WriteLine($"Finished editing cell at row {e.RowIndex} and column {e.ColumnIndex}");
             Console.WriteLine($"Previous contents were: '{prevCellContents}'. New contents are: '{gridViewHabitsByDate.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString()}'");
-            string newCellContents = gridViewHabitsByDate.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
-            // validate edits based on column: column 1 can't be edited, column 4 MUST be an integer and can't be empty, column 3 can be empty or contain any combination of ASCII characters
-            if (e.ColumnIndex == quantityCol)
+
+            // habit name column can't be edited - roll back value when user attempts to edit it
+            // TODO: non-intrusive notification that this column can't be edited
+            if (e.ColumnIndex == habitNameCol)
             {
-                // validate input - if not integer, revert to previous value and notify user
-                if (!int.TryParse(newCellContents, out int intInput))
-                {
-                    gridViewHabitsByDate.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = prevCellContents;
-                    MessageBox.Show($"Error, frequency must be an integer!\nYou entered: '{newCellContents}'.\nPlease try again.", "Frequency input failed.", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                gridViewHabitsByDate.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = prevCellContents;
             }
-            // TODO: implement other columns
-            // if validation fails, roll back contents to the previous value
-            // update DataGridViewHistory
-            // commit changes to db
-            WriteRowToDb(e.RowIndex);
+
+            // commit all valid edits to db and update history (note: all values are valid for note column)
+            else
+            {
+                WriteRowToDb(e.RowIndex);
+            }
+            
+            // TODO: update history
+        }
+
+        // catch data type errors in gridViewHabitsByDate
+        private void gridViewHabitsByDate_DataError(object sender, DataGridViewDataErrorEventArgs anError)
+        {
+            // get the new value entered (can't get this value with Value.ToString())
+            string newCellContents = gridViewHabitsByDate.EditingControl.Text;
+
+            // handle non-integer input errors into the habit quantity column
+            if (anError.ColumnIndex == quantityCol)
+            {
+                // roll the value back and notify user
+                gridViewHabitsByDate.EditingControl.Text = prevCellContents;
+                MessageBox.Show($"Error: frequency must be an integer!\nYou entered: '{newCellContents}'.\nPlease try again.", "Frequency input failed.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            // notify user of unexpected error in a different column
+            else
+            {
+                gridViewHabitsByDate.EditingControl.Text = prevCellContents;
+                MessageBox.Show($"Error: an unexpected error has occurred \nat row: {anError.RowIndex} \nand column: {anError.ColumnIndex} \nwith current contents: {newCellContents} \nand previous contents: {prevCellContents}.\nError context: {anError.Context}", "Unexpected Error.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         // TODO:
