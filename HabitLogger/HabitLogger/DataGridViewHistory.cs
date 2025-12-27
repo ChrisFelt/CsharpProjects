@@ -18,6 +18,7 @@ namespace HabitLogger
         
         public DataGridViewHistory() { }  // empty constructor
 
+        // TODO: add public methods RedoCell, RedoRow, UndoCell, and UndoRow. Make Redo and Undo private. Add "cell" and "row" as class variables
         public (string type, int row, string note, int quantity, int habitHasDateID) Redo((string type, int row, string note, int quantity, int habitHasDateID) values)
         {
             // pop top value off redoHistory
