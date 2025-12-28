@@ -59,6 +59,18 @@ namespace HabitLogger
             return undoHistory.Count;
         }
 
+        public (string type, int row, string note, int quantity, int habitHasDateID) UndoPeek()
+        {
+            // peek at top value of undoHistory
+            return undoHistory.Peek();
+        }
+
+        public (string type, int row, string note, int quantity, int habitHasDateID) RedoPeek()
+        {
+            // peek at top value of redoHistory
+            return redoHistory.Peek();
+        }
+
         public void ClearHistory()
         {
             redoHistory.Clear();
