@@ -12,19 +12,34 @@ namespace HabitLogger
     {
         // controls the activity history for a DataGridView 
         // C# stack data structure documentation: https://learn.microsoft.com/en-us/dotnet/api/system.collections.stack?view=net-10.0
-        private Stack<(string type, int row, int quantity, string note, int habitHasDateID)> undoHistory = new Stack<(string type, int row, int quantity, string note, int habitHasDateID)>();
-        private Stack<(string type, int row, int quantity, string note, int habitHasDateID)> redoHistory = new Stack<(string type, int row, int quantity, string note, int habitHasDateID)>();
-        
+        // fields
+        private Stack<(string type, int row, int quantity, string note, int habitHasDateID)> _undoHistory = new Stack<(string type, int row, int quantity, string note, int habitHasDateID)>();
+        private Stack<(string type, int row, int quantity, string note, int habitHasDateID)> _redoHistory = new Stack<(string type, int row, int quantity, string note, int habitHasDateID)>();
+        private int _deletedRowsCount = 0;
+
+        // properties
+        public int DeletedRowsCount
+        {
+            get
+            {
+                return _deletedRowsCount;
+            }
+            set
+            {
+                _deletedRowsCount = value;
+            }
+        }
+
         public DataGridViewHistory() { }  // empty constructor
 
         public (string type, int row, int quantity, string note, int habitHasDateID) Redo((string type, int row, int quantity, string note, int habitHasDateID) values)
         {
-            // pop top value off redoHistory
-            (string type, int row, int quantity, string note, int habitHasDateID) returnValue = redoHistory.Pop();
+            // pop top value off _redoHistory
+            (string type, int row, int quantity, string note, int habitHasDateID) returnValue = _redoHistory.Pop();
             // find its destination cell(s) in the dt
-            // push current values of those cell(s) into undoHistory
-            undoHistory.Push(values);
-            // replace destination cell(s) with values from redoHistory
+            // push current values of those cell(s) into _undoHistory
+            _undoHistory.Push(values);
+            // replace destination cell(s) with values from _redoHistory
             return returnValue;
             // TODO: modify db/dt in calling function
             // write changes to database
@@ -32,49 +47,49 @@ namespace HabitLogger
 
         public (string type, int row, int quantity, string note, int habitHasDateID) Undo((string type, int row, int quantity, string note, int habitHasDateID) values)
         {
-            // pop top value off undoHistory
-            (string type, int row, int quantity, string note, int habitHasDateID) returnValue = undoHistory.Pop();
+            // pop top value off _undoHistory
+            (string type, int row, int quantity, string note, int habitHasDateID) returnValue = _undoHistory.Pop();
             // find its destination cell(s) in the dt
-            // push current values of those cell(s) into redoHistory
-            redoHistory.Push(values);
-            // replace destination cell(s) with values from undoHistory
+            // push current values of those cell(s) into _redoHistory
+            _redoHistory.Push(values);
+            // replace destination cell(s) with values from _undoHistory
             return returnValue;
             // write changes to database
         }
 
         public void Commit((string type, int row, int quantity, string note, int habitHasDateID) values)
         {
-            // clear redoHistory stack and push values on top of undoHistory
-            redoHistory.Clear();
-            undoHistory.Push(values);
+            // clear _redoHistory stack and push values on top of _undoHistory
+            _redoHistory.Clear();
+            _undoHistory.Push(values);
         }
 
         public int GetRedoCount()
         {
-            return redoHistory.Count;
+            return _redoHistory.Count;
         }
 
         public int GetUndoCount()
         {
-            return undoHistory.Count;
+            return _undoHistory.Count;
         }
 
         public (string type, int row, int quantity, string note, int habitHasDateID) UndoPeek()
         {
-            // peek at top value of undoHistory
-            return undoHistory.Peek();
+            // peek at top value of _undoHistory
+            return _undoHistory.Peek();
         }
 
         public (string type, int row, int quantity, string note, int habitHasDateID) RedoPeek()
         {
-            // peek at top value of redoHistory
-            return redoHistory.Peek();
+            // peek at top value of _redoHistory
+            return _redoHistory.Peek();
         }
 
         public void ClearHistory()
         {
-            redoHistory.Clear();
-            undoHistory.Clear();
+            _redoHistory.Clear();
+            _undoHistory.Clear();
         }
     }
 }
