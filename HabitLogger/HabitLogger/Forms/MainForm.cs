@@ -239,6 +239,19 @@ namespace HabitLogger
             }
         }
 
+        // add rows deleted from gridViewHabitsByDate to history
+        private void gridViewHabitsByDate_UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
+        {
+            string name = gridViewHabitsByDate.Rows[e.Row.Index].Cells[habitNameCol].Value.ToString();
+            string quantity = gridViewHabitsByDate.Rows[e.Row.Index].Cells[quantityCol].Value.ToString();
+            string note = gridViewHabitsByDate.Rows[e.Row.Index].Cells[noteCol].Value.ToString();
+            string habitHasDateID = gridViewHabitsByDate.Rows[e.Row.Index].Cells[habitHasDateIDCol].Value.ToString();
+            Console.WriteLine($"User deleting row: {e.Row.Index} with contents: {name} {quantity} {note} {habitHasDateID}.");
+            // TODO: add row to history
+            // NOTE: this event fires for EACH row deleted. Multiple rows deleted simultaneously each cause the event to fire individually.
+            // Need to track how many rows were deleted with history. Add new class variable in DataGridViewHistory to count?
+        }
+
         // TODO:
         // add Undo and Redo buttons (replace Add/Edit?) under gridViewHabitsByDate
         // add separate click events to both buttons
