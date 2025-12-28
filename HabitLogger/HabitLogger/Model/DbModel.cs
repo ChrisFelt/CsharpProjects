@@ -323,8 +323,8 @@ namespace HabitLogger
                     cmd.CommandText = @"SELECT h.habitID AS 'habitID', 
                                                h.name AS 'Habit', 
                                                h.description AS 'Description', 
-                                               hd.note AS 'Note', 
                                                hd.quantity AS 'Frequency', 
+                                               hd.note AS 'Note', 
                                                hd.habitHasDateID AS 'habitHasDateID' 
                                         FROM Dates AS d 
                                         INNER JOIN Habits_has_Dates AS hd 

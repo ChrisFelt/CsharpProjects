@@ -210,11 +210,12 @@ namespace HabitLogger
             }
 
             // commit change to history
-            string note = gridViewHabitsByDate.Rows[e.RowIndex].Cells[noteCol].Value.ToString();
+            
             int quantity = Convert.ToInt32(gridViewHabitsByDate.Rows[e.RowIndex].Cells[quantityCol].Value);
+            string note = gridViewHabitsByDate.Rows[e.RowIndex].Cells[noteCol].Value.ToString();
             int habitHasDateID = Convert.ToInt32(gridViewHabitsByDate.Rows[e.RowIndex].Cells[habitHasDateIDCol].Value);
 
-            gridViewHabitsByDateHistory.Commit((cellType, e.RowIndex, note, quantity, habitHasDateID));
+            gridViewHabitsByDateHistory.Commit((cellType, e.RowIndex, quantity, note, habitHasDateID));
             Console.WriteLine(gridViewHabitsByDateHistory.UndoPeek());
         }
 
