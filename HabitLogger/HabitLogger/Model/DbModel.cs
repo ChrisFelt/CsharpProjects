@@ -19,15 +19,14 @@ namespace HabitLogger
 {
     public class DbModel
     {
-        public SQLiteConnection conn;
-        private string connString = ConfigurationManager.ConnectionStrings["Default"].ConnectionString;
+        private string _connString = ConfigurationManager.ConnectionStrings["Default"].ConnectionString;
 
         // default constructor
         public DbModel(string dbFilePath = "../../Database/HabitLoggerDb.db", string ddlFile = "DDL.sql")
         {
             // TODO: move db to project directory
             RunDdlFromResourceFile(dbFilePath, ddlFile);
-            Console.WriteLine(connString);
+            Console.WriteLine(_connString);
         }
 
         // -----------------------------------------------------
@@ -44,7 +43,7 @@ namespace HabitLogger
             if (!File.Exists(dbFilePath))
             {
                 // establish db connection
-                using (SQLiteConnection conn = new SQLiteConnection(connString))
+                using (SQLiteConnection conn = new SQLiteConnection(_connString))
                 {
                     DbConnect(conn);
                     using (SQLiteCommand cmd = new SQLiteCommand(conn))
@@ -114,7 +113,7 @@ namespace HabitLogger
         // -----------------------------------------------------
         public void CreateUser(string userName)
         {
-            using (SQLiteConnection conn = new SQLiteConnection(connString))
+            using (SQLiteConnection conn = new SQLiteConnection(_connString))
             {
                 DbConnect(conn);
                 // Add User record with userName to Users table
@@ -133,7 +132,7 @@ namespace HabitLogger
 
         public int ReadUser(string userName)
         {
-            using (SQLiteConnection conn = new SQLiteConnection(connString))
+            using (SQLiteConnection conn = new SQLiteConnection(_connString))
             {
                 DbConnect(conn);
                 // get userID given a userName
@@ -176,7 +175,7 @@ namespace HabitLogger
         public void CreateHabit(string habitName, string habitDesc, int userID)
         {
             // TODO: need to test this method
-            using (SQLiteConnection conn = new SQLiteConnection(connString))
+            using (SQLiteConnection conn = new SQLiteConnection(_connString))
             {
                 DbConnect(conn);
                 // Add Habit record to Habits with name, description (optional), and user ID
@@ -212,7 +211,7 @@ namespace HabitLogger
             List<(int habitID, string name, string description)> returnList = new List<(int habitID, string name, string description)>();
 
             // CreateHabit option 1: used to list habits in AddHabitForm
-            using (SQLiteConnection conn = new SQLiteConnection(connString))
+            using (SQLiteConnection conn = new SQLiteConnection(_connString))
             {
                 DbConnect(conn);
                 // when date is empty, get habits by userID
@@ -259,7 +258,7 @@ namespace HabitLogger
             List<(int habitID, string name, string note, int habitHasDateID, string quantity)> returnList = new List<(int habitID, string name, string description, int habitHasDateID, string quantity)>();
 
             // CreateHabit option 2: used to list habits in lblMain of MainForm
-            using (SQLiteConnection conn = new SQLiteConnection(connString))
+            using (SQLiteConnection conn = new SQLiteConnection(_connString))
             {
                 DbConnect(conn);
                 // pull up habit by date and userID
@@ -314,7 +313,7 @@ namespace HabitLogger
             DataTable data = new DataTable();
 
             // CreateHabit option 2: used to populate grid view of habits in lblMain of MainForm
-            using (SQLiteConnection conn = new SQLiteConnection(connString))
+            using (SQLiteConnection conn = new SQLiteConnection(_connString))
             {
                 DbConnect(conn);
                 // pull up habit by date and userID
@@ -358,7 +357,7 @@ namespace HabitLogger
         // updates habit name or description given a habitID
         public void UpdateHabit(string habitName, string habitDesc, int habitID)
         {
-            using (SQLiteConnection conn = new SQLiteConnection(connString))
+            using (SQLiteConnection conn = new SQLiteConnection(_connString))
             {
                 DbConnect(conn);
                 // Update name and description for the habit with the given habitID
@@ -400,7 +399,7 @@ namespace HabitLogger
         // creates a Dates record if it doesn't already exist
         public void CreateDate(string date)
         {
-            using (SQLiteConnection conn = new SQLiteConnection(connString))
+            using (SQLiteConnection conn = new SQLiteConnection(_connString))
             {
                 DbConnect(conn);
                 // Add Date to Dates table if it does not exist
@@ -426,7 +425,7 @@ namespace HabitLogger
         // CreateHabitHasDate method
         public void CreateHabitHasDate(string note, int quantity, string habitName, string date)
         {
-            using (SQLiteConnection conn = new SQLiteConnection(connString))
+            using (SQLiteConnection conn = new SQLiteConnection(_connString))
             {
                 DbConnect(conn);
                 // Add record to HabitsHasDates table
@@ -461,7 +460,7 @@ namespace HabitLogger
         // UpdateHabitsHasDates method
         public void UpdateHabitHasDate(string note, int quantity, int habitHasDateID)
         {
-            using (SQLiteConnection conn = new SQLiteConnection(connString))
+            using (SQLiteConnection conn = new SQLiteConnection(_connString))
             {
                 DbConnect(conn);
                 // given a habitHasDateID, update the quantity column
@@ -495,7 +494,7 @@ namespace HabitLogger
         // deletes a Habits_has_Dates record given habitHasDateID and also deletes Dates record if appropriate
         public void DeleteHabitHasDate(int habitHasDateID)
         {
-            using (SQLiteConnection conn = new SQLiteConnection(connString))
+            using (SQLiteConnection conn = new SQLiteConnection(_connString))
             {
                 using (SQLiteCommand cmd = new SQLiteCommand(conn))
                 {
