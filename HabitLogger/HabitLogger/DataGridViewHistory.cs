@@ -49,6 +49,16 @@ namespace HabitLogger
             undoHistory.Push(values);
         }
 
+        public int GetRedoCount()
+        {
+            return redoHistory.Count;
+        }
+
+        public int GetUndoCount()
+        {
+            return undoHistory.Count;
+        }
+
         public void ClearHistory()
         {
             redoHistory.Clear();
