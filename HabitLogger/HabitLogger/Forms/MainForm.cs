@@ -27,6 +27,10 @@ namespace HabitLogger
 
         DataTable dt;
 
+        // track gridViewHabitsByDate row/cell history separately
+        DataGridViewHistory cellHistory = new DataGridViewHistory();
+        DataGridViewHistory rowHistory = new DataGridViewHistory();
+
         public main()
         {
             InitializeComponent();

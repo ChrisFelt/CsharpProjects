@@ -42,7 +42,7 @@ namespace HabitLogger
             // write changes to database
         }
 
-        public void Commit((int row, string note, int quantity, int habitHasDateID) values)
+        public void Commit((string type, int row, string note, int quantity, int habitHasDateID) values)
         {
             // clear redoHistory stack and push values on top of undoHistory
             redoHistory.Clear();
