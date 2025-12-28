@@ -193,8 +193,9 @@ namespace HabitLogger
         // validate edits made to a cell and update DataGridViewHistory
         private void gridViewHabitsByDate_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
+            string curCellContents = gridViewHabitsByDate.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
             Console.WriteLine($"Finished editing cell at row {e.RowIndex} and column {e.ColumnIndex}");
-            Console.WriteLine($"Previous contents were: '{prevCellContents}'. New contents are: '{gridViewHabitsByDate.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString()}'");
+            Console.WriteLine($"Previous contents were: '{prevCellContents}'. New contents are: '{curCellContents}'");
 
             // habit name column can't be edited - roll back value when user attempts to edit it
             // TODO: non-intrusive notification that this column can't be edited
@@ -204,19 +205,17 @@ namespace HabitLogger
             }
 
             // commit all valid edits to db and update history (note: all values are valid for note column)
-            else
+            else if (prevCellContents != curCellContents)
             {
                 WriteRowToDb(e.RowIndex);
+                // commit change to history
+                int quantity = Convert.ToInt32(gridViewHabitsByDate.Rows[e.RowIndex].Cells[quantityCol].Value);
+                string note = gridViewHabitsByDate.Rows[e.RowIndex].Cells[noteCol].Value.ToString();
+                int habitHasDateID = Convert.ToInt32(gridViewHabitsByDate.Rows[e.RowIndex].Cells[habitHasDateIDCol].Value);
+
+                gridViewHabitsByDateHistory.Commit((cellType, e.RowIndex, quantity, note, habitHasDateID));
+                Console.WriteLine($"Added to history: {gridViewHabitsByDateHistory.UndoPeek()}");
             }
-
-            // commit change to history
-            
-            int quantity = Convert.ToInt32(gridViewHabitsByDate.Rows[e.RowIndex].Cells[quantityCol].Value);
-            string note = gridViewHabitsByDate.Rows[e.RowIndex].Cells[noteCol].Value.ToString();
-            int habitHasDateID = Convert.ToInt32(gridViewHabitsByDate.Rows[e.RowIndex].Cells[habitHasDateIDCol].Value);
-
-            gridViewHabitsByDateHistory.Commit((cellType, e.RowIndex, quantity, note, habitHasDateID));
-            Console.WriteLine(gridViewHabitsByDateHistory.UndoPeek());
         }
 
         // catch data type errors in gridViewHabitsByDate
