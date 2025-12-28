@@ -21,15 +21,18 @@ namespace HabitLogger
 
         // gridViewHabitsByDate columns
         int habitNameCol = 1;
-        int noteCol = 3;
-        int quantityCol = 4;
+        int quantityCol = 3;
+        int noteCol = 4;
         int habitHasDateIDCol = 5;
 
         DataTable dt;
 
         // track gridViewHabitsByDate row/cell history separately
-        DataGridViewHistory cellHistory = new DataGridViewHistory();
-        DataGridViewHistory rowHistory = new DataGridViewHistory();
+        DataGridViewHistory gridViewHabitsByDateHistory = new DataGridViewHistory();
+
+        // hard code history types
+        string cellType = "cell";
+        string rowType = "row";
 
         public main()
         {
@@ -205,8 +208,14 @@ namespace HabitLogger
             {
                 WriteRowToDb(e.RowIndex);
             }
-            
-            // TODO: update history
+
+            // commit change to history
+            string note = gridViewHabitsByDate.Rows[e.RowIndex].Cells[noteCol].Value.ToString();
+            int quantity = Convert.ToInt32(gridViewHabitsByDate.Rows[e.RowIndex].Cells[quantityCol].Value);
+            int habitHasDateID = Convert.ToInt32(gridViewHabitsByDate.Rows[e.RowIndex].Cells[habitHasDateIDCol].Value);
+
+            gridViewHabitsByDateHistory.Commit((cellType, e.RowIndex, note, quantity, habitHasDateID));
+            Console.WriteLine(gridViewHabitsByDateHistory.UndoPeek());
         }
 
         // catch data type errors in gridViewHabitsByDate
