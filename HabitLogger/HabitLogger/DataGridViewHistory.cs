@@ -12,15 +12,15 @@ namespace HabitLogger
     {
         // controls the activity history for a DataGridView 
         // C# stack data structure documentation: https://learn.microsoft.com/en-us/dotnet/api/system.collections.stack?view=net-10.0
-        private Stack<(int row, string note, int quantity, int habitHasDateID)> undoHistory = new Stack<(int row, string note, int quantity, int habitHasDateID)>();
-        private Stack<(int row, string note, int quantity, int habitHasDateID)> redoHistory = new Stack<(int row, string note, int quantity, int habitHasDateID)>();
+        private Stack<(string type, int row, string note, int quantity, int habitHasDateID)> undoHistory = new Stack<(string type, int row, string note, int quantity, int habitHasDateID)>();
+        private Stack<(string type, int row, string note, int quantity, int habitHasDateID)> redoHistory = new Stack<(string type, int row, string note, int quantity, int habitHasDateID)>();
         
         public DataGridViewHistory() { }  // empty constructor
 
-        public (int row, string note, int quantity, int habitHasDateID) Redo((int row, string note, int quantity, int habitHasDateID) values)
+        public (string type, int row, string note, int quantity, int habitHasDateID) Redo((string type, int row, string note, int quantity, int habitHasDateID) values)
         {
             // pop top value off redoHistory
-            (int row, string note, int quantity, int habitHasDateID) returnValue = redoHistory.Pop();
+            (string type, int row, string note, int quantity, int habitHasDateID) returnValue = redoHistory.Pop();
             // find its destination cell(s) in the dt
             // push current values of those cell(s) into undoHistory
             undoHistory.Push(values);
@@ -30,10 +30,10 @@ namespace HabitLogger
             // write changes to database
         }
 
-        public (int row, string note, int quantity, int habitHasDateID) Undo((int row, string note, int quantity, int habitHasDateID) values)
+        public (string type, int row, string note, int quantity, int habitHasDateID) Undo((string type, int row, string note, int quantity, int habitHasDateID) values)
         {
             // pop top value off undoHistory
-            (int row, string note, int quantity, int habitHasDateID) returnValue = undoHistory.Pop();
+            (string type, int row, string note, int quantity, int habitHasDateID) returnValue = undoHistory.Pop();
             // find its destination cell(s) in the dt
             // push current values of those cell(s) into redoHistory
             redoHistory.Push(values);
