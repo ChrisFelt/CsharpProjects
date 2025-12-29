@@ -14,25 +14,27 @@ namespace HabitLogger
 {
     public partial class main : Form
     {
-        DbModel sqliteDb = new DbModel();
-        int curUserID = 0;  // user not logged in
-        int indexHabitHasDateID = 4;  // ListViewItem index for habitHasDateID
-        string prevCellContents;  // track contents of a cell before edit
-
+        // fields
+        private DbModel sqliteDb = new DbModel();
+        private int curUserID = 0;  // user not logged in
+        private int indexHabitHasDateID = 4;  // ListViewItem index for habitHasDateID
+        private string prevCellContents;  // track contents of a cell before edit
+        
+        // data source for gridViewHabitsByDate
+        private DataTable dt;
+        
         // gridViewHabitsByDate columns
-        int habitNameCol = 1;
-        int quantityCol = 3;
-        int noteCol = 4;
-        int habitHasDateIDCol = 5;
-
-        DataTable dt;
+        private int habitNameCol = 1;
+        private int quantityCol = 3;
+        private int noteCol = 4;
+        private int habitHasDateIDCol = 5;
 
         // track gridViewHabitsByDate row/cell history separately
-        DataGridViewHistory gridViewHabitsByDateHistory = new DataGridViewHistory();
+        private DataGridViewHistory gridViewHabitsByDateHistory = new DataGridViewHistory();
 
         // hard code history types
-        string cellType = "cell";
-        string rowType = "row";
+        private string cellType = "cell";
+        private string rowType = "row";
 
         public main()
         {
