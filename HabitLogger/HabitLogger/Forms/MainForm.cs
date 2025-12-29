@@ -245,13 +245,19 @@ namespace HabitLogger
         private void gridViewHabitsByDate_UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
         {
             string name = gridViewHabitsByDate.Rows[e.Row.Index].Cells[habitNameCol].Value.ToString();
-            string quantity = gridViewHabitsByDate.Rows[e.Row.Index].Cells[quantityCol].Value.ToString();
+            int quantity = Convert.ToInt32(gridViewHabitsByDate.Rows[e.Row.Index].Cells[quantityCol].Value);
             string note = gridViewHabitsByDate.Rows[e.Row.Index].Cells[noteCol].Value.ToString();
-            string habitHasDateID = gridViewHabitsByDate.Rows[e.Row.Index].Cells[habitHasDateIDCol].Value.ToString();
+            int habitHasDateID = Convert.ToInt32(gridViewHabitsByDate.Rows[e.Row.Index].Cells[habitHasDateIDCol].Value);
             Console.WriteLine($"User deleting row: {e.Row.Index} with contents: {name} {quantity} {note} {habitHasDateID}.");
             // TODO: add row to history
             // NOTE: this event fires for EACH row deleted. Multiple rows deleted simultaneously each cause the event to fire individually.
             // Need to track how many rows were deleted with history. Add new class variable in DataGridViewHistory to count?
+            gridViewHabitsByDateHistory.Commit((rowType, e.Row.Index, quantity, note, habitHasDateID));
+            gridViewHabitsByDateHistory.DeletedRowsCount++;
+            Console.WriteLine($"Deleted row count: {gridViewHabitsByDateHistory.DeletedRowsCount}");
+
+            // delete row from db
+            DeleteRow(habitHasDateID);
         }
 
         // TODO:
@@ -313,6 +319,13 @@ namespace HabitLogger
             Console.Write($"Attempting to write note: {note}, quantity: {quantity}, habitHasDateID: {habitHasDateID}... ");
             sqliteDb.UpdateHabitHasDate(note, quantity, habitHasDateID);
             Console.WriteLine("Success!");
+        }
+
+        // delete row from HabitsHasDates
+        private void DeleteRow(int habitHasDateID)
+        {
+            sqliteDb.DeleteHabitHasDate(habitHasDateID);
+            Console.WriteLine($"Successfully deleted HabitsHasDates row with ID: {habitHasDateID}.");
         }
     }
 }
