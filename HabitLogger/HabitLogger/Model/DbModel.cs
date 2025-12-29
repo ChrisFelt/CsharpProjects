@@ -496,6 +496,7 @@ namespace HabitLogger
         {
             using (SQLiteConnection conn = new SQLiteConnection(_connString))
             {
+                DbConnect(conn);
                 using (SQLiteCommand cmd = new SQLiteCommand(conn))
                 {
                     cmd.CommandText = @"DELETE FROM Habits_has_Dates 
