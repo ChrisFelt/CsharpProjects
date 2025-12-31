@@ -36,6 +36,12 @@ namespace HabitLogger
         private string cellType = "cell";
         private string rowType = "row";
 
+        // testing combobox in empty cell at the end of the habit name column 
+        private List<string> testList = new List<string> { "", "Choice1", "Choice2", "Choice3", "Choice4" };
+        private DataGridViewComboBoxCell testCellCombo = new DataGridViewComboBoxCell();
+        
+
+
         public main()
         {
             InitializeComponent();
@@ -297,14 +303,36 @@ namespace HabitLogger
         // TODO: change name to RefreshGridHabitsByDate?
         private void UpdateGridHabitsByDate(string date)
         {
+            gridViewHabitsByDate.DataSource = null;
             // get populated DataTable from db for this date
             dt = sqliteDb.ReadHabitByDateDT(curUserID, date);
+
+            gridViewHabitsByDate.Rows.Add();
+
+            testCellCombo.DataSource = testList;
+            gridViewHabitsByDate.Rows[0].Cells[habitNameCol] = testCellCombo;
+
             gridViewHabitsByDate.DataSource = dt;
 
             // hide IDs and description
             gridViewHabitsByDate.Columns["habitID"].Visible = false;
             gridViewHabitsByDate.Columns["Description"].Visible = false;
             gridViewHabitsByDate.Columns["habitHasDateID"].Visible = false;
+
+            // testing combobox
+            //testCellCombo.DataSource = testList;
+            //Console.WriteLine($"Current empty row: {gridViewHabitsByDate.Rows.Count - 1}.");
+            //DataRow newRow = dt.NewRow();
+            //newRow[habitNameCol] = testCellCombo;
+            
+
+            //dt.Rows.Add(newRow);
+            //gridViewHabitsByDate.Rows[0].Cells[habitNameCol] = testCellCombo;
+
+            // TODO: allow user to enter habit name in new row under name column, then query db for habit by that name (not case-specific)
+            // if habit exists, generate new row automatically with the habit and a frequency of 0
+            // if it does not exist, delete text in the new row and notify user with popup asking if they want to create the habit
+            
         }
 
         // call UpdateHabitHasDate on a given DataGridView row
