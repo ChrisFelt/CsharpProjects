@@ -192,37 +192,47 @@ namespace HabitLogger
         // grab contents of the cell before user edits it
         private void gridViewHabitsByDate_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
         {
-            Console.WriteLine($"Editing cell at row {e.RowIndex} and column {e.ColumnIndex}");
-            prevCellContents = gridViewHabitsByDate.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
-            Console.WriteLine($"Contents: {prevCellContents}");
-            // save contents of cell to global string contents
+            if (gridViewHabitsByDate.Rows[e.RowIndex].Cells[e.ColumnIndex].Value != null)
+            {
+                Console.WriteLine($"Editing cell at row {e.RowIndex} and column {e.ColumnIndex}");
+                prevCellContents = gridViewHabitsByDate.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
+                Console.WriteLine($"Contents: {prevCellContents}");
+                // save contents of cell to global string contents
+            }
+            else
+            {
+                prevCellContents = null;
+            }
         }
 
         // validate edits made to a cell and update DataGridViewHistory
         private void gridViewHabitsByDate_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
-            string curCellContents = gridViewHabitsByDate.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
-            Console.WriteLine($"Finished editing cell at row {e.RowIndex} and column {e.ColumnIndex}");
-            Console.WriteLine($"Previous contents were: '{prevCellContents}'. New contents are: '{curCellContents}'");
-
-            // habit name column can't be edited - roll back value when user attempts to edit it
-            // TODO: non-intrusive notification that this column can't be edited
-            if (e.ColumnIndex == habitNameCol)
+            if (prevCellContents != null)
             {
-                gridViewHabitsByDate.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = prevCellContents;
-            }
+                string curCellContents = gridViewHabitsByDate.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
+                Console.WriteLine($"Finished editing cell at row {e.RowIndex} and column {e.ColumnIndex}");
+                Console.WriteLine($"Previous contents were: '{prevCellContents}'. New contents are: '{curCellContents}'");
 
-            // commit all valid edits to db and update history (note: all values are valid for note column)
-            else if (prevCellContents != curCellContents)
-            {
-                WriteRowToDb(e.RowIndex);
-                // commit change to history
-                int quantity = Convert.ToInt32(gridViewHabitsByDate.Rows[e.RowIndex].Cells[quantityCol].Value);
-                string note = gridViewHabitsByDate.Rows[e.RowIndex].Cells[noteCol].Value.ToString();
-                int habitHasDateID = Convert.ToInt32(gridViewHabitsByDate.Rows[e.RowIndex].Cells[habitHasDateIDCol].Value);
+                // habit name column can't be edited - roll back value when user attempts to edit it
+                // TODO: non-intrusive notification that this column can't be edited
+                if (e.ColumnIndex == habitNameCol)
+                {
+                    gridViewHabitsByDate.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = prevCellContents;
+                }
 
-                gridViewHabitsByDateHistory.Commit((cellType, e.RowIndex, quantity, note, habitHasDateID));
-                Console.WriteLine($"Added to history: {gridViewHabitsByDateHistory.UndoPeek()}");
+                // commit all valid edits to db and update history (note: all values are valid for note column)
+                else if (prevCellContents != curCellContents)
+                {
+                    WriteRowToDb(e.RowIndex);
+                    // commit change to history
+                    int quantity = Convert.ToInt32(gridViewHabitsByDate.Rows[e.RowIndex].Cells[quantityCol].Value);
+                    string note = gridViewHabitsByDate.Rows[e.RowIndex].Cells[noteCol].Value.ToString();
+                    int habitHasDateID = Convert.ToInt32(gridViewHabitsByDate.Rows[e.RowIndex].Cells[habitHasDateIDCol].Value);
+
+                    gridViewHabitsByDateHistory.Commit((cellType, e.RowIndex, quantity, note, habitHasDateID));
+                    Console.WriteLine($"Added to history: {gridViewHabitsByDateHistory.UndoPeek()}");
+                }
             }
         }
 
@@ -266,6 +276,34 @@ namespace HabitLogger
             DeleteRow(habitHasDateID);
         }
 
+        // autocomplete for new habit in habit name column of gridViewHabitsByDate
+        private void gridViewHabitsByDate_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
+        {
+            if (gridViewHabitsByDate.CurrentCell.ColumnIndex == habitNameCol)
+            {
+                TextBox autoText = e.Control as TextBox;
+                if (autoText != null)
+                {
+                    autoText.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+                    autoText.AutoCompleteSource = AutoCompleteSource.CustomSource;
+
+                    // Create and assign your custom source collection
+                    AutoCompleteStringCollection customSource = new AutoCompleteStringCollection();
+                    customSource.AddRange(new string[] { "Apple", "Banana", "Cherry", "Date" }); // Add your items
+                    autoText.AutoCompleteCustomSource = customSource;
+                }
+            }
+            else
+            {
+                // Optional: Ensure autocomplete is off for other columns
+                TextBox autoText = e.Control as TextBox;
+                if (autoText != null)
+                {
+                    autoText.AutoCompleteMode = AutoCompleteMode.None;
+                }
+            }
+        }
+
         // TODO:
         // add Undo and Redo buttons (replace Add/Edit?) under gridViewHabitsByDate
         // add separate click events to both buttons
@@ -303,14 +341,8 @@ namespace HabitLogger
         // TODO: change name to RefreshGridHabitsByDate?
         private void UpdateGridHabitsByDate(string date)
         {
-            gridViewHabitsByDate.DataSource = null;
             // get populated DataTable from db for this date
             dt = sqliteDb.ReadHabitByDateDT(curUserID, date);
-
-            gridViewHabitsByDate.Rows.Add();
-
-            testCellCombo.DataSource = testList;
-            gridViewHabitsByDate.Rows[0].Cells[habitNameCol] = testCellCombo;
 
             gridViewHabitsByDate.DataSource = dt;
 
@@ -318,16 +350,6 @@ namespace HabitLogger
             gridViewHabitsByDate.Columns["habitID"].Visible = false;
             gridViewHabitsByDate.Columns["Description"].Visible = false;
             gridViewHabitsByDate.Columns["habitHasDateID"].Visible = false;
-
-            // testing combobox
-            //testCellCombo.DataSource = testList;
-            //Console.WriteLine($"Current empty row: {gridViewHabitsByDate.Rows.Count - 1}.");
-            //DataRow newRow = dt.NewRow();
-            //newRow[habitNameCol] = testCellCombo;
-            
-
-            //dt.Rows.Add(newRow);
-            //gridViewHabitsByDate.Rows[0].Cells[habitNameCol] = testCellCombo;
 
             // TODO: allow user to enter habit name in new row under name column, then query db for habit by that name (not case-specific)
             // if habit exists, generate new row automatically with the habit and a frequency of 0
