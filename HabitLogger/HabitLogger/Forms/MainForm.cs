@@ -24,10 +24,10 @@ namespace HabitLogger
         private DataTable dt;
         
         // gridViewHabitsByDate columns
-        private int habitNameCol = 1;
-        private int quantityCol = 3;
-        private int noteCol = 4;
-        private int habitHasDateIDCol = 5;
+        private int habitNameCol = 0;
+        private int quantityCol = 1;
+        private int noteCol = 2;
+        private int habitHasDateIDCol = 4;
 
         // track gridViewHabitsByDate row/cell history separately
         private DataGridViewHistory gridViewHabitsByDateHistory = new DataGridViewHistory();
@@ -192,6 +192,7 @@ namespace HabitLogger
         // grab contents of the cell before user edits it
         private void gridViewHabitsByDate_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
         {
+            // skip when the cell value is null
             if (gridViewHabitsByDate.Rows[e.RowIndex].Cells[e.ColumnIndex].Value != null)
             {
                 Console.WriteLine($"Editing cell at row {e.RowIndex} and column {e.ColumnIndex}");
@@ -199,6 +200,7 @@ namespace HabitLogger
                 Console.WriteLine($"Contents: {prevCellContents}");
                 // save contents of cell to global string contents
             }
+            // set prevCellContents to null
             else
             {
                 prevCellContents = null;
@@ -224,6 +226,7 @@ namespace HabitLogger
                 // commit all valid edits to db and update history (note: all values are valid for note column)
                 else if (prevCellContents != curCellContents)
                 {
+                    // TODO: do not write to db unless both habit name and quantity columns have a value
                     WriteRowToDb(e.RowIndex);
                     // commit change to history
                     int quantity = Convert.ToInt32(gridViewHabitsByDate.Rows[e.RowIndex].Cells[quantityCol].Value);
@@ -233,6 +236,11 @@ namespace HabitLogger
                     gridViewHabitsByDateHistory.Commit((cellType, e.RowIndex, quantity, note, habitHasDateID));
                     Console.WriteLine($"Added to history: {gridViewHabitsByDateHistory.UndoPeek()}");
                 }
+            }
+            else
+            {
+                // reset prevCellContents
+                prevCellContents = "";
             }
         }
 
@@ -279,28 +287,25 @@ namespace HabitLogger
         // autocomplete for new habit in habit name column of gridViewHabitsByDate
         private void gridViewHabitsByDate_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
         {
-            if (gridViewHabitsByDate.CurrentCell.ColumnIndex == habitNameCol)
+            // enable autocomplete for new rows in the habit name column
+            if (gridViewHabitsByDate.CurrentCell.ColumnIndex == habitNameCol && gridViewHabitsByDate.CurrentCell.RowIndex == gridViewHabitsByDate.Rows.Count - 1)
             {
-                TextBox autoText = e.Control as TextBox;
-                if (autoText != null)
-                {
-                    autoText.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-                    autoText.AutoCompleteSource = AutoCompleteSource.CustomSource;
+                TextBox autoComplete = e.Control as TextBox;
 
-                    // Create and assign your custom source collection
-                    AutoCompleteStringCollection customSource = new AutoCompleteStringCollection();
-                    customSource.AddRange(new string[] { "Apple", "Banana", "Cherry", "Date" }); // Add your items
-                    autoText.AutoCompleteCustomSource = customSource;
-                }
+                autoComplete.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+                autoComplete.AutoCompleteSource = AutoCompleteSource.CustomSource;
+
+                // placeholder data: populate string array with habit names from db
+                AutoCompleteStringCollection customSource = new AutoCompleteStringCollection();
+                customSource.AddRange(new string[] { "Apple", "Banana", "Cherry", "Date" });
+                autoComplete.AutoCompleteCustomSource = customSource;
+
             }
             else
             {
                 // Optional: Ensure autocomplete is off for other columns
-                TextBox autoText = e.Control as TextBox;
-                if (autoText != null)
-                {
-                    autoText.AutoCompleteMode = AutoCompleteMode.None;
-                }
+                TextBox autoComplete = e.Control as TextBox;
+                autoComplete.AutoCompleteMode = AutoCompleteMode.None;
             }
         }
 

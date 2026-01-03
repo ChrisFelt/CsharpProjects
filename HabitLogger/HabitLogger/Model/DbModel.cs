@@ -319,12 +319,12 @@ namespace HabitLogger
                 // pull up habit by date and userID
                 using (SQLiteCommand cmd = new SQLiteCommand(conn))
                 {
-                    cmd.CommandText = @"SELECT h.habitID AS 'habitID', 
-                                               h.name AS 'Habit', 
-                                               h.description AS 'Description', 
+                    cmd.CommandText = @"SELECT h.name AS 'Habit', 
                                                hd.quantity AS 'Frequency', 
                                                hd.note AS 'Note', 
-                                               hd.habitHasDateID AS 'habitHasDateID' 
+                                               h.habitID AS 'habitID', 
+                                               hd.habitHasDateID AS 'habitHasDateID', 
+                                               h.description AS 'Description' 
                                         FROM Dates AS d 
                                         INNER JOIN Habits_has_Dates AS hd 
                                             ON d.dateID = hd.dateID 
