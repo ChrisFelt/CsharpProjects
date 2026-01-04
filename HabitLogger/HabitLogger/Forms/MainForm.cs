@@ -290,22 +290,34 @@ namespace HabitLogger
             // enable autocomplete for new rows in the habit name column
             if (gridViewHabitsByDate.CurrentCell.ColumnIndex == habitNameCol && gridViewHabitsByDate.CurrentCell.RowIndex == gridViewHabitsByDate.Rows.Count - 1)
             {
+                // cast the control for this cell as a TextBox
                 TextBox autoComplete = e.Control as TextBox;
+                if (autoComplete != null)
+                {
+                    // setup autocomplete mode and custom source
+                    autoComplete.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+                    autoComplete.AutoCompleteSource = AutoCompleteSource.CustomSource;
+                    AutoCompleteStringCollection customSource = new AutoCompleteStringCollection();
 
-                autoComplete.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-                autoComplete.AutoCompleteSource = AutoCompleteSource.CustomSource;
+                    // populate customSource with habit names from db
+                    List<(int habitID, string name, string description)> habitAllList = sqliteDb.ReadHabitByUser(curUserID);
+                    foreach ((int habitID, string name, string description) tuple in habitAllList)
+                    {
+                        customSource.Add(tuple.name);
+                        Console.WriteLine($"Added habit: {tuple.name} to autocomplete.");
+                    }
 
-                // placeholder data: populate string array with habit names from db
-                AutoCompleteStringCollection customSource = new AutoCompleteStringCollection();
-                customSource.AddRange(new string[] { "Apple", "Banana", "Cherry", "Date" });
-                autoComplete.AutoCompleteCustomSource = customSource;
-
+                    autoComplete.AutoCompleteCustomSource = customSource;
+                }
             }
             else
             {
                 // Optional: Ensure autocomplete is off for other columns
                 TextBox autoComplete = e.Control as TextBox;
-                autoComplete.AutoCompleteMode = AutoCompleteMode.None;
+                if (autoComplete != null)
+                {
+                    autoComplete.AutoCompleteMode = AutoCompleteMode.None;
+                }
             }
         }
 
