@@ -292,32 +292,20 @@ namespace HabitLogger
             {
                 // cast the control for this cell as a TextBox
                 TextBox autoComplete = e.Control as TextBox;
-                if (autoComplete != null)
-                {
-                    // setup autocomplete mode and custom source
-                    autoComplete.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-                    autoComplete.AutoCompleteSource = AutoCompleteSource.CustomSource;
-                    AutoCompleteStringCollection customSource = new AutoCompleteStringCollection();
 
-                    // populate customSource with habit names from db
-                    List<(int habitID, string name, string description)> habitAllList = sqliteDb.ReadHabitByUser(curUserID);
-                    foreach ((int habitID, string name, string description) tuple in habitAllList)
-                    {
-                        customSource.Add(tuple.name);
-                        Console.WriteLine($"Added habit: {tuple.name} to autocomplete.");
-                    }
+                // setup autocomplete mode and custom source
+                autoComplete.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+                autoComplete.AutoCompleteSource = AutoCompleteSource.CustomSource;
+                AutoCompleteStringCollection customSource = new AutoCompleteStringCollection();
 
-                    autoComplete.AutoCompleteCustomSource = customSource;
-                }
-            }
-            else
-            {
-                // Optional: Ensure autocomplete is off for other columns
-                TextBox autoComplete = e.Control as TextBox;
-                if (autoComplete != null)
+                // populate customSource with habit names from db
+                List<(int habitID, string name, string description)> habitAllList = sqliteDb.ReadHabitByUser(curUserID);
+                foreach ((int habitID, string name, string description) tuple in habitAllList)
                 {
-                    autoComplete.AutoCompleteMode = AutoCompleteMode.None;
+                    customSource.Add(tuple.name);
+                    Console.WriteLine($"Added habit: {tuple.name} to autocomplete.");
                 }
+                autoComplete.AutoCompleteCustomSource = customSource;
             }
         }
 
