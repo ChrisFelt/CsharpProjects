@@ -423,7 +423,7 @@ namespace HabitLogger
         // gets dateID given a date and returns all habits that occur on that date as a list to be viewed in the lstHabits form
 
         // CreateHabitHasDate method
-        public void CreateHabitHasDate(string note, int quantity, string habitName, string date)
+        public void CreateHabitHasDate(string habitName, int quantity, string note, string date)
         {
             using (SQLiteConnection conn = new SQLiteConnection(_connString))
             {
@@ -431,13 +431,14 @@ namespace HabitLogger
                 // Add record to HabitsHasDates table
                 using (SQLiteCommand cmd = new SQLiteCommand(conn))
                 {
-                    cmd.CommandText = @"INSERT INTO Habits_has_Dates (quantity, habitID, dateID) 
-                                        VALUES(:note, 
-                                               :quantity, 
+                    cmd.CommandText = @"INSERT INTO Habits_has_Dates (quantity, note, habitID, dateID) 
+                                        VALUES(:quantity, 
+                                               :note, 
                                                (SELECT habitID FROM Habits WHERE name = :habitName), 
                                                (SELECT dateID FROM Dates WHERE date = :date));";
 
                     // add parametarized values
+                    cmd.Parameters.AddWithValue(":quantity", quantity);
                     // insert NULL for note if it is blank
                     if (note == "")
                     {
@@ -447,7 +448,6 @@ namespace HabitLogger
                     {
                         cmd.Parameters.AddWithValue(":note", note);
                     }
-                    cmd.Parameters.AddWithValue(":quantity", quantity);
                     cmd.Parameters.AddWithValue(":habitName", habitName);
                     cmd.Parameters.AddWithValue(":date", date);
 
