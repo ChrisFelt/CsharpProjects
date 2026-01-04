@@ -132,6 +132,7 @@
             this.gridViewHabitsByDate.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.gridViewHabitsByDate_DataError);
             this.gridViewHabitsByDate.UserDeletingRow += new System.Windows.Forms.DataGridViewRowCancelEventHandler(this.gridViewHabitsByDate_UserDeletingRow);
             this.gridViewHabitsByDate.EditingControlShowing += new System.Windows.Forms.DataGridViewEditingControlShowingEventHandler(this.gridViewHabitsByDate_EditingControlShowing);
+            this.gridViewHabitsByDate.UserAddedRow += new System.Windows.Forms.DataGridViewRowEventHandler(this.gridViewHabitsByDate_UserAddedRow);
             // 
             // lblDisplayUser
             // 

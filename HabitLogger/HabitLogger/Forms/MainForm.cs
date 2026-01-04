@@ -52,7 +52,7 @@ namespace HabitLogger
         }
 
         // -----------------------------------------------------
-        // pnlLogin Events
+        // pnlLogin General Events
         // -----------------------------------------------------
 
         // Login button click event
@@ -175,6 +175,9 @@ namespace HabitLogger
             }
         }
 
+        // -----------------------------------------------------
+        // pnlMain gridViewHabitsByDate Events
+        // -----------------------------------------------------
         // DataGridView Cell click event
         private void gridViewHabitsByDate_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -273,7 +276,6 @@ namespace HabitLogger
             string note = gridViewHabitsByDate.Rows[e.Row.Index].Cells[noteCol].Value.ToString();
             int habitHasDateID = Convert.ToInt32(gridViewHabitsByDate.Rows[e.Row.Index].Cells[habitHasDateIDCol].Value);
             Console.WriteLine($"User deleting row: {e.Row.Index} with contents: {name} {quantity} {note} {habitHasDateID}.");
-            // TODO: add row to history
             // NOTE: this event fires for EACH row deleted. Multiple rows deleted simultaneously each cause the event to fire individually.
             // Need to track how many rows were deleted with history. Add new class variable in DataGridViewHistory to count?
             gridViewHabitsByDateHistory.Commit((rowType, e.Row.Index, quantity, note, habitHasDateID));
@@ -306,6 +308,16 @@ namespace HabitLogger
                     Console.WriteLine($"Added habit: {tuple.name} to autocomplete.");
                 }
                 autoComplete.AutoCompleteCustomSource = customSource;
+            }
+        }
+
+        // add data from new rows to the db and refresh gridViewHabitsByDate
+        private void gridViewHabitsByDate_UserAddedRow(object sender, DataGridViewRowEventArgs e)
+        {
+            // remove row if no habit name entered (currently auto-removes rows regardless)
+            if (e.Row.Cells[habitNameCol].Value == null || e.Row.Cells[habitNameCol].Value.ToString() == "")
+            {
+                gridViewHabitsByDate.Rows.Remove(gridViewHabitsByDate.Rows[gridViewHabitsByDate.Rows.Count - 2]);
             }
         }
 
