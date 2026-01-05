@@ -19,10 +19,10 @@ namespace HabitLogger
         private int curUserID = 0;  // user not logged in
         private int indexHabitHasDateID = 4;  // ListViewItem index for habitHasDateID
         private string prevCellContents;  // track contents of a cell before edit
-        
+
         // data source for gridViewHabitsByDate
         private DataTable dt;
-        
+
         // gridViewHabitsByDate columns
         private int habitNameCol = 0;
         private int quantityCol = 1;
@@ -35,9 +35,6 @@ namespace HabitLogger
         // hard code history types
         private string cellType = "cell";
         private string rowType = "row";
-
-        // new cell row flag
-        bool newRow = false;
 
         // initialize list of current user's habits
         List<(int habitID, string name, string description)> curUserHabits = new List<(int habitID, string name, string description)>();
@@ -194,24 +191,65 @@ namespace HabitLogger
         // grab contents of the cell before user edits it
         private void gridViewHabitsByDate_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
         {
-            // skip when the cell value is null
-            if (gridViewHabitsByDate.Rows[e.RowIndex].Cells[e.ColumnIndex].Value != null)
-            {
-                Console.WriteLine($"Editing cell at row {e.RowIndex} and column {e.ColumnIndex}");
-                prevCellContents = gridViewHabitsByDate.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
-                Console.WriteLine($"Contents: {prevCellContents}");
-            }
-            // set prevCellContents to null
-            else
-            {
-                prevCellContents = null;
-            }
+            Console.WriteLine($"Editing cell at row {e.RowIndex} and column {e.ColumnIndex}");
+            prevCellContents = gridViewHabitsByDate.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
+            Console.WriteLine($"Contents: {prevCellContents}");
         }
 
         // validate edits made to a cell and update DataGridViewHistory
         private void gridViewHabitsByDate_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
-            if (prevCellContents != null && !newRow)
+            // 1. add new row routine - check if cell is on new row
+            if (e.RowIndex == dt.Rows.Count)
+            {
+                // exit event without commiting data to db if no habit name entered
+                if (gridViewHabitsByDate.Rows[e.RowIndex].Cells[habitNameCol].Value.ToString() != "")
+                {
+                    gridViewHabitsByDate.Columns[habitNameCol].ValueType = typeof(string);
+                    string newRowHabit = gridViewHabitsByDate.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
+                    // if habit name does not exist, prompt user to create new habit
+                    if (curUserHabits.Any(tuple => tuple.name == newRowHabit))
+                    {
+
+                        // grab cell values for the row besides name
+                        int newRowQuantity = Convert.ToInt32(gridViewHabitsByDate.Rows[e.RowIndex].Cells[quantityCol].Value.ToString());
+                        string newRowNote = gridViewHabitsByDate.Rows[e.RowIndex].Cells[noteCol].Value.ToString();
+                        string newRowDate = monthCalendar.SelectionRange.Start.ToString("yyyy-MM-dd");
+
+                        // call CreateDate (method only adds date if it doesn't already exist)
+                        sqliteDb.CreateDate(newRowDate);
+
+                        // create new Habits_Has_Dates record
+                        Console.Write($"Creating new HabitHasDate record with: " +
+                                          $"habit name: {newRowHabit}, " +
+                                          $"quantity: {newRowQuantity}, " +
+                                          $"note: {newRowNote}, " +
+                                          $"date: {newRowDate}... ");
+                        sqliteDb.CreateHabitHasDate(newRowHabit,
+                                                    newRowQuantity,
+                                                    newRowNote,
+                                                    newRowDate);
+                        Console.WriteLine("Success!");
+
+                        // call UpdateGridHabitsByDate to refresh view with dt data source
+                        UpdateGridHabitsByDate(monthCalendar.SelectionRange.Start.ToString("yyyy-MM-dd"));
+                    }
+                    else
+                    {
+                        // popup asks user if they want to add new habit
+                        // if yes, open AddHabitForm
+                        // if no, delete row
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("New row routine aborted due to empty habit name column value.");
+                    // TODO: notify user that they must enter a habit name for row to be saved?
+                    // TODO: either delete this row here, or disallow user from creating a new row until this row is added to db
+                }
+            }
+            // 2. edit existing row
+            else
             {
                 string curCellContents = gridViewHabitsByDate.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
                 Console.WriteLine($"Finished editing cell at row {e.RowIndex} and column {e.ColumnIndex}");
@@ -237,11 +275,6 @@ namespace HabitLogger
                     gridViewHabitsByDateHistory.Commit((cellType, e.RowIndex, quantity, note, habitHasDateID));
                     Console.WriteLine($"Added to history: {gridViewHabitsByDateHistory.UndoPeek()}");
                 }
-            }
-            else
-            {
-                // reset prevCellContents
-                prevCellContents = "";
             }
         }
 
@@ -308,87 +341,6 @@ namespace HabitLogger
             }
         }
 
-        // add data from new rows to the db and refresh gridViewHabitsByDate
-        private void gridViewHabitsByDate_UserAddedRow(object sender, DataGridViewRowEventArgs e)
-        {
-            // remove row if no habit name entered (currently auto-removes rows regardless)
-            if (e.Row.Cells[habitNameCol].Value == null || e.Row.Cells[habitNameCol].Value.ToString() == "")
-            {
-                //gridViewHabitsByDate.Rows.Remove(gridViewHabitsByDate.Rows[gridViewHabitsByDate.Rows.Count - 2]);
-            }
-
-            newRow = true;
-        }
-
-        // validate and commit cell changes to db
-        private void gridViewHabitsByDate_CellValueChanged(object sender, DataGridViewCellEventArgs e)
-        {
-            
-            // 1. new row routine
-            // this event can fire at unexpected times, so check newRow flag first
-            if (newRow)
-            {
-                // null dt may occur on initial date before user selects
-                if (dt == null || e.RowIndex == dt.Rows.Count)
-                {
-                    // exit event without commiting data to db if no habit name entered
-                    if (gridViewHabitsByDate.Rows[e.RowIndex].Cells[habitNameCol].Value != null || gridViewHabitsByDate.Rows[e.RowIndex].Cells[habitNameCol].Value.ToString() != "")
-                    {
-                        gridViewHabitsByDate.Columns[habitNameCol].ValueType = typeof(string);
-                        string newHabit = gridViewHabitsByDate.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
-                        Console.WriteLine($"newHabit: {newHabit}.");
-                        // if habit name does not exist, prompt user to create new habit
-                        if (curUserHabits.Any(tuple => tuple.name == newHabit))
-                        {
-                            // if no quantity entered, auto-set to 0
-                            if (gridViewHabitsByDate.Rows[e.RowIndex].Cells[quantityCol].Value == null || gridViewHabitsByDate.Rows[e.RowIndex].Cells[quantityCol].Value.ToString() == "")
-                            {
-                                //gridViewHabitsByDate.Columns[quantityCol].ValueType = typeof(int);
-                                //gridViewHabitsByDate.Rows[e.RowIndex].Cells[quantityCol].Value = 0;
-                            }
-                            // initialize note column if it is null
-                            if (gridViewHabitsByDate.Rows[e.RowIndex].Cells[noteCol].Value == null)
-                            {
-                                gridViewHabitsByDate.Rows[e.RowIndex].Cells[noteCol].Value = "";
-                            }
-                            // call CreateDate (method only adds date if it doesn't already exist)
-                            sqliteDb.CreateDate(monthCalendar.SelectionRange.Start.ToString("yyyy-MM-dd"));
-                            // call WriteRowToDb
-                            // {Convert.ToInt32(gridViewHabitsByDate.Rows[e.RowIndex].Cells[quantityCol].Value.ToString())}
-                            string newNote = gridViewHabitsByDate.Rows[e.RowIndex].Cells[noteCol].Value == null ? "" : gridViewHabitsByDate.Rows[e.RowIndex].Cells[noteCol].Value.ToString();
-                            string newDate = monthCalendar.SelectionRange.Start.ToString("yyyy-MM-dd");
-                            Console.WriteLine($"Creating new HabitHasDate record with: " +
-                                              $"habit name: {newHabit}, " +
-                                              $"quantity: 0, " +
-                                              $"note: {newNote}, " +
-                                              $"date: {newDate}.");
-                            sqliteDb.CreateHabitHasDate(newHabit,
-                                                        0,
-                                                        gridViewHabitsByDate.Rows[e.RowIndex].Cells[noteCol].Value == null ? "" : gridViewHabitsByDate.Rows[e.RowIndex].Cells[noteCol].Value.ToString(),
-                                                        monthCalendar.SelectionRange.Start.ToString("yyyy-MM-dd"));
-                            // call UpdateGridHabitsByDate to refresh view with dt data source
-                            UpdateGridHabitsByDate(monthCalendar.SelectionRange.Start.ToString("yyyy-MM-dd"));
-                            // reset newRow flag
-                            newRow = false;
-                        }
-                        else
-                        {
-                            // popup asks user if they want to add new habit
-                            // if yes, open AddHabitForm
-                            // if no, delete row
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine("CellValueChanged event triggered, but no value entered into habit name column. Exiting event.");
-                        // TODO: notify user that they must enter a habit name for row to be saved?
-                    }
-                }
-            }
-            
-            
-        }
-
         // TODO:
         // add Undo and Redo buttons (replace Add/Edit?) under gridViewHabitsByDate
         // add separate click events to both buttons
@@ -440,7 +392,7 @@ namespace HabitLogger
             // TODO: allow user to enter habit name in new row under name column, then query db for habit by that name (not case-specific)
             // if habit exists, generate new row automatically with the habit and a frequency of 0
             // if it does not exist, delete text in the new row and notify user with popup asking if they want to create the habit
-            
+
         }
 
         // call UpdateHabitHasDate on a given DataGridView row
