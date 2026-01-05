@@ -85,6 +85,9 @@ namespace HabitLogger
 
                     // populate curUserHabits
                     curUserHabits = sqliteDb.ReadHabitByUser(curUserID);
+
+                    // establish data source for gridViewHabitsByDate
+                    UpdateGridHabitsByDate(monthCalendar.SelectionRange.Start.ToString("yyyy-MM-dd"));
                 }
                 else if (curUserID == 0)
                 {
@@ -208,7 +211,7 @@ namespace HabitLogger
         // validate edits made to a cell and update DataGridViewHistory
         private void gridViewHabitsByDate_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
-            if (prevCellContents != null)
+            if (prevCellContents != null && !newRow)
             {
                 string curCellContents = gridViewHabitsByDate.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
                 Console.WriteLine($"Finished editing cell at row {e.RowIndex} and column {e.ColumnIndex}");
@@ -320,7 +323,7 @@ namespace HabitLogger
         // validate and commit cell changes to db
         private void gridViewHabitsByDate_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
-            /*
+            
             // 1. new row routine
             // this event can fire at unexpected times, so check newRow flag first
             if (newRow)
@@ -336,12 +339,6 @@ namespace HabitLogger
                         Console.WriteLine($"newHabit: {newHabit}.");
                         // if habit name does not exist, prompt user to create new habit
                         if (curUserHabits.Any(tuple => tuple.name == newHabit))
-                        {
-                            // popup asks user if they want to add new habit
-                            // if yes, open AddHabitForm
-                            // if no, delete row
-                        }
-                        else
                         {
                             // if no quantity entered, auto-set to 0
                             if (gridViewHabitsByDate.Rows[e.RowIndex].Cells[quantityCol].Value == null || gridViewHabitsByDate.Rows[e.RowIndex].Cells[quantityCol].Value.ToString() == "")
@@ -365,14 +362,20 @@ namespace HabitLogger
                                               $"quantity: 0, " +
                                               $"note: {newNote}, " +
                                               $"date: {newDate}.");
-                            sqliteDb.CreateHabitHasDate(newHabit, 
-                                                        0, 
+                            sqliteDb.CreateHabitHasDate(newHabit,
+                                                        0,
                                                         gridViewHabitsByDate.Rows[e.RowIndex].Cells[noteCol].Value == null ? "" : gridViewHabitsByDate.Rows[e.RowIndex].Cells[noteCol].Value.ToString(),
                                                         monthCalendar.SelectionRange.Start.ToString("yyyy-MM-dd"));
                             // call UpdateGridHabitsByDate to refresh view with dt data source
                             UpdateGridHabitsByDate(monthCalendar.SelectionRange.Start.ToString("yyyy-MM-dd"));
                             // reset newRow flag
                             newRow = false;
+                        }
+                        else
+                        {
+                            // popup asks user if they want to add new habit
+                            // if yes, open AddHabitForm
+                            // if no, delete row
                         }
                     }
                     else
@@ -382,7 +385,7 @@ namespace HabitLogger
                     }
                 }
             }
-            */
+            
             
         }
 
