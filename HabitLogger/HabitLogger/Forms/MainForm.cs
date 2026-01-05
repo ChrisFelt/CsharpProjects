@@ -246,6 +246,8 @@ namespace HabitLogger
                     Console.WriteLine("New row routine aborted due to empty habit name column value.");
                     // TODO: notify user that they must enter a habit name for row to be saved?
                     // TODO: either delete this row here, or disallow user from creating a new row until this row is added to db
+                    // gridViewHabitsByDate.AllowUserToAddRows = false;  // causes infinite loop
+                    gridViewHabitsByDate.Rows.Remove(gridViewHabitsByDate.Rows[e.RowIndex]);
                 }
             }
             // 2. edit existing row
