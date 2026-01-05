@@ -199,7 +199,7 @@ namespace HabitLogger
         // validate edits made to a cell and update DataGridViewHistory
         private void gridViewHabitsByDate_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
-            // 1. add new row routine - check if cell is on new row
+            // 1. add new row - check if cell is on new row
             if (e.RowIndex == dt.Rows.Count)
             {
                 // exit event without commiting data to db if no habit name entered
@@ -232,7 +232,7 @@ namespace HabitLogger
                         Console.WriteLine("Success!");
 
                         // call UpdateGridHabitsByDate to refresh view with dt data source
-                        UpdateGridHabitsByDate(monthCalendar.SelectionRange.Start.ToString("yyyy-MM-dd"));
+                        UpdateGridHabitsByDate(newRowDate);
                     }
                     else
                     {
@@ -243,7 +243,7 @@ namespace HabitLogger
                 }
                 else
                 {
-                    Console.WriteLine("New row routine aborted due to empty habit name column value.");
+                    Console.WriteLine("New row was removed: no habit name column value.");
                     // TODO: notify user that they must enter a habit name for row to be saved?
                     // TODO: either delete this row here, or disallow user from creating a new row until this row is added to db
                     // gridViewHabitsByDate.AllowUserToAddRows = false;  // causes infinite loop
