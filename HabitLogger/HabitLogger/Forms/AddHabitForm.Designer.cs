@@ -31,9 +31,9 @@
             this.btnOk = new System.Windows.Forms.Button();
             this.lblHabitName = new System.Windows.Forms.Label();
             this.btnCancel = new System.Windows.Forms.Button();
-            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
-            this.lblDescription = new System.Windows.Forms.Label();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.richTextBoxHabitDesc = new System.Windows.Forms.RichTextBox();
+            this.lblHabitDesc = new System.Windows.Forms.Label();
+            this.comboBoxHabitName = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // btnOk
@@ -73,41 +73,41 @@
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
-            // richTextBox1
+            // richTextBoxHabitDesc
             // 
-            this.richTextBox1.Location = new System.Drawing.Point(40, 120);
-            this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(408, 75);
-            this.richTextBox1.TabIndex = 12;
-            this.richTextBox1.Text = "";
+            this.richTextBoxHabitDesc.Location = new System.Drawing.Point(40, 120);
+            this.richTextBoxHabitDesc.Name = "richTextBoxHabitDesc";
+            this.richTextBoxHabitDesc.Size = new System.Drawing.Size(408, 75);
+            this.richTextBoxHabitDesc.TabIndex = 12;
+            this.richTextBoxHabitDesc.Text = "";
             // 
-            // lblDescription
+            // lblHabitDesc
             // 
-            this.lblDescription.AutoSize = true;
-            this.lblDescription.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDescription.Location = new System.Drawing.Point(43, 97);
-            this.lblDescription.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.lblDescription.Name = "lblDescription";
-            this.lblDescription.Size = new System.Drawing.Size(93, 20);
-            this.lblDescription.TabIndex = 13;
-            this.lblDescription.Text = "Description:";
+            this.lblHabitDesc.AutoSize = true;
+            this.lblHabitDesc.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblHabitDesc.Location = new System.Drawing.Point(43, 97);
+            this.lblHabitDesc.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblHabitDesc.Name = "lblHabitDesc";
+            this.lblHabitDesc.Size = new System.Drawing.Size(93, 20);
+            this.lblHabitDesc.TabIndex = 13;
+            this.lblHabitDesc.Text = "Description:";
             // 
-            // comboBox1
+            // comboBoxHabitName
             // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(40, 44);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(408, 28);
-            this.comboBox1.TabIndex = 11;
+            this.comboBoxHabitName.FormattingEnabled = true;
+            this.comboBoxHabitName.Location = new System.Drawing.Point(40, 44);
+            this.comboBoxHabitName.Name = "comboBoxHabitName";
+            this.comboBoxHabitName.Size = new System.Drawing.Size(408, 28);
+            this.comboBoxHabitName.TabIndex = 11;
             // 
             // AddHabitForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(494, 280);
-            this.Controls.Add(this.lblDescription);
-            this.Controls.Add(this.richTextBox1);
-            this.Controls.Add(this.comboBox1);
+            this.Controls.Add(this.lblHabitDesc);
+            this.Controls.Add(this.richTextBoxHabitDesc);
+            this.Controls.Add(this.comboBoxHabitName);
             this.Controls.Add(this.lblHabitName);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnOk);
@@ -123,8 +123,8 @@
         private System.Windows.Forms.Button btnOk;
         private System.Windows.Forms.Label lblHabitName;
         private System.Windows.Forms.Button btnCancel;
-        private System.Windows.Forms.RichTextBox richTextBox1;
-        private System.Windows.Forms.Label lblDescription;
-        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.RichTextBox richTextBoxHabitDesc;
+        private System.Windows.Forms.Label lblHabitDesc;
+        private System.Windows.Forms.ComboBox comboBoxHabitName;
     }
 }

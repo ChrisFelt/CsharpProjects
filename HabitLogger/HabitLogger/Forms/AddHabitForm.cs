@@ -13,13 +13,18 @@ namespace HabitLogger
     public partial class AddHabitForm : Form
     {
         DbModel sqliteDb;
-        int curUserID = 0;
+        int curUserID;
+        string habitName;
+        string habitDesc;
+
         public AddHabitForm(int userID, DbModel db, (string name, string desc) habitData)
         {
             InitializeComponent();
             CenterToScreen();
             curUserID = userID;
             sqliteDb = db;
+            habitName = habitData.name;
+            habitDesc = habitData.desc;
         }
 
         private void btnOk_Click(object sender, EventArgs e)
