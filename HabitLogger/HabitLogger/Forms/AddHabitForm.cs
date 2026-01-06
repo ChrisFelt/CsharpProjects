@@ -14,27 +14,48 @@ namespace HabitLogger
     {
         DbModel sqliteDb;
         int curUserID;
-        string habitName;
-        string habitDesc;
+        public (int habitID, string name, string desc) initialHabitData;
 
-        public AddHabitForm(int userID, DbModel db, (string name, string desc) habitData)
+        // allow main form to grab the user's input
+        public (int habitID, string name, string desc) UserHabitInput { get; private set; }
+
+        List<(int habitID, string name, string description)> curUserHabits;
+
+        public AddHabitForm(int userID, DbModel db, List<(int habitID, string name, string description)> habitsList, (int habitID, string name, string desc) habitData)
         {
             InitializeComponent();
             CenterToScreen();
             curUserID = userID;
             sqliteDb = db;
-            habitName = habitData.name;
-            habitDesc = habitData.desc;
+            initialHabitData.habitID = habitData.habitID;
+            initialHabitData.name = habitData.name;
+            initialHabitData.desc = habitData.desc;
+            curUserHabits = habitsList;
         }
 
         private void btnOk_Click(object sender, EventArgs e)
         {
-            // todo: connect the habit with currently selected date
+            // TODO: grab input from combobox and rtxt box and save to userHabitInput
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
             Close();
+        }
+
+        private (int habitID, string name, string description)[] GenerateHabitNameArray()
+        {
+            // populate return array with initial habit data and user's habits
+            (int habitID, string name, string description)[] habitNameArray = new (int habitID, string name, string description)[curUserHabits.Count + 1];
+
+            habitNameArray.Append(initialHabitData);  // this value will be the default value shown in the combobox
+
+            foreach ((int habitID, string name, string description) habit in curUserHabits)
+            {
+                habitNameArray.Append(habit);
+            }
+
+            return habitNameArray;
         }
     }
 }

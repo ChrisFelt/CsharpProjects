@@ -134,8 +134,8 @@ namespace HabitLogger
         private void btnAdd_Click(object sender, EventArgs e)
         {
             // show AddHabitForm
-            AddHabitForm addHabit = new AddHabitForm(curUserID, sqliteDb);
-            addHabit.Show();
+            //AddHabitForm addHabit = new AddHabitForm(curUserID, sqliteDb);
+            //addHabit.Show();
         }
 
         // Date click event
@@ -208,7 +208,7 @@ namespace HabitLogger
                     gridViewHabitsByDate.Columns[habitNameCol].ValueType = typeof(string);
                     string newRowHabit = gridViewHabitsByDate.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
                     // if habit name does not exist, prompt user to create new habit
-                    if (curUserHabits.Any(tuple => tuple.name == newRowHabit))
+                    if (curUserHabits.Any(habit => habit.name == newRowHabit))
                     {
 
                         // grab cell values for the row besides name
@@ -421,9 +421,9 @@ namespace HabitLogger
         private void OpenAddHabitForm(string name, string desc = "")
         {
             // TODO: redesign AddHabitForm
-            (string name, string desc) habitData = (name, desc);
+            (int habitID, string name, string desc) habitData = (0, name, desc);
             // show AddHabitForm
-            AddHabitForm addHabit = new AddHabitForm(curUserID, sqliteDb, habitData);
+            AddHabitForm addHabit = new AddHabitForm(curUserID, sqliteDb, curUserHabits, habitData);
             addHabit.Show();
         }
     }
