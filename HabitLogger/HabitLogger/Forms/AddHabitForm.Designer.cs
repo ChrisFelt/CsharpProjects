@@ -28,108 +28,90 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.btnNew = new System.Windows.Forms.Button();
-            this.btnDelete = new System.Windows.Forms.Button();
             this.btnOk = new System.Windows.Forms.Button();
+            this.lblHabitName = new System.Windows.Forms.Label();
             this.btnCancel = new System.Windows.Forms.Button();
-            this.lblAddHabit = new System.Windows.Forms.Label();
-            this.lstAddHabit = new System.Windows.Forms.ListView();
-            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+            this.lblDescription = new System.Windows.Forms.Label();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
-            // 
-            // btnNew
-            // 
-            this.btnNew.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.btnNew.Location = new System.Drawing.Point(271, 28);
-            this.btnNew.Name = "btnNew";
-            this.btnNew.Size = new System.Drawing.Size(76, 30);
-            this.btnNew.TabIndex = 6;
-            this.btnNew.Text = "New";
-            this.btnNew.UseVisualStyleBackColor = true;
-            this.btnNew.Click += new System.EventHandler(this.btnNew_Click);
-            // 
-            // btnDelete
-            // 
-            this.btnDelete.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.btnDelete.Location = new System.Drawing.Point(353, 28);
-            this.btnDelete.Name = "btnDelete";
-            this.btnDelete.Size = new System.Drawing.Size(76, 30);
-            this.btnDelete.TabIndex = 7;
-            this.btnDelete.Text = "Delete";
-            this.btnDelete.UseVisualStyleBackColor = true;
-            this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
             // 
             // btnOk
             // 
             this.btnOk.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.btnOk.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnOk.Location = new System.Drawing.Point(109, 326);
+            this.btnOk.Location = new System.Drawing.Point(80, 217);
+            this.btnOk.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnOk.Name = "btnOk";
-            this.btnOk.Size = new System.Drawing.Size(106, 51);
+            this.btnOk.Size = new System.Drawing.Size(159, 48);
             this.btnOk.TabIndex = 8;
             this.btnOk.Text = "Ok";
             this.btnOk.UseVisualStyleBackColor = true;
             this.btnOk.Click += new System.EventHandler(this.btnOk_Click);
             // 
+            // lblHabitName
+            // 
+            this.lblHabitName.AutoSize = true;
+            this.lblHabitName.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblHabitName.Location = new System.Drawing.Point(43, 21);
+            this.lblHabitName.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblHabitName.Name = "lblHabitName";
+            this.lblHabitName.Size = new System.Drawing.Size(97, 20);
+            this.lblHabitName.TabIndex = 10;
+            this.lblHabitName.Text = "Habit Name:";
+            // 
             // btnCancel
             // 
             this.btnCancel.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.btnCancel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnCancel.Location = new System.Drawing.Point(221, 326);
+            this.btnCancel.Location = new System.Drawing.Point(248, 217);
+            this.btnCancel.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(106, 51);
+            this.btnCancel.Size = new System.Drawing.Size(159, 48);
             this.btnCancel.TabIndex = 9;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
-            // lblAddHabit
+            // richTextBox1
             // 
-            this.lblAddHabit.AutoSize = true;
-            this.lblAddHabit.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblAddHabit.Location = new System.Drawing.Point(12, 32);
-            this.lblAddHabit.Name = "lblAddHabit";
-            this.lblAddHabit.Size = new System.Drawing.Size(169, 20);
-            this.lblAddHabit.TabIndex = 10;
-            this.lblAddHabit.Text = "Choose a habit to add:";
+            this.richTextBox1.Location = new System.Drawing.Point(40, 120);
+            this.richTextBox1.Name = "richTextBox1";
+            this.richTextBox1.Size = new System.Drawing.Size(408, 75);
+            this.richTextBox1.TabIndex = 12;
+            this.richTextBox1.Text = "";
             // 
-            // lstAddHabit
+            // lblDescription
             // 
-            this.lstAddHabit.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader1,
-            this.columnHeader2});
-            this.lstAddHabit.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lstAddHabit.FullRowSelect = true;
-            this.lstAddHabit.HideSelection = false;
-            this.lstAddHabit.Location = new System.Drawing.Point(12, 66);
-            this.lstAddHabit.Name = "lstAddHabit";
-            this.lstAddHabit.Size = new System.Drawing.Size(417, 244);
-            this.lstAddHabit.TabIndex = 11;
-            this.lstAddHabit.UseCompatibleStateImageBehavior = false;
-            this.lstAddHabit.View = System.Windows.Forms.View.Details;
+            this.lblDescription.AutoSize = true;
+            this.lblDescription.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDescription.Location = new System.Drawing.Point(43, 97);
+            this.lblDescription.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblDescription.Name = "lblDescription";
+            this.lblDescription.Size = new System.Drawing.Size(93, 20);
+            this.lblDescription.TabIndex = 13;
+            this.lblDescription.Text = "Description:";
             // 
-            // columnHeader1
+            // comboBox1
             // 
-            this.columnHeader1.Text = "Name";
-            this.columnHeader1.Width = 120;
-            // 
-            // columnHeader2
-            // 
-            this.columnHeader2.Text = "Description";
-            this.columnHeader2.Width = 294;
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Location = new System.Drawing.Point(40, 44);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(408, 28);
+            this.comboBox1.TabIndex = 11;
             // 
             // AddHabitForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(441, 393);
-            this.Controls.Add(this.lstAddHabit);
-            this.Controls.Add(this.lblAddHabit);
+            this.ClientSize = new System.Drawing.Size(494, 280);
+            this.Controls.Add(this.lblDescription);
+            this.Controls.Add(this.richTextBox1);
+            this.Controls.Add(this.comboBox1);
+            this.Controls.Add(this.lblHabitName);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnOk);
-            this.Controls.Add(this.btnDelete);
-            this.Controls.Add(this.btnNew);
+            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "AddHabitForm";
             this.Text = "Add your habit!";
             this.ResumeLayout(false);
@@ -138,13 +120,11 @@
         }
 
         #endregion
-        private System.Windows.Forms.Button btnNew;
-        private System.Windows.Forms.Button btnDelete;
         private System.Windows.Forms.Button btnOk;
+        private System.Windows.Forms.Label lblHabitName;
         private System.Windows.Forms.Button btnCancel;
-        private System.Windows.Forms.Label lblAddHabit;
-        private System.Windows.Forms.ListView lstAddHabit;
-        private System.Windows.Forms.ColumnHeader columnHeader1;
-        private System.Windows.Forms.ColumnHeader columnHeader2;
+        private System.Windows.Forms.RichTextBox richTextBox1;
+        private System.Windows.Forms.Label lblDescription;
+        private System.Windows.Forms.ComboBox comboBox1;
     }
 }

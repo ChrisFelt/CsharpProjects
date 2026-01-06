@@ -243,11 +243,11 @@ namespace HabitLogger
                 }
                 else
                 {
-                    Console.WriteLine("New row was removed: no habit name column value.");
                     // TODO: notify user that they must enter a habit name for row to be saved?
                     // TODO: either delete this row here, or disallow user from creating a new row until this row is added to db
                     // gridViewHabitsByDate.AllowUserToAddRows = false;  // causes infinite loop
                     gridViewHabitsByDate.Rows.Remove(gridViewHabitsByDate.Rows[e.RowIndex]);
+                    Console.WriteLine("New row was removed: no habit name column value.");
                 }
             }
             // 2. edit existing row
@@ -416,6 +416,15 @@ namespace HabitLogger
         {
             sqliteDb.DeleteHabitHasDate(habitHasDateID);
             Console.WriteLine($"Successfully deleted HabitsHasDates row with ID: {habitHasDateID}.");
+        }
+
+        private void OpenAddHabitForm(string name, string desc = "")
+        {
+            // TODO: redesign AddHabitForm
+            (string name, string desc) habitData = (name, desc);
+            // show AddHabitForm
+            AddHabitForm addHabit = new AddHabitForm(curUserID, sqliteDb, habitData);
+            addHabit.Show();
         }
     }
 }
