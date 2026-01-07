@@ -19,7 +19,7 @@ namespace HabitLogger
         (int habitID, string name, string description) _userHabitInput;
 
         // allow main form to grab the user's input (read-only property)
-        public (int habitID, string name, string desc) UserHabitInput 
+        public (int habitID, string name, string description) UserHabitInput 
         {
             get { return _userHabitInput; }
         }
@@ -42,10 +42,11 @@ namespace HabitLogger
 
         private void btnOk_Click(object sender, EventArgs e)
         {
-            // TODO: grab input from combobox and rtxt box and save to userHabitInput
+            // grab input from combobox and rtxt box and save to userHabitInput
             _userHabitInput.name = habitsList[comboBoxHabitName.SelectedIndex].name;
             _userHabitInput.description = richTextBoxHabitDesc.Text;
-            Close();
+            //Close();
+            this.DialogResult = DialogResult.OK;
         }
 
         private void btnCancel_Click(object sender, EventArgs e)

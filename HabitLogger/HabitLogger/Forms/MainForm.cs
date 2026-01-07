@@ -84,7 +84,7 @@ namespace HabitLogger
                     curUserHabits = sqliteDb.ReadHabitByUser(curUserID);
 
                     // establish data source for gridViewHabitsByDate
-                    UpdateGridHabitsByDate(monthCalendar.SelectionRange.Start.ToString("yyyy-MM-dd"));
+                    RefreshGridViewHabitsByDate(monthCalendar.SelectionRange.Start.ToString("yyyy-MM-dd"));
                 }
                 else if (curUserID == 0)
                 {
@@ -146,7 +146,7 @@ namespace HabitLogger
 
             // then update the list view by invoking UpdateLstHabitsByDate() 
             UpdateLstHabitsByDate(e.Start.ToString("yyyy-MM-dd"));
-            UpdateGridHabitsByDate(e.Start.ToString("yyyy-MM-dd"));
+            RefreshGridViewHabitsByDate(e.Start.ToString("yyyy-MM-dd"));
             // TODO: There is currently no way to delete a date. Add delete date option?
         }
 
@@ -205,41 +205,27 @@ namespace HabitLogger
                 // exit event without commiting data to db if no habit name entered
                 if (gridViewHabitsByDate.Rows[e.RowIndex].Cells[habitNameCol].Value.ToString() != "")
                 {
-                    gridViewHabitsByDate.Columns[habitNameCol].ValueType = typeof(string);
+                    // set quantity to 0 if quantity column is empty (NOTE: will always be empty until delay committing row to db feature is added)
+                    if (gridViewHabitsByDate.Rows[e.RowIndex].Cells[quantityCol].Value.ToString() == "")
+                    {
+                        gridViewHabitsByDate.Rows[e.RowIndex].Cells[quantityCol].Value = 0;
+                    }
+
+                    // get habit name
                     string newRowHabit = gridViewHabitsByDate.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
+
                     // if habit name does not exist, prompt user to create new habit
                     if (curUserHabits.Any(habit => habit.name == newRowHabit))
                     {
-
-                        // grab cell values for the row besides name
-                        int newRowQuantity = Convert.ToInt32(gridViewHabitsByDate.Rows[e.RowIndex].Cells[quantityCol].Value.ToString());
-                        string newRowNote = gridViewHabitsByDate.Rows[e.RowIndex].Cells[noteCol].Value.ToString();
-                        string newRowDate = monthCalendar.SelectionRange.Start.ToString("yyyy-MM-dd");
-
-                        // call CreateDate (method only adds date if it doesn't already exist)
-                        sqliteDb.CreateDate(newRowDate);
-
-                        // create new Habits_Has_Dates record
-                        Console.Write($"Creating new HabitHasDate record with: " +
-                                          $"habit name: {newRowHabit}, " +
-                                          $"quantity: {newRowQuantity}, " +
-                                          $"note: {newRowNote}, " +
-                                          $"date: {newRowDate}... ");
-                        sqliteDb.CreateHabitHasDate(newRowHabit,
-                                                    newRowQuantity,
-                                                    newRowNote,
-                                                    newRowDate);
-                        Console.WriteLine("Success!");
-
-                        // call UpdateGridHabitsByDate to refresh view with dt data source
-                        UpdateGridHabitsByDate(newRowDate);
+                        // create new Habits_Has_Dates record in db
+                        CreateGridViewHabitsByDateRow(newRowHabit, e.RowIndex);
                     }
                     else
                     {
                         // popup asks user if they want to add new habit
                         // if yes, open AddHabitForm
                         // if no, delete row
-                        OpenAddHabitForm(newRowHabit);
+                        OpenAddHabitForm(newRowHabit, e.RowIndex);
                     }
                 }
                 else
@@ -269,7 +255,7 @@ namespace HabitLogger
                 else if (prevCellContents != curCellContents)
                 {
                     // TODO: do not write to db unless both habit name and quantity columns have a value
-                    WriteRowToDb(e.RowIndex);
+                    UpdateGridViewHabitsByDateRow(e.RowIndex);
                     // commit change to history
                     int quantity = Convert.ToInt32(gridViewHabitsByDate.Rows[e.RowIndex].Cells[quantityCol].Value);
                     string note = gridViewHabitsByDate.Rows[e.RowIndex].Cells[noteCol].Value.ToString();
@@ -380,7 +366,7 @@ namespace HabitLogger
 
         // refresh DataGridView
         // TODO: change name to RefreshGridHabitsByDate?
-        private void UpdateGridHabitsByDate(string date)
+        private void RefreshGridViewHabitsByDate(string date)
         {
             // get populated DataTable from db for this date
             dt = sqliteDb.ReadHabitByDateDT(curUserID, date);
@@ -399,7 +385,7 @@ namespace HabitLogger
         }
 
         // call UpdateHabitHasDate on a given DataGridView row
-        private void WriteRowToDb(int row)
+        private void UpdateGridViewHabitsByDateRow(int row)
         {
             // get values from the given row
             string note = gridViewHabitsByDate.Rows[row].Cells[noteCol].Value.ToString();
@@ -419,13 +405,64 @@ namespace HabitLogger
             Console.WriteLine($"Successfully deleted HabitsHasDates row with ID: {habitHasDateID}.");
         }
 
-        private void OpenAddHabitForm(string name, string desc = "")
+        // call CreateHabitHasDate on a given DataGridView row
+        private void CreateGridViewHabitsByDateRow(string habitName, int row)
         {
-            // TODO: redesign AddHabitForm
+            // grab cell values for the row besides name
+            int newRowQuantity = Convert.ToInt32(gridViewHabitsByDate.Rows[row].Cells[quantityCol].Value.ToString());
+            string newRowNote = gridViewHabitsByDate.Rows[row].Cells[noteCol].Value.ToString();
+            string newRowDate = monthCalendar.SelectionRange.Start.ToString("yyyy-MM-dd");
+
+            // call CreateDate (method only adds date if it doesn't already exist)
+            sqliteDb.CreateDate(newRowDate);
+
+            // create new Habits_Has_Dates record
+            Console.Write($"Creating new HabitHasDate record with: " +
+                              $"habit name: {habitName}, " +
+                              $"quantity: {newRowQuantity}, " +
+                              $"note: {newRowNote}, " +
+                              $"date: {newRowDate}... ");
+            sqliteDb.CreateHabitHasDate(habitName,
+                                        newRowQuantity,
+                                        newRowNote,
+                                        newRowDate);
+            Console.WriteLine("Success!");
+
+            // call RefreshGridViewHabitsByDate to refresh view with dt data source
+            RefreshGridViewHabitsByDate(newRowDate);
+        }
+
+        // add a new habit
+        private void OpenAddHabitForm(string name, int row, string desc = "")
+        {
+            // save arguments as a tuple to pass to the AddHabitForm
             (int habitID, string name, string desc) habitData = (0, name, desc);
+
             // show AddHabitForm
-            AddHabitForm addHabit = new AddHabitForm(curUserID, sqliteDb, curUserHabits, habitData);
-            addHabit.Show();
+            using (AddHabitForm addHabit = new AddHabitForm(curUserID, sqliteDb, curUserHabits, habitData))
+            {
+                // TODO: form currently needs to be closed twice, fix
+                if (addHabit.ShowDialog() == DialogResult.OK)
+                {
+                    // grab user input from AddHabitForm
+                    int habitID = addHabit.UserHabitInput.habitID;
+                    string habitName = addHabit.UserHabitInput.name;
+                    string habitDescription = addHabit.UserHabitInput.description;
+
+                    // create habit in db if it does not exist
+                    if (habitID == 0)
+                    {
+                        sqliteDb.CreateHabit(habitName, habitDescription, curUserID);
+                    }
+
+                    // add row to date and refresh datagridview
+                    CreateGridViewHabitsByDateRow(habitName, row);
+                }
+                if (addHabit.ShowDialog() == DialogResult.Cancel)
+                {
+                    // TODO: delete row
+                }
+            }
         }
     }
 }
