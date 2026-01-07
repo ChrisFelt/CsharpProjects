@@ -14,14 +14,17 @@ namespace HabitLogger
     {
         DbModel sqliteDb;
         int curUserID;
-        public (int habitID, string name, string desc) initialHabitData;
-
-        // allow main form to grab the user's input
-        public (int habitID, string name, string desc) UserHabitInput { get; private set; }
-
+        (int habitID, string name, string description) initialHabitData;
         List<(int habitID, string name, string description)> habitsList;
+        (int habitID, string name, string description) _userHabitInput;
 
-        public AddHabitForm(int userID, DbModel db, List<(int habitID, string name, string description)> curUserHabits, (int habitID, string name, string desc) habitData)
+        // allow main form to grab the user's input (read-only property)
+        public (int habitID, string name, string desc) UserHabitInput 
+        {
+            get { return _userHabitInput; }
+        }
+
+        public AddHabitForm(int userID, DbModel db, List<(int habitID, string name, string description)> curUserHabits, (int habitID, string name, string description) habitData)
         {
             InitializeComponent();
             CenterToScreen();
@@ -29,7 +32,7 @@ namespace HabitLogger
             sqliteDb = db;
             initialHabitData.habitID = habitData.habitID;
             initialHabitData.name = habitData.name;
-            initialHabitData.desc = habitData.desc;
+            initialHabitData.description = habitData.description;
 
             // populate list of habits and display names in the combobox
             habitsList = GenerateHabitNameArray(curUserHabits);
@@ -40,11 +43,26 @@ namespace HabitLogger
         private void btnOk_Click(object sender, EventArgs e)
         {
             // TODO: grab input from combobox and rtxt box and save to userHabitInput
+            _userHabitInput.name = habitsList[comboBoxHabitName.SelectedIndex].name;
+            _userHabitInput.description = richTextBoxHabitDesc.Text;
+            Close();
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
             Close();
+        }
+
+
+        private void comboBoxHabitName_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            richTextBoxHabitDesc.Text = habitsList[comboBoxHabitName.SelectedIndex].description;
+        }
+
+        // TODO: might not need this event?
+        private void comboBoxHabitName_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            // change description to match the habit name
         }
 
         private List<(int habitID, string name, string description)> GenerateHabitNameArray(List<(int habitID, string name, string description)> curUserHabits)
