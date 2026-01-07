@@ -239,6 +239,7 @@ namespace HabitLogger
                         // popup asks user if they want to add new habit
                         // if yes, open AddHabitForm
                         // if no, delete row
+                        OpenAddHabitForm(newRowHabit);
                     }
                 }
                 else

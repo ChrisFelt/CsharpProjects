@@ -19,9 +19,9 @@ namespace HabitLogger
         // allow main form to grab the user's input
         public (int habitID, string name, string desc) UserHabitInput { get; private set; }
 
-        List<(int habitID, string name, string description)> curUserHabits;
+        List<(int habitID, string name, string description)> habitsList;
 
-        public AddHabitForm(int userID, DbModel db, List<(int habitID, string name, string description)> habitsList, (int habitID, string name, string desc) habitData)
+        public AddHabitForm(int userID, DbModel db, List<(int habitID, string name, string description)> curUserHabits, (int habitID, string name, string desc) habitData)
         {
             InitializeComponent();
             CenterToScreen();
@@ -30,7 +30,11 @@ namespace HabitLogger
             initialHabitData.habitID = habitData.habitID;
             initialHabitData.name = habitData.name;
             initialHabitData.desc = habitData.desc;
-            curUserHabits = habitsList;
+
+            // populate list of habits and display names in the combobox
+            habitsList = GenerateHabitNameArray(curUserHabits);
+            comboBoxHabitName.Items.AddRange(habitsList.Select(t=>t.name).ToArray());
+            comboBoxHabitName.SelectedIndex = 0;
         }
 
         private void btnOk_Click(object sender, EventArgs e)
@@ -43,19 +47,19 @@ namespace HabitLogger
             Close();
         }
 
-        private (int habitID, string name, string description)[] GenerateHabitNameArray()
+        private List<(int habitID, string name, string description)> GenerateHabitNameArray(List<(int habitID, string name, string description)> curUserHabits)
         {
-            // populate return array with initial habit data and user's habits
-            (int habitID, string name, string description)[] habitNameArray = new (int habitID, string name, string description)[curUserHabits.Count + 1];
+            // populate return list with initial habit data and user's habits
+            List<(int habitID, string name, string description)> returnList = new List<(int habitID, string name, string description)>(curUserHabits.Count + 1);
 
-            habitNameArray.Append(initialHabitData);  // this value will be the default value shown in the combobox
+            returnList.Add(initialHabitData);  // this value will be the default value shown in the combobox
 
             foreach ((int habitID, string name, string description) habit in curUserHabits)
             {
-                habitNameArray.Append(habit);
+                returnList.Add(habit);
             }
 
-            return habitNameArray;
+            return returnList;
         }
     }
 }
