@@ -172,7 +172,7 @@ namespace HabitLogger
         // -----------------------------------------------------
         // Habits Table Queries
         // -----------------------------------------------------
-        public void CreateHabit(string habitName, string habitDesc, int userID)
+        public void CreateHabit(string habitName, string habitDescription, int userID)
         {
             // TODO: need to test this method
             using (SQLiteConnection conn = new SQLiteConnection(_connString))
@@ -189,13 +189,13 @@ namespace HabitLogger
                     // add parameterized values
                     cmd.Parameters.AddWithValue(":habitName", habitName);
                     // insert NULL for description if it is blank
-                    if (habitDesc == "")
+                    if (habitDescription == "")
                     {
                         cmd.Parameters.AddWithValue(":habitDesc", DBNull.Value);
                     }
                     else
                     {
-                        cmd.Parameters.AddWithValue(":habitDesc", habitDesc);
+                        cmd.Parameters.AddWithValue(":habitDesc", habitDescription);
                     }
                     cmd.Parameters.AddWithValue(":userID", userID);
 
