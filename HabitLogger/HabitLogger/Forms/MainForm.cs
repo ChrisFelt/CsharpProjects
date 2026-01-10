@@ -441,8 +441,9 @@ namespace HabitLogger
             // show AddHabitForm
             using (AddHabitForm addHabit = new AddHabitForm(curUserID, sqliteDb, curUserHabits, habitData))
             {
-                // TODO: form currently needs to be closed twice, fix
-                if (addHabit.ShowDialog() == DialogResult.OK)
+                // open form and get dialog result
+                DialogResult result = addHabit.ShowDialog();
+                if (result == DialogResult.OK)
                 {
                     // grab user input from AddHabitForm
                     int habitID = addHabit.UserHabitInput.habitID;
@@ -458,9 +459,9 @@ namespace HabitLogger
                     // add row to date and refresh datagridview
                     CreateGridViewHabitsByDateRow(habitName, row);
                 }
-                if (addHabit.ShowDialog() == DialogResult.Cancel)
+                else
                 {
-                    // TODO: delete row
+                    gridViewHabitsByDate.Rows.Remove(gridViewHabitsByDate.Rows[row]);
                 }
             }
         }

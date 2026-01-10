@@ -45,13 +45,12 @@ namespace HabitLogger
             // grab input from combobox and rtxt box and save to userHabitInput
             _userHabitInput.name = habitsList[comboBoxHabitName.SelectedIndex].name;
             _userHabitInput.description = richTextBoxHabitDesc.Text;
-            //Close();
             this.DialogResult = DialogResult.OK;
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            Close();
+            this.DialogResult = DialogResult.Cancel;
         }
 
 
