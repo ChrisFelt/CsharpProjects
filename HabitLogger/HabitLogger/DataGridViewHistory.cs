@@ -32,28 +32,28 @@ namespace HabitLogger
 
         public DataGridViewHistory() { }  // empty constructor
 
-        public (string type, int row, string name, int quantity, string note, int habitHasDateID) Redo((string type, int row, string name, int quantity, string note, int habitHasDateID) values)
+        public (string type, int row, string name, int quantity, string note, int habitHasDateID) Redo()
         {
             // pop top value off _redoHistory
-            (string type, int row, string name, int quantity, string note, int habitHasDateID) returnValue = _redoHistory.Pop();
+            (string type, int row, string name, int quantity, string note, int habitHasDateID) values = _redoHistory.Pop();
             // find its destination cell(s) in the dt
             // push current values of those cell(s) into _undoHistory
             _undoHistory.Push(values);
             // replace destination cell(s) with values from _redoHistory
-            return returnValue;
+            return values;
             // TODO: modify db/dt in calling function
             // write changes to database
         }
 
-        public (string type, int row, string name, int quantity, string note, int habitHasDateID) Undo((string type, int row, string name, int quantity, string note, int habitHasDateID) values)
+        public (string type, int row, string name, int quantity, string note, int habitHasDateID) Undo()
         {
             // pop top value off _undoHistory
-            (string type, int row, string name, int quantity, string note, int habitHasDateID) returnValue = _undoHistory.Pop();
+            (string type, int row, string name, int quantity, string note, int habitHasDateID) values = _undoHistory.Pop();
             // find its destination cell(s) in the dt
             // push current values of those cell(s) into _redoHistory
             _redoHistory.Push(values);
             // replace destination cell(s) with values from _undoHistory
-            return returnValue;
+            return values;
             // write changes to database
         }
 
