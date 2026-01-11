@@ -1,8 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
@@ -17,7 +18,6 @@ namespace HabitLogger
         // fields
         private DbModel sqliteDb = new DbModel();
         private int curUserID = 0;  // user not logged in
-        private int indexHabitHasDateID = 4;  // ListViewItem index for habitHasDateID
         private string prevCellContents;  // track contents of a cell before edit
 
         // data source for gridViewHabitsByDate
@@ -136,6 +136,87 @@ namespace HabitLogger
             // TODO: There is currently no way to delete a date. Add delete date option?
         }
 
+        // Undo click event:
+        // 1. pops top value off of undoHistory and replaces the current value of that cell with the undoHistory value
+        // 2. pushes the value into redoHistory
+        // Redo click event does the reverse
+        private void btnUndo_Click(object sender, EventArgs e)
+        {
+            // do nothing if undo stack is empty
+            if (gridViewHabitsByDateHistory.GetUndoCount() > 0)
+            {
+                (string type, int row, string habitName, int quantity, string note, int habitHasDateID) historyData = gridViewHabitsByDateHistory.Undo();
+
+                // check type and call appropriate function
+                if (historyData.type == rowType)
+                {
+                    rowHistory((historyData.row, historyData.habitName, historyData.quantity, historyData.note));
+                }
+                else
+                {
+                    cellHistory((historyData.row, historyData.habitName, historyData.quantity, historyData.note, historyData.habitHasDateID));
+                }
+            }
+        }
+
+        private void btnRedo_Click(object sender, EventArgs e)
+        {
+            // do nothing if redo stack is empty
+            if (gridViewHabitsByDateHistory.GetRedoCount() > 0)
+            {
+                (string type, int row, string habitName, int quantity, string note, int habitHasDateID) historyData = gridViewHabitsByDateHistory.Redo();
+
+                // check type and call appropriate function
+                if (historyData.type == rowType)
+                {
+                    rowHistory((historyData.row, historyData.habitName, historyData.quantity, historyData.note));
+                }
+                else
+                {
+                    cellHistory((historyData.row, historyData.habitName, historyData.quantity, historyData.note, historyData.habitHasDateID));
+                }
+            }
+        }
+
+        // update all columns in a row
+        private void cellHistory((int row, string habitName, int quantity, string note, int habitHasDateID) cellData)
+        {
+            // update cell values
+            gridViewHabitsByDate.Rows[cellData.row].Cells[habitNameCol].Value = cellData.habitName;
+            gridViewHabitsByDate.Rows[cellData.row].Cells[noteCol].Value = cellData.note;
+            gridViewHabitsByDate.Rows[cellData.row].Cells[quantityCol].Value = cellData.quantity;
+            gridViewHabitsByDate.Rows[cellData.row].Cells[habitHasDateIDCol].Value = cellData.habitHasDateID;  // TODO: only needed if habit name can be modified
+
+            // update db
+            UpdateGridViewHabitsByDateRow(cellData.row);
+        }
+
+        // add row to gridViewHabitsByDate and create Habits_Has_Dates relationship
+        private void rowHistory((int row, string habitName, int quantity, string note) rowData)
+        {
+            // insert a new row into gridViewHabitsByDate
+            // TODO: can't insert in datagridview when data source is bound
+            gridViewHabitsByDate.Rows.Insert(rowData.row, 1);
+
+            // update cell values
+            gridViewHabitsByDate.Rows[rowData.row].Cells[habitNameCol].Value = rowData.habitName;
+            gridViewHabitsByDate.Rows[rowData.row].Cells[noteCol].Value = rowData.note;
+            gridViewHabitsByDate.Rows[rowData.row].Cells[quantityCol].Value = rowData.quantity;
+
+            // TODO: need to first check if habit exists and create if not - modify OpenAddHabitForm to return a boolean
+
+            // create Habits_Has_Dates relationship
+            CreateGridViewHabitsByDateRow(rowData.habitName, rowData.row);
+        }
+
+        // TODO: 
+        // refresh curUserHabits when a new habit record is added
+        // replace rtxtHabitDesc with DataGridView of all existing habits
+        // allow double-click event to add current selection to the DataGridView as a new row
+        // update whenever a new habit is created
+        // allow creation of new habit within the DataGriView, and editing the habit and its description
+        // use RowLeave event to strictly control edits, with confirmation popups each time a cell is edited
+
         // -----------------------------------------------------
         // pnlMain gridViewHabitsByDate Events
         // -----------------------------------------------------
@@ -158,6 +239,7 @@ namespace HabitLogger
         private void gridViewHabitsByDate_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
             // 1. add new row - check if cell is on new row
+            // TODO: need to implement history here
             if (e.RowIndex == dt.Rows.Count)
             {
                 // exit event without commiting data to db if no habit name entered
@@ -215,11 +297,13 @@ namespace HabitLogger
                     // TODO: do not write to db unless both habit name and quantity columns have a value
                     UpdateGridViewHabitsByDateRow(e.RowIndex);
                     // commit change to history
+                    string habitName = gridViewHabitsByDate.Rows[e.RowIndex].Cells[habitNameCol].Value.ToString();
                     int quantity = Convert.ToInt32(gridViewHabitsByDate.Rows[e.RowIndex].Cells[quantityCol].Value);
                     string note = gridViewHabitsByDate.Rows[e.RowIndex].Cells[noteCol].Value.ToString();
                     int habitHasDateID = Convert.ToInt32(gridViewHabitsByDate.Rows[e.RowIndex].Cells[habitHasDateIDCol].Value);
 
-                    gridViewHabitsByDateHistory.Commit((cellType, e.RowIndex, quantity, note, habitHasDateID));
+                    // TODO: need to save PREVIOSU value to undo... change Commit to SaveUndo and use tuples with prevCellContents/curCellContents?
+                    gridViewHabitsByDateHistory.Commit((cellType, e.RowIndex, habitName, quantity, note, habitHasDateID));
                     Console.WriteLine($"Added to history: {gridViewHabitsByDateHistory.UndoPeek()}");
                 }
             }
@@ -249,14 +333,14 @@ namespace HabitLogger
         // add rows deleted from gridViewHabitsByDate to history
         private void gridViewHabitsByDate_UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
         {
-            string name = gridViewHabitsByDate.Rows[e.Row.Index].Cells[habitNameCol].Value.ToString();
+            string habitName = gridViewHabitsByDate.Rows[e.Row.Index].Cells[habitNameCol].Value.ToString();
             int quantity = Convert.ToInt32(gridViewHabitsByDate.Rows[e.Row.Index].Cells[quantityCol].Value);
             string note = gridViewHabitsByDate.Rows[e.Row.Index].Cells[noteCol].Value.ToString();
             int habitHasDateID = Convert.ToInt32(gridViewHabitsByDate.Rows[e.Row.Index].Cells[habitHasDateIDCol].Value);
-            Console.WriteLine($"User deleting row: {e.Row.Index} with contents: {name} {quantity} {note} {habitHasDateID}.");
+            Console.WriteLine($"User deleting row: {e.Row.Index} with contents: {habitName} {quantity} {note} {habitHasDateID}.");
             // NOTE: this event fires for EACH row deleted. Multiple rows deleted simultaneously each cause the event to fire individually.
             // Need to track how many rows were deleted with history. Add new class variable in DataGridViewHistory to count?
-            gridViewHabitsByDateHistory.Commit((rowType, e.Row.Index, quantity, note, habitHasDateID));
+            gridViewHabitsByDateHistory.Commit((rowType, e.Row.Index, habitName, quantity, note, habitHasDateID));
             gridViewHabitsByDateHistory.DeletedRowsCount++;
             Console.WriteLine($"Deleted row count: {gridViewHabitsByDateHistory.DeletedRowsCount}");
 
@@ -287,22 +371,6 @@ namespace HabitLogger
                 autoComplete.AutoCompleteCustomSource = customSource;
             }
         }
-
-        // TODO:
-        // add Undo and Redo buttons (replace Add/Edit?) under gridViewHabitsByDate
-        // add separate click events to both buttons
-        // Undo click event:
-        // 1. pops top value off of undoHistory and replaces the current value of that cell with the undoHistory value
-        // 2. pushes the value into redoHistory
-        // Redo click event does the reverse
-
-        // TODO: 
-        // refresh curUserHabits when a new habit record is added
-        // replace rtxtHabitDesc with DataGridView of all existing habits
-        // allow double-click event to add current selection to the DataGridView as a new row
-        // update whenever a new habit is created
-        // allow creation of new habit within the DataGriView, and editing the habit and its description
-        // use RowLeave event to strictly control edits, with confirmation popups each time a cell is edited
 
         // -----------------------------------------------------
         // pnlMain General Use Methods
@@ -401,6 +469,9 @@ namespace HabitLogger
 
                     // add row to date and refresh datagridview
                     CreateGridViewHabitsByDateRow(habitName, row);
+
+                    // update current user habits list
+                    curUserHabits = sqliteDb.ReadHabitByUser(curUserID);
                 }
                 else
                 {
