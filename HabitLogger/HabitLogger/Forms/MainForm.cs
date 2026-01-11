@@ -127,55 +127,13 @@ namespace HabitLogger
             curUserID = 0;
             txtUserName.Select();
             lblDisplayUser.Text = "";
-            // TODO: populate lstHabitsByDate with today's date
-        }
-
-        // Add button click event
-        private void btnAdd_Click(object sender, EventArgs e)
-        {
-            // show AddHabitForm
-            //AddHabitForm addHabit = new AddHabitForm(curUserID, sqliteDb);
-            //addHabit.Show();
         }
 
         // Date click event
         private void monthCalendar_DateChanged(object sender, DateRangeEventArgs e)
         {
-            // first clear the list view
-            lstHabitsByDate.Items.Clear();
-
-            // then update the list view by invoking UpdateLstHabitsByDate() 
-            UpdateLstHabitsByDate(e.Start.ToString("yyyy-MM-dd"));
             RefreshGridViewHabitsByDate(e.Start.ToString("yyyy-MM-dd"));
             // TODO: There is currently no way to delete a date. Add delete date option?
-        }
-
-        // Edit button click event
-        private void btnEdit_Click(object sender, EventArgs e)
-        {
-            // open new window that allows the user to edit the current habit
-            dt.Rows[0][1] = "New value";
-        }
-
-        // Delete button click event
-        private void btnDelete_Click(object sender, EventArgs e)
-        {
-            // delete the currently selected habit from the current date ONLY
-            // confirmation popup allows user to change their mind
-            DialogResult confirm = MessageBox.Show("Remove habit from this date permanently?", "Delete Confirmation", MessageBoxButtons.YesNo);
-            if (confirm == DialogResult.Yes)
-            {
-                // delete habitHasDate for each item selected in the listview
-                foreach (ListViewItem habit in lstHabitsByDate.SelectedItems)
-                {
-                    Console.WriteLine($"Deleting ID: {int.Parse(habit.SubItems[indexHabitHasDateID].Text)}");
-                    sqliteDb.DeleteHabitHasDate(int.Parse(habit.SubItems[indexHabitHasDateID].Text));
-
-                    // remove habit from lstHabitsByDate display
-                    // TODO: test with large selection of habits
-                    lstHabitsByDate.Items.Remove(habit);
-                }
-            }
         }
 
         // -----------------------------------------------------
@@ -349,21 +307,6 @@ namespace HabitLogger
         // -----------------------------------------------------
         // pnlMain General Use Methods
         // -----------------------------------------------------
-        // refresh ListView
-        private void UpdateLstHabitsByDate(string date)
-        {
-
-            // populate LstHabitsByDate using ReadHabitsByDate()
-            List<(int habitID, string name, string note, int habitHasDateID, string quantity)> habitsLst = sqliteDb.ReadHabitByDate(curUserID, date);
-            foreach (var habit in habitsLst)
-            {
-                // add items from the tuple as a row to lstHabitsByDate
-                string[] items = new string[] { habit.name, habit.quantity, habit.note, habit.habitID.ToString(), habit.habitHasDateID.ToString() };
-                ListViewItem row = new ListViewItem(items);
-                lstHabitsByDate.Items.Add(row);
-            }
-        }
-
         // refresh DataGridView
         // TODO: change name to RefreshGridHabitsByDate?
         private void RefreshGridViewHabitsByDate(string date)
