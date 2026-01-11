@@ -55,11 +55,11 @@
             this.lblNewUser = new System.Windows.Forms.Label();
             this.pnlLogin = new System.Windows.Forms.Panel();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Habit = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Frequency = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Note = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.pnlMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridViewHabitsByDate)).BeginInit();
             this.menuStrip.SuspendLayout();
@@ -358,13 +358,29 @@
             this.dataGridView1.Size = new System.Drawing.Size(492, 112);
             this.dataGridView1.TabIndex = 15;
             // 
+            // dataGridViewTextBoxColumn1
+            // 
+            this.dataGridViewTextBoxColumn1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.dataGridViewTextBoxColumn1.DataPropertyName = "Habit";
+            this.dataGridViewTextBoxColumn1.HeaderText = "Habit";
+            this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
+            this.dataGridViewTextBoxColumn1.Width = 170;
+            // 
+            // dataGridViewTextBoxColumn3
+            // 
+            this.dataGridViewTextBoxColumn3.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.dataGridViewTextBoxColumn3.DataPropertyName = "Description";
+            this.dataGridViewTextBoxColumn3.FillWeight = 92.13584F;
+            this.dataGridViewTextBoxColumn3.HeaderText = "Description";
+            this.dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
+            // 
             // Habit
             // 
             this.Habit.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
             this.Habit.DataPropertyName = "Habit";
             this.Habit.HeaderText = "Habit";
             this.Habit.Name = "Habit";
-            this.Habit.Width = 180;
+            this.Habit.Width = 170;
             // 
             // Frequency
             // 
@@ -379,22 +395,6 @@
             this.Note.DataPropertyName = "Note";
             this.Note.HeaderText = "Note";
             this.Note.Name = "Note";
-            // 
-            // dataGridViewTextBoxColumn1
-            // 
-            this.dataGridViewTextBoxColumn1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.dataGridViewTextBoxColumn1.DataPropertyName = "Habit";
-            this.dataGridViewTextBoxColumn1.HeaderText = "Habit";
-            this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
-            this.dataGridViewTextBoxColumn1.Width = 180;
-            // 
-            // dataGridViewTextBoxColumn3
-            // 
-            this.dataGridViewTextBoxColumn3.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.dataGridViewTextBoxColumn3.DataPropertyName = "Description";
-            this.dataGridViewTextBoxColumn3.FillWeight = 92.13584F;
-            this.dataGridViewTextBoxColumn3.HeaderText = "Description";
-            this.dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
             // 
             // main
             // 
