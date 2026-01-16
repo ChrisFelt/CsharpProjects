@@ -135,6 +135,7 @@ namespace HabitLogger
             RefreshGridViewHabitsByDate(e.Start.ToString("yyyy-MM-dd"));
             // TODO: There is currently no way to delete a date. Add delete date option?
             // TODO: Clear history!!
+            gridViewHabitsByDateHistory.ClearHistory();
         }
 
         // Undo click event:
@@ -232,12 +233,12 @@ namespace HabitLogger
             // insert a new row into gridViewHabitsByDate
             DataRow newRow = dt.NewRow();
 
-            dt.Rows.InsertAt(newRow, rowData.row);
-
             // update cell values
-            gridViewHabitsByDate.Rows[rowData.row].Cells[habitNameCol].Value = rowData.habitName;
-            gridViewHabitsByDate.Rows[rowData.row].Cells[noteCol].Value = rowData.note;
-            gridViewHabitsByDate.Rows[rowData.row].Cells[quantityCol].Value = rowData.quantity;
+            newRow[habitNameCol] = rowData.habitName;
+            newRow[quantityCol] = rowData.quantity;
+            newRow[noteCol] = rowData.note;
+
+            dt.Rows.Add(newRow);
 
             // TODO: need to first check if habit exists and create if not - modify OpenAddHabitForm to return a boolean
 
@@ -542,6 +543,7 @@ namespace HabitLogger
 
         private int FindRowByHabitHasDateID(int habitHasDateID)
         {
+            // TODO: need to change this method to search by habit name instead (if deleted habits_has_dates were modified before deleting, habitHasID searches break)
             int rowIndex = -1;
 
             // find row index where habitHasID matches 
