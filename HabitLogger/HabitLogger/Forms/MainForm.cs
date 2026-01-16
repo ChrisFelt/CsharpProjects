@@ -149,25 +149,28 @@ namespace HabitLogger
                 // get Undo row number by peeking at the Undo stack
                 (string type, int row, string habitName, int quantity, string note, int habitHasDateID) undoData = gridViewHabitsByDateHistory.UndoPeek();
 
-                // gather current values of the row
                 string type = undoData.type;
-                int row = undoData.row;
-                string habitName = gridViewHabitsByDate.Rows[row].Cells[habitNameCol].Value.ToString();
-                int quantity = Convert.ToInt32(gridViewHabitsByDate.Rows[row].Cells[quantityCol].Value.ToString());
-                string note = gridViewHabitsByDate.Rows[row].Cells[noteCol].Value.ToString();
-                int habitHasDateID = undoData.habitHasDateID;
 
-                // call Undo
-                undoData = gridViewHabitsByDateHistory.Undo((type, row, habitName, quantity, note, habitHasDateID));
-
-                // check type and call appropriate function
-                if (undoData.type == rowType)
+                // cell type - gather current values of the row then call Undo method
+                if (type == cellType)
                 {
-                    rowHistory((undoData.row, undoData.habitName, undoData.quantity, undoData.note));
+                    // get row number of matching habitHasDateID
+                    int row = FindRowByHabitHasDateID(undoData.habitHasDateID);
+                    string habitName = gridViewHabitsByDate.Rows[row].Cells[habitNameCol].Value.ToString();
+                    int quantity = Convert.ToInt32(gridViewHabitsByDate.Rows[row].Cells[quantityCol].Value.ToString());
+                    string note = gridViewHabitsByDate.Rows[row].Cells[noteCol].Value.ToString();
+                    int habitHasDateID = undoData.habitHasDateID;
+
+                    undoData = gridViewHabitsByDateHistory.Undo((type, row, habitName, quantity, note, habitHasDateID));
+
+                    cellHistory((undoData.row, undoData.habitName, undoData.quantity, undoData.note, undoData.habitHasDateID));
                 }
+
+                // row type - history is updated only after new Habits_Has_Dates record is created
                 else
                 {
-                    cellHistory((undoData.row, undoData.habitName, undoData.quantity, undoData.note, undoData.habitHasDateID));
+                    // TODO: need to account for multiple simultaneous deleted rows - loop method call for deletedrowscount?
+                    rowHistory((undoData.row, undoData.habitName, undoData.quantity, undoData.note));
                 }
             }
         }
@@ -180,25 +183,32 @@ namespace HabitLogger
                 // get Redo row number by peeking at the Redo stack
                 (string type, int row, string habitName, int quantity, string note, int habitHasDateID) redoData = gridViewHabitsByDateHistory.RedoPeek();
 
-                // gather current values of the row
                 string type = redoData.type;
-                int row = redoData.row;
+
+                // grab current values of the row
+                // get row number of matching habitHasDateID
+                int row = FindRowByHabitHasDateID(redoData.habitHasDateID);
                 string habitName = gridViewHabitsByDate.Rows[row].Cells[habitNameCol].Value.ToString();
                 int quantity = Convert.ToInt32(gridViewHabitsByDate.Rows[row].Cells[quantityCol].Value.ToString());
                 string note = gridViewHabitsByDate.Rows[row].Cells[noteCol].Value.ToString();
                 int habitHasDateID = redoData.habitHasDateID;
 
-                // call Redo
-                redoData = gridViewHabitsByDateHistory.Redo((type, row, habitName, quantity, note, habitHasDateID));
-
-                // check type and call appropriate function
-                if (redoData.type == rowType)
+                // cell type - gather current values of the row then call Redo method
+                if (type == cellType)
                 {
-                    rowHistory((redoData.row, redoData.habitName, redoData.quantity, redoData.note));
+                    redoData = gridViewHabitsByDateHistory.Redo((type, row, habitName, quantity, note, habitHasDateID));
+
+                    cellHistory((redoData.row, redoData.habitName, redoData.quantity, redoData.note, redoData.habitHasDateID));
                 }
+
+                // row type - delete the row and update history
                 else
                 {
-                    cellHistory((redoData.row, redoData.habitName, redoData.quantity, redoData.note, redoData.habitHasDateID));
+                    // TODO: may need to repeat method call for multiple simultaneous deletes
+                    dt.Rows.Remove(dt.Rows[row]);
+                    DeleteRow(habitHasDateID);
+
+                    gridViewHabitsByDateHistory.Redo((type, row, habitName, quantity, note, habitHasDateID));
                 }
             }
         }
@@ -220,8 +230,9 @@ namespace HabitLogger
         private void rowHistory((int row, string habitName, int quantity, string note) rowData)
         {
             // insert a new row into gridViewHabitsByDate
-            // TODO: can't insert in datagridview when data source is bound
-            gridViewHabitsByDate.Rows.Insert(rowData.row, 1);
+            DataRow newRow = dt.NewRow();
+
+            dt.Rows.InsertAt(newRow, rowData.row);
 
             // update cell values
             gridViewHabitsByDate.Rows[rowData.row].Cells[habitNameCol].Value = rowData.habitName;
@@ -232,6 +243,15 @@ namespace HabitLogger
 
             // create Habits_Has_Dates relationship
             CreateGridViewHabitsByDateRow(rowData.habitName, rowData.row);
+
+            // update history here to reflect the new habitHasDateID
+            int row = gridViewHabitsByDate.Rows.Count - 2;
+            string habitName = gridViewHabitsByDate.Rows[row].Cells[habitNameCol].Value.ToString();
+            int quantity = Convert.ToInt32(gridViewHabitsByDate.Rows[row].Cells[quantityCol].Value.ToString());
+            string note = gridViewHabitsByDate.Rows[row].Cells[noteCol].Value.ToString();
+            int habitHasDateID = Convert.ToInt32(gridViewHabitsByDate.Rows[row].Cells[habitHasDateIDCol].Value.ToString());
+
+            gridViewHabitsByDateHistory.Undo((rowType, row, habitName, quantity, note, habitHasDateID));
         }
 
         // TODO: 
@@ -518,6 +538,23 @@ namespace HabitLogger
                     gridViewHabitsByDate.Rows.Remove(gridViewHabitsByDate.Rows[row]);
                 }
             }
+        }
+
+        private int FindRowByHabitHasDateID(int habitHasDateID)
+        {
+            int rowIndex = -1;
+
+            // find row index where habitHasID matches 
+            foreach (DataGridViewRow row in gridViewHabitsByDate.Rows)
+            {
+                if (Convert.ToInt32(row.Cells[habitHasDateIDCol].Value.ToString()) == habitHasDateID)
+                {
+                    rowIndex = row.Index;
+                    break;  // stop searching
+                }
+            }
+
+            return rowIndex;  // TODO: will break if habitHasDateID not found
         }
     }
 }
