@@ -206,8 +206,8 @@ namespace HabitLogger
                 else
                 {
                     // TODO: may need to repeat method call for multiple simultaneous deletes
-                    dt.Rows.Remove(dt.Rows[row]);
                     DeleteRow(habitHasDateID);
+                    RefreshGridViewHabitsByDate(monthCalendar.SelectionRange.Start.ToString("yyyy-MM-dd"));
 
                     gridViewHabitsByDateHistory.Redo((type, row, habitName, quantity, note, habitHasDateID));
                 }
@@ -468,6 +468,7 @@ namespace HabitLogger
             Console.Write($"Attempting to write note: {note}, quantity: {quantity}, habitHasDateID: {habitHasDateID}... ");
             sqliteDb.UpdateHabitHasDate(note, quantity, habitHasDateID);
             Console.WriteLine("Success!");
+            RefreshGridViewHabitsByDate(monthCalendar.SelectionRange.Start.ToString("yyyy-MM-dd"));
         }
 
         // delete row from HabitsHasDates
