@@ -230,6 +230,16 @@ namespace HabitLogger
         // add row to gridViewHabitsByDate and create Habits_Has_Dates relationship
         private void rowHistory((int row, string habitName, int quantity, string note) rowData)
         {
+            // attempt to add habit if it no longer exists
+            if (curUserHabits.Any(habit => habit.name == rowData.habitName))
+            {
+                // if user cancels add habit, do not add the row
+                if (!OpenAddHabitForm(rowData.habitName, rowData.row))
+                {
+                    return;
+                }
+            }
+
             // insert a new row into gridViewHabitsByDate
             DataRow newRow = dt.NewRow();
 
@@ -239,8 +249,6 @@ namespace HabitLogger
             newRow[noteCol] = rowData.note;
 
             dt.Rows.Add(newRow);
-
-            // TODO: need to first check if habit exists and create if not - modify OpenAddHabitForm to return a boolean
 
             // create Habits_Has_Dates relationship
             CreateGridViewHabitsByDateRow(rowData.habitName, rowData.row);
@@ -506,7 +514,7 @@ namespace HabitLogger
         }
 
         // add a new habit
-        private void OpenAddHabitForm(string name, int row, string desc = "")
+        private bool OpenAddHabitForm(string name, int row, string desc = "")
         {
             // save arguments as a tuple to pass to the AddHabitForm
             (int habitID, string name, string desc) habitData = (0, name, desc);
@@ -534,10 +542,13 @@ namespace HabitLogger
 
                     // update current user habits list
                     curUserHabits = sqliteDb.ReadHabitByUser(curUserID);
+
+                    return true;
                 }
                 else
                 {
                     gridViewHabitsByDate.Rows.Remove(gridViewHabitsByDate.Rows[row]);
+                    return false;
                 }
             }
         }
