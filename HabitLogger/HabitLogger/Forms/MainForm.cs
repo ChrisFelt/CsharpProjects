@@ -173,6 +173,17 @@ namespace HabitLogger
                     // TODO: need to account for multiple simultaneous deleted rows - loop method call for deletedrowscount?
                     rowHistory((undoData.row, undoData.habitName, undoData.quantity, undoData.note));
                 }
+
+                // grey out button text when undo history is empty
+                if (gridViewHabitsByDateHistory.GetUndoCount() == 0)
+                {
+                    btnUndo.ForeColor = SystemColors.ControlDark;
+                }
+                // undo action may somtimes abort, so check here if redo button text needs to be activated
+                if (gridViewHabitsByDateHistory.GetRedoCount() > 0)
+                {
+                    btnRedo.ForeColor = SystemColors.ControlText;
+                }
             }
         }
 
@@ -210,6 +221,17 @@ namespace HabitLogger
                     RefreshGridViewHabitsByDate(monthCalendar.SelectionRange.Start.ToString("yyyy-MM-dd"));
 
                     gridViewHabitsByDateHistory.Redo((type, row, habitName, quantity, note, habitHasDateID));
+                }
+
+                // grey out button text when redo history is empty
+                if (gridViewHabitsByDateHistory.GetRedoCount() == 0)
+                {
+                    btnRedo.ForeColor = SystemColors.ControlDark;
+                }
+                // redo action may somtimes abort, so check here if redo button text needs to be activated
+                if (gridViewHabitsByDateHistory.GetUndoCount() > 0)
+                {
+                    btnUndo.ForeColor = SystemColors.ControlText;
                 }
             }
         }
@@ -312,6 +334,7 @@ namespace HabitLogger
                     if (curUserHabits.Any(habit => habit.name == newRowHabit))
                     {
                         // create new Habits_Has_Dates record in db
+                        // TODO: call history commit
                         CreateGridViewHabitsByDateRow(newRowHabit, e.RowIndex);
                     }
                     else
@@ -319,13 +342,14 @@ namespace HabitLogger
                         // popup asks user if they want to add new habit
                         // if yes, open AddHabitForm
                         // if no, delete row
+                        // TODO: when user cancels out of AddHabitForm without adding habit, delete row
+                        // TODO: call history commit
                         OpenAddHabitForm(newRowHabit, e.RowIndex);
                     }
                 }
                 else
                 {
                     // TODO: notify user that they must enter a habit name for row to be saved?
-                    // TODO: either delete this row here, or disallow user from creating a new row until this row is added to db
                     // gridViewHabitsByDate.AllowUserToAddRows = false;  // causes infinite loop
                     gridViewHabitsByDate.Rows.Remove(gridViewHabitsByDate.Rows[e.RowIndex]);
                     Console.WriteLine("New row was removed: no habit name column value.");
@@ -371,8 +395,10 @@ namespace HabitLogger
                             break;
                     }
 
-                    // TODO: need to save PREVIOUS value to undo... change Commit to SaveUndo and use tuples with prevCellContents/curCellContents?
+                    // update history, toggle Undo button text to active, and toggle Redo button text to inactive
                     gridViewHabitsByDateHistory.Commit((cellType, e.RowIndex, habitName, quantity, note, habitHasDateID));
+                    btnUndo.ForeColor = SystemColors.ControlText;
+                    btnRedo.ForeColor = SystemColors.ControlDark;
                     Console.WriteLine($"Added to history: {gridViewHabitsByDateHistory.UndoPeek()}");
                 }
             }
