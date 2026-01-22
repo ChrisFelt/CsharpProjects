@@ -21,7 +21,7 @@ namespace HabitLogger
         private string prevCellContents;  // track contents of a cell before edit
 
         // data source for gridViewHabitsByDate
-        private DataTable dt;
+        private DataTable dt = new DataTable();
 
         // gridViewHabitsByDate columns
         private const int habitNameCol = 0;
@@ -134,8 +134,12 @@ namespace HabitLogger
         {
             RefreshGridViewHabitsByDate(e.Start.ToString("yyyy-MM-dd"));
             // TODO: There is currently no way to delete a date. Add delete date option?
-            // TODO: Clear history!!
+            
+            // reset history and grey out undo/redo text
             gridViewHabitsByDateHistory.ClearHistory();
+
+            btnUndo.ForeColor = SystemColors.ControlDark;
+            btnRedo.ForeColor = SystemColors.ControlDark;
         }
 
         // Undo click event:
@@ -253,7 +257,7 @@ namespace HabitLogger
         private void rowHistory((int row, string habitName, int quantity, string note) rowData)
         {
             // attempt to add habit if it no longer exists
-            if (curUserHabits.Any(habit => habit.name == rowData.habitName))
+            if (!curUserHabits.Any(habit => habit.name == rowData.habitName))
             {
                 // if user cancels add habit, do not add the row
                 if (!OpenAddHabitForm(rowData.habitName, rowData.row))
@@ -261,6 +265,8 @@ namespace HabitLogger
                     return;
                 }
             }
+
+            // TODO: delete row if it was added
 
             // insert a new row into gridViewHabitsByDate
             DataRow newRow = dt.NewRow();
@@ -327,24 +333,36 @@ namespace HabitLogger
                         gridViewHabitsByDate.Rows[e.RowIndex].Cells[quantityCol].Value = 0;
                     }
 
-                    // get habit name
-                    string newRowHabit = gridViewHabitsByDate.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
+                    // get habit row data
+                    string habitName = gridViewHabitsByDate.Rows[e.RowIndex].Cells[habitNameCol].Value.ToString();
+                    int quantity = Convert.ToInt32(gridViewHabitsByDate.Rows[e.RowIndex].Cells[quantityCol].Value);
+                    string note = gridViewHabitsByDate.Rows[e.RowIndex].Cells[noteCol].Value.ToString();
 
                     // if habit name does not exist, prompt user to create new habit
-                    if (curUserHabits.Any(habit => habit.name == newRowHabit))
+                    if (curUserHabits.Any(habit => habit.name == habitName))
                     {
-                        // create new Habits_Has_Dates record in db
-                        // TODO: call history commit
-                        CreateGridViewHabitsByDateRow(newRowHabit, e.RowIndex);
+                        // create new Habits_Has_Dates record in db and add to history
+                        CreateGridViewHabitsByDateRow(habitName, e.RowIndex);
+
+                        int habitHasDateID = Convert.ToInt32(gridViewHabitsByDate.Rows[e.RowIndex].Cells[habitHasDateIDCol].Value);
+                        CommitChanges(rowType, e.RowIndex, habitName, quantity, note, habitHasDateID);
                     }
                     else
                     {
                         // popup asks user if they want to add new habit
                         // if yes, open AddHabitForm
                         // if no, delete row
-                        // TODO: when user cancels out of AddHabitForm without adding habit, delete row
-                        // TODO: call history commit
-                        OpenAddHabitForm(newRowHabit, e.RowIndex);
+                        if (OpenAddHabitForm(habitName, e.RowIndex))
+                        {
+                            // add new row to history
+                            int habitHasDateID = Convert.ToInt32(gridViewHabitsByDate.Rows[e.RowIndex].Cells[habitHasDateIDCol].Value);
+                            CommitChanges(rowType, e.RowIndex, habitName, quantity, note, habitHasDateID);
+                        }
+                        else
+                        {
+                            gridViewHabitsByDate.Rows.Remove(gridViewHabitsByDate.Rows[e.RowIndex]);
+                            Console.WriteLine("New row was removed: no habit name column value.");
+                        }
                     }
                 }
                 else
@@ -380,7 +398,7 @@ namespace HabitLogger
                     int quantity = Convert.ToInt32(gridViewHabitsByDate.Rows[e.RowIndex].Cells[quantityCol].Value);
                     string note = gridViewHabitsByDate.Rows[e.RowIndex].Cells[noteCol].Value.ToString();
                     int habitHasDateID = Convert.ToInt32(gridViewHabitsByDate.Rows[e.RowIndex].Cells[habitHasDateIDCol].Value);
-                    
+
                     // assign prevCellContents to appropriate variable
                     switch (e.ColumnIndex)
                     {
@@ -390,15 +408,13 @@ namespace HabitLogger
                         case quantityCol:
                             quantity = Convert.ToInt32(prevCellContents);
                             break;
-                        case noteCol: 
+                        case noteCol:
                             note = prevCellContents;
                             break;
                     }
 
                     // update history, toggle Undo button text to active, and toggle Redo button text to inactive
-                    gridViewHabitsByDateHistory.Commit((cellType, e.RowIndex, habitName, quantity, note, habitHasDateID));
-                    btnUndo.ForeColor = SystemColors.ControlText;
-                    btnRedo.ForeColor = SystemColors.ControlDark;
+                    CommitChanges(rowType, e.RowIndex, habitName, quantity, note, habitHasDateID);
                     Console.WriteLine($"Added to history: {gridViewHabitsByDateHistory.UndoPeek()}");
                 }
             }
@@ -433,9 +449,10 @@ namespace HabitLogger
             string note = gridViewHabitsByDate.Rows[e.Row.Index].Cells[noteCol].Value.ToString();
             int habitHasDateID = Convert.ToInt32(gridViewHabitsByDate.Rows[e.Row.Index].Cells[habitHasDateIDCol].Value);
             Console.WriteLine($"User deleting row: {e.Row.Index} with contents: {habitName} {quantity} {note} {habitHasDateID}.");
+            
             // NOTE: this event fires for EACH row deleted. Multiple rows deleted simultaneously each cause the event to fire individually.
             // Need to track how many rows were deleted with history. Add new class variable in DataGridViewHistory to count?
-            gridViewHabitsByDateHistory.Commit((rowType, e.Row.Index, habitName, quantity, note, habitHasDateID));
+            CommitChanges(rowType, e.Row.Index, habitName, quantity, note, habitHasDateID);
             gridViewHabitsByDateHistory.DeletedRowsCount++;
             Console.WriteLine($"Deleted row count: {gridViewHabitsByDateHistory.DeletedRowsCount}");
 
@@ -474,6 +491,9 @@ namespace HabitLogger
         // TODO: change name to RefreshGridHabitsByDate?
         private void RefreshGridViewHabitsByDate(string date)
         {
+            // infinite loop can sometimes occur if DataTable isn't cleared first
+            dt.Clear();
+
             // get populated DataTable from db for this date
             dt = sqliteDb.ReadHabitByDateDT(curUserID, date);
 
@@ -595,6 +615,14 @@ namespace HabitLogger
             }
 
             return rowIndex;  // TODO: will break if habitHasDateID not found
+        }
+
+        // commit row change to history and toggle undo/redo button text
+        private void CommitChanges(string type, int row, string name, int quantity, string note, int habitHasDateID)
+        {
+            gridViewHabitsByDateHistory.Commit((cellType, row, name, quantity, note, habitHasDateID));
+            btnUndo.ForeColor = SystemColors.ControlText;
+            btnRedo.ForeColor = SystemColors.ControlDark;
         }
     }
 }
