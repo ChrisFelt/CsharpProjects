@@ -253,9 +253,12 @@ namespace HabitLogger
             UpdateGridViewHabitsByDateRow(cellData.row);
         }
 
-        // add row to gridViewHabitsByDate and create Habits_Has_Dates relationship
+        // add row to gridViewHabitsByDate and create Habits_Has_Dates relationship OR remove row if it already exists
         private void rowHistory((int row, string habitName, int quantity, string note) rowData)
         {
+            // habitHasDateID may vary depending on the action to take, so we declare it beforehand
+            int habitHasDateID;
+
             // attempt to add habit if it no longer exists
             if (!curUserHabits.Any(habit => habit.name == rowData.habitName))
             {
@@ -266,7 +269,21 @@ namespace HabitLogger
                 }
             }
 
-            // TODO: delete row if it was added
+            // TODO: when deleting a row and then clicking undo, the row is reinstated with quantity copied from a different row - fix!
+            // TODO: also breaks undo/redo text refresh when a date with a single row has row deleted and then undo button is clicked
+            // delete row if it already exists (occurs when user adds a new row and clicks undo button)
+            foreach (DataRow dtRow in dt.Rows)
+            {
+                if (dtRow.RowState != DataRowState.Deleted && dtRow[habitNameCol].ToString() == rowData.habitName)
+                {
+                    habitHasDateID = Convert.ToInt32(dtRow[habitHasDateIDCol]);
+                    gridViewHabitsByDateHistory.Undo((rowType, rowData.row, rowData.habitName, rowData.quantity, rowData.note, habitHasDateID));
+                    DeleteRow(habitHasDateID);
+
+                    // exit function
+                    return;
+                }
+            }
 
             // insert a new row into gridViewHabitsByDate
             DataRow newRow = dt.NewRow();
@@ -286,7 +303,7 @@ namespace HabitLogger
             string habitName = gridViewHabitsByDate.Rows[row].Cells[habitNameCol].Value.ToString();
             int quantity = Convert.ToInt32(gridViewHabitsByDate.Rows[row].Cells[quantityCol].Value.ToString());
             string note = gridViewHabitsByDate.Rows[row].Cells[noteCol].Value.ToString();
-            int habitHasDateID = Convert.ToInt32(gridViewHabitsByDate.Rows[row].Cells[habitHasDateIDCol].Value.ToString());
+            habitHasDateID = Convert.ToInt32(gridViewHabitsByDate.Rows[row].Cells[habitHasDateIDCol].Value.ToString());
 
             gridViewHabitsByDateHistory.Undo((rowType, row, habitName, quantity, note, habitHasDateID));
         }
@@ -414,7 +431,7 @@ namespace HabitLogger
                     }
 
                     // update history, toggle Undo button text to active, and toggle Redo button text to inactive
-                    CommitChanges(rowType, e.RowIndex, habitName, quantity, note, habitHasDateID);
+                    CommitChanges(cellType, e.RowIndex, habitName, quantity, note, habitHasDateID);
                     Console.WriteLine($"Added to history: {gridViewHabitsByDateHistory.UndoPeek()}");
                 }
             }
@@ -530,6 +547,10 @@ namespace HabitLogger
         {
             sqliteDb.DeleteHabitHasDate(habitHasDateID);
             Console.WriteLine($"Successfully deleted HabitsHasDates row with ID: {habitHasDateID}.");
+            dt.AcceptChanges();
+
+            // need to refresh the data table to avoid deleted row inaccessible exception
+            //RefreshGridViewHabitsByDate(monthCalendar.SelectionRange.Start.ToString("yyyy-MM-dd"));
         }
 
         // call CreateHabitHasDate on a given DataGridView row
@@ -620,7 +641,7 @@ namespace HabitLogger
         // commit row change to history and toggle undo/redo button text
         private void CommitChanges(string type, int row, string name, int quantity, string note, int habitHasDateID)
         {
-            gridViewHabitsByDateHistory.Commit((cellType, row, name, quantity, note, habitHasDateID));
+            gridViewHabitsByDateHistory.Commit((type, row, name, quantity, note, habitHasDateID));
             btnUndo.ForeColor = SystemColors.ControlText;
             btnRedo.ForeColor = SystemColors.ControlDark;
         }
