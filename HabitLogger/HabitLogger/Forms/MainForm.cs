@@ -101,6 +101,16 @@ namespace HabitLogger
             }
         }
 
+        private void txtUserName_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            // fire btnLogin_Click event on Enter key up
+            if (e.KeyChar == (char)Keys.Enter)
+            {
+                e.Handled = true;  // suppress ding sound
+                btnLogin.PerformClick();
+            }
+        }
+
         // Exit button click event
         private void btnExit_Click(object sender, EventArgs e)
         {
