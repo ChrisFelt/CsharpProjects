@@ -287,8 +287,6 @@ namespace HabitLogger
                 }
             }
 
-            // TODO: when deleting a row and then clicking undo, the row is reinstated with quantity copied from a different row - fix!
-            // TODO: also breaks undo/redo text refresh when a date with a single row has row deleted and then undo button is clicked
             // delete row if it already exists (occurs when user adds a new row and clicks undo button)
             foreach (DataRow dtRow in dt.Rows)
             {
@@ -340,12 +338,6 @@ namespace HabitLogger
         // -----------------------------------------------------
         // pnlMain gridViewHabitsByDate Events
         // -----------------------------------------------------
-        // DataGridView Cell click event
-        private void gridViewHabitsByDate_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-            // TODO: update Description to the selected habit
-            //Console.WriteLine("Cell content click event handler called.");
-        }
 
         // grab contents of the cell before user edits it
         private void gridViewHabitsByDate_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
@@ -359,7 +351,6 @@ namespace HabitLogger
         private void gridViewHabitsByDate_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
             // 1. add new row - check if cell is on new row
-            // TODO: need to implement history here
             if (e.RowIndex == dt.Rows.Count)
             {
                 // exit event without commiting data to db if no habit name entered
@@ -489,10 +480,12 @@ namespace HabitLogger
             Console.WriteLine($"User deleting row: {e.Row.Index} with contents: {habitName} {quantity} {note} {habitHasDateID}.");
             
             // NOTE: this event fires for EACH row deleted. Multiple rows deleted simultaneously each cause the event to fire individually.
-            // Need to track how many rows were deleted with history. Add new class variable in DataGridViewHistory to count?
             CommitChanges(rowType, e.Row.Index, habitName, quantity, note, habitHasDateID);
+            
+            // placeholder - currently history only supports deleting one row at a time
             gridViewHabitsByDateHistory.DeletedRowsCount++;
             Console.WriteLine($"Deleted row count: {gridViewHabitsByDateHistory.DeletedRowsCount}");
+            gridViewHabitsByDateHistory.DeletedRowsCount = 0;
 
             // delete row from db
             DeleteRow(habitHasDateID);
@@ -568,7 +561,8 @@ namespace HabitLogger
         {
             sqliteDb.DeleteHabitHasDate(habitHasDateID);
             Console.WriteLine($"Successfully deleted HabitsHasDates row with ID: {habitHasDateID}.");
-
+            
+            // TODO: may not need this line anymore
             // need to refresh the data table to avoid deleted row inaccessible exception
             //RefreshGridViewHabitsByDate(monthCalendar.SelectionRange.Start.ToString("yyyy-MM-dd"));
         }
