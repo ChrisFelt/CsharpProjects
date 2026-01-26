@@ -180,7 +180,6 @@
             this.gridViewHabitsByDate.Size = new System.Drawing.Size(492, 210);
             this.gridViewHabitsByDate.TabIndex = 14;
             this.gridViewHabitsByDate.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.gridViewHabitsByDate_CellBeginEdit);
-            this.gridViewHabitsByDate.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.gridViewHabitsByDate_CellContentClick);
             this.gridViewHabitsByDate.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.gridViewHabitsByDate_CellEndEdit);
             this.gridViewHabitsByDate.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.gridViewHabitsByDate_DataError);
             this.gridViewHabitsByDate.EditingControlShowing += new System.Windows.Forms.DataGridViewEditingControlShowingEventHandler(this.gridViewHabitsByDate_EditingControlShowing);
