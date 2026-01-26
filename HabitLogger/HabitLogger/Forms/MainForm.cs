@@ -204,10 +204,26 @@ namespace HabitLogger
                 // grab current values of the row
                 // get row number of matching habitHasDateID
                 int row = FindRowByHabitHasDateID(redoData.habitHasDateID);
-                string habitName = gridViewHabitsByDate.Rows[row].Cells[habitNameCol].Value.ToString();
-                int quantity = Convert.ToInt32(gridViewHabitsByDate.Rows[row].Cells[quantityCol].Value.ToString());
-                string note = gridViewHabitsByDate.Rows[row].Cells[noteCol].Value.ToString();
-                int habitHasDateID = redoData.habitHasDateID;
+                string habitName;
+                int quantity;
+                string note;
+                int habitHasDateID;
+
+                // when row is 0, gridViewHabitsByDate is empty
+                if (row == 0)
+                {
+                    habitName = redoData.habitName;
+                    quantity = redoData.quantity;
+                    note = redoData.note;
+                    habitHasDateID = redoData.habitHasDateID;
+                }
+                else
+                {
+                    habitName = gridViewHabitsByDate.Rows[row].Cells[habitNameCol].Value.ToString();
+                    quantity = Convert.ToInt32(gridViewHabitsByDate.Rows[row].Cells[quantityCol].Value.ToString());
+                    note = gridViewHabitsByDate.Rows[row].Cells[noteCol].Value.ToString();
+                    habitHasDateID = redoData.habitHasDateID;
+                }
 
                 // cell type - gather current values of the row then call Redo method
                 if (type == cellType)
@@ -222,6 +238,8 @@ namespace HabitLogger
                 {
                     // TODO: may need to repeat method call for multiple simultaneous deletes
                     DeleteRow(habitHasDateID);
+
+                    // need to refresh the grid view here unlike delete event handlers
                     RefreshGridViewHabitsByDate(monthCalendar.SelectionRange.Start.ToString("yyyy-MM-dd"));
 
                     gridViewHabitsByDateHistory.Redo((type, row, habitName, quantity, note, habitHasDateID));
@@ -280,6 +298,9 @@ namespace HabitLogger
                     gridViewHabitsByDateHistory.Undo((rowType, rowData.row, rowData.habitName, rowData.quantity, rowData.note, habitHasDateID));
                     DeleteRow(habitHasDateID);
 
+                    // need to refresh the grid view here unlike delete event handlers
+                    RefreshGridViewHabitsByDate(monthCalendar.SelectionRange.Start.ToString("yyyy-MM-dd"));
+                    
                     // exit function
                     return;
                 }
@@ -295,17 +316,17 @@ namespace HabitLogger
 
             dt.Rows.Add(newRow);
 
-            // create Habits_Has_Dates relationship
-            CreateGridViewHabitsByDateRow(rowData.habitName, rowData.row);
+            // create Habits_Has_Dates relationship - new row will always be the last populated row in the datagridview
+            CreateGridViewHabitsByDateRow(rowData.habitName, gridViewHabitsByDate.Rows.Count - 2);
 
             // update history here to reflect the new habitHasDateID
-            int row = gridViewHabitsByDate.Rows.Count - 2;
-            string habitName = gridViewHabitsByDate.Rows[row].Cells[habitNameCol].Value.ToString();
-            int quantity = Convert.ToInt32(gridViewHabitsByDate.Rows[row].Cells[quantityCol].Value.ToString());
-            string note = gridViewHabitsByDate.Rows[row].Cells[noteCol].Value.ToString();
-            habitHasDateID = Convert.ToInt32(gridViewHabitsByDate.Rows[row].Cells[habitHasDateIDCol].Value.ToString());
+            DataRow dtLastRow = dt.Rows[dt.Rows.Count - 1];
+            string habitName = dtLastRow[habitNameCol].ToString();
+            int quantity = Convert.ToInt32(dtLastRow[quantityCol]);
+            string note = dtLastRow[noteCol].ToString();
+            habitHasDateID = Convert.ToInt32(dtLastRow[habitHasDateIDCol]);
 
-            gridViewHabitsByDateHistory.Undo((rowType, row, habitName, quantity, note, habitHasDateID));
+            gridViewHabitsByDateHistory.Undo((rowType, dt.Rows.Count - 1, habitName, quantity, note, habitHasDateID));
         }
 
         // TODO: 
@@ -547,7 +568,6 @@ namespace HabitLogger
         {
             sqliteDb.DeleteHabitHasDate(habitHasDateID);
             Console.WriteLine($"Successfully deleted HabitsHasDates row with ID: {habitHasDateID}.");
-            dt.AcceptChanges();
 
             // need to refresh the data table to avoid deleted row inaccessible exception
             //RefreshGridViewHabitsByDate(monthCalendar.SelectionRange.Start.ToString("yyyy-MM-dd"));
@@ -628,6 +648,11 @@ namespace HabitLogger
             // find row index where habitHasID matches 
             foreach (DataGridViewRow row in gridViewHabitsByDate.Rows)
             {
+                if (row.Cells[habitHasDateIDCol].Value == null)
+                {
+                    rowIndex = 0;
+                    break;
+                }
                 if (Convert.ToInt32(row.Cells[habitHasDateIDCol].Value.ToString()) == habitHasDateID)
                 {
                     rowIndex = row.Index;
