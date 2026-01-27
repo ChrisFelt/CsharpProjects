@@ -219,14 +219,15 @@ namespace HabitLogger
                 string note;
                 int habitHasDateID;
 
-                // when row is 0, gridViewHabitsByDate is empty
-                if (row == 0)
+                // get row data from history if dt is empty
+                if (dt.Rows.Count == 0)
                 {
                     habitName = redoData.habitName;
                     quantity = redoData.quantity;
                     note = redoData.note;
                     habitHasDateID = redoData.habitHasDateID;
                 }
+                // get row data from the gridview
                 else
                 {
                     habitName = gridViewHabitsByDate.Rows[row].Cells[habitNameCol].Value.ToString();
