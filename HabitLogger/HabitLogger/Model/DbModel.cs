@@ -205,6 +205,8 @@ namespace HabitLogger
             }
         }
 
+        // TODO: create ReadHabitByUserDT method that returns a DataTable of the user's habits
+
         public List<(int habitID, string name, string description)> ReadHabitByUser(int userID)
         {
             // prepare list of tuples to return
@@ -389,7 +391,7 @@ namespace HabitLogger
 
         // DeleteHabit method
         // delete a Habit given its ID, also deletes Dates and intermediate Habits_has_Dates records where appropriate
-
+        // TODO: write this method!
 
         // -----------------------------------------------------
         // Dates and Habits_has_Dates Table Queries
