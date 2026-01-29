@@ -345,6 +345,32 @@ namespace HabitLogger
         // update whenever a new habit is created
         // allow creation of new habit within the DataGriView, and editing the habit and its description
         // use RowLeave event to strictly control edits, with confirmation popups each time a cell is edited
+        // -----------------------------------------------------
+        // pnlMain gridViewHabitsByUser Events
+        // -----------------------------------------------------
+
+        // gridViewHabitsByUser data is populated with a DataTable using ReadHabitByUserDT method when the user logs in
+        // no redo/undo history will be used for the gridViewHabitsByUser
+
+        // event methods
+
+        // CellBeginEdit
+        // calls OpenAddHabitForm support method and refreshes gridViewHabitsByUser
+        // repopulates curUserHabits
+
+        // CellEndEdit method
+        // calls UpdateHabit method if on existing row - no validation required
+        // repopulates curUserHabits
+
+        // UserDeletingRow method
+        // deletes the habit using DeleteHabit
+        // does not support multiple simultaneous deletes
+        // refreshes gridViewHabitsByUser
+
+        // supporting methods
+
+        // RefreshGridViewHabitsByUser method
+        // refreshes gridViewHabitsByUser 
 
         // -----------------------------------------------------
         // pnlMain gridViewHabitsByDate Events
