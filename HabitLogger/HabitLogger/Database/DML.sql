@@ -168,6 +168,12 @@ INNER JOIN Habits_has_Dates AS hd
 	ON d.dateID = hd.dateID
 WHERE d.date = dateInput;
 
+-- Read Dates LEFT JOIN HAbits_has_Dates on dateID
+SELECT *
+FROM Dates AS d
+LEFT OUTER JOIN Habits_has_Dates AS hd
+    ON d.dateID = hd.dateID;
+
 -- UPDATE
 -- update frequency given a HabitHasDateID
 UPDATE Habits_has_Dates
@@ -191,4 +197,10 @@ DELETE
 FROM Dates
 WHERE dateID = dateIDInput;
 
-
+-- Delete all Dates that no longer have a relationship with Habits
+DELETE
+FROM Dates
+WHERE dateID NOT IN (
+	SELECT Habits_has_Dates.dateID
+	FROM Habits_has_Dates
+);
