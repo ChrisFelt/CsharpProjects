@@ -46,6 +46,7 @@ namespace HabitLogger
                 using (SQLiteConnection conn = new SQLiteConnection(_connString))
                 {
                     DbConnect(conn);
+
                     using (SQLiteCommand cmd = new SQLiteCommand(conn))
                     {
                         // get array of resource names from the assembly and find matching resource to fileName
@@ -116,6 +117,7 @@ namespace HabitLogger
             using (SQLiteConnection conn = new SQLiteConnection(_connString))
             {
                 DbConnect(conn);
+
                 // Add User record with userName to Users table
                 using (SQLiteCommand cmd = new SQLiteCommand(conn))
                 {
@@ -135,6 +137,7 @@ namespace HabitLogger
             using (SQLiteConnection conn = new SQLiteConnection(_connString))
             {
                 DbConnect(conn);
+
                 // get userID given a userName
                 using (SQLiteCommand cmd = new SQLiteCommand(conn))
                 {
@@ -174,10 +177,10 @@ namespace HabitLogger
         // -----------------------------------------------------
         public void CreateHabit(string habitName, string habitDescription, int userID)
         {
-            // TODO: need to test this method
             using (SQLiteConnection conn = new SQLiteConnection(_connString))
             {
                 DbConnect(conn);
+
                 // Add Habit record to Habits with name, description (optional), and user ID
                 using (SQLiteCommand cmd = new SQLiteCommand(conn))
                 {
@@ -205,17 +208,16 @@ namespace HabitLogger
             }
         }
 
-        // TODO: create ReadHabitByUserDT method that returns a DataTable of the user's habits
-
-        public List<(int habitID, string name, string description)> ReadHabitByUser(int userID)
+        // READ operation for gridViewHabitsByUser
+        public DataTable ReadHabitByUserDT(int userID)
         {
-            // prepare list of tuples to return
-            List<(int habitID, string name, string description)> returnList = new List<(int habitID, string name, string description)>();
+            // initialize return DataTable 
+            DataTable data = new DataTable();
 
-            // CreateHabit option 1: used to list habits in AddHabitForm
             using (SQLiteConnection conn = new SQLiteConnection(_connString))
             {
                 DbConnect(conn);
+
                 // when date is empty, get habits by userID
                 using (SQLiteCommand cmd = new SQLiteCommand(conn))
                 {
@@ -227,6 +229,44 @@ namespace HabitLogger
                                         WHERE userID = :userID;";
                     cmd.Parameters.AddWithValue(":userID", userID);
 
+                    // populate data
+                    try
+                    {
+                        // instantiate adapter with SQLiteCommand constructor
+                        using (SQLiteDataAdapter adapter = new SQLiteDataAdapter(cmd))
+                        {
+                            adapter.Fill(data);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"{ex.Message}", "Read Habit Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+            return data;
+        }
+
+        public List<(int habitID, string name, string description)> ReadHabitByUser(int userID)
+        {
+            // prepare list of tuples to return
+            List<(int habitID, string name, string description)> returnList = new List<(int habitID, string name, string description)>();
+
+            // get list of user's habits from the db
+            using (SQLiteConnection conn = new SQLiteConnection(_connString))
+            {
+                DbConnect(conn);
+
+                // when date is empty, get habits by userID
+                using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                {
+
+                    cmd.CommandText = @"SELECT habitID AS 'habitID', 
+                                               name AS 'Name', 
+                                               description AS 'Description' 
+                                        FROM Habits 
+                                        WHERE userID = :userID;";
+                    cmd.Parameters.AddWithValue(":userID", userID);
 
                     // populate the return list from data reader
                     try
@@ -251,62 +291,6 @@ namespace HabitLogger
             }
             return returnList;
         }
-
-        
-        // Deprecated READ operation for ListView 
-        public List<(int habitID, string name, string note, int habitHasDateID, string quantity)> ReadHabitByDate(int userID, string date)
-        {
-            // prepare list of tuples to return
-            List<(int habitID, string name, string note, int habitHasDateID, string quantity)> returnList = new List<(int habitID, string name, string description, int habitHasDateID, string quantity)>();
-
-            // CreateHabit option 2: used to list habits in lblMain of MainForm
-            using (SQLiteConnection conn = new SQLiteConnection(_connString))
-            {
-                DbConnect(conn);
-                // pull up habit by date and userID
-                using (SQLiteCommand cmd = new SQLiteCommand(conn))
-                {
-                    cmd.CommandText = @"SELECT h.habitID AS 'habitID', 
-                                               h.name AS 'Name', 
-                                               h.description AS 'Description', 
-                                               hd.note AS 'Note', 
-                                               hd.quantity AS 'Quantity', 
-                                               hd.habitHasDateID AS 'habitHasDateID' 
-                                        FROM Dates AS d 
-                                        INNER JOIN Habits_has_Dates AS hd 
-                                            ON d.dateID = hd.dateID 
-                                        INNER JOIN Habits AS h 
-                                            ON hd.habitID = h.habitID 
-                                        WHERE d.date = :date 
-                                            AND h.UserID = :userID;";
-                    cmd.Parameters.AddWithValue(":date", date);
-                    cmd.Parameters.AddWithValue(":userID", userID);
-
-                    // populate the return list from data reader
-                    try
-                    {
-                        using (SQLiteDataReader read = cmd.ExecuteReader())
-                        {
-                            while (read.Read())
-                            {
-                                returnList.Add(
-                                    (habitID: Convert.ToInt32(read["habitID"]),
-                                    name: Convert.ToString(read["Name"]),
-                                    note: Convert.ToString(read["Note"]),
-                                    habitHasDateID: Convert.ToInt32(read["habitHasDateID"]),
-                                    quantity: Convert.ToString(read["Quantity"]))
-                                    );
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show($"{ex.Message}", "Read Habit Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                }
-            }
-            return returnList;
-        }
         
         // READ operation for DataGridView
         public DataTable ReadHabitByDateDT(int userID, string date)
@@ -318,6 +302,7 @@ namespace HabitLogger
             using (SQLiteConnection conn = new SQLiteConnection(_connString))
             {
                 DbConnect(conn);
+
                 // pull up habit by date and userID
                 using (SQLiteCommand cmd = new SQLiteCommand(conn))
                 {
@@ -362,6 +347,7 @@ namespace HabitLogger
             using (SQLiteConnection conn = new SQLiteConnection(_connString))
             {
                 DbConnect(conn);
+
                 // Update name and description for the habit with the given habitID
                 using (SQLiteCommand cmd = new SQLiteCommand(conn))
                 {
@@ -390,8 +376,27 @@ namespace HabitLogger
         }
 
         // DeleteHabit method
-        // delete a Habit given its ID, also deletes Dates and intermediate Habits_has_Dates records where appropriate
-        // TODO: write this method!
+        // delete a Habit given its ID
+        // TODO: cascade should auto-delete all child habits_has_dates records, test!
+        // will need to manually check and delete dates
+        public void DeleteHabit(int userID)
+        {
+            using (SQLiteConnection conn = new SQLiteConnection(_connString))
+            {
+                DbConnect(conn);
+
+                using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                {
+                    cmd.CommandText = @"DELETE
+                                        FROM Habits
+                                        WHERE habitID = :userID;";
+                    cmd.Parameters.AddWithValue(":habitHasDateID", userID);
+
+                    // execute query
+                    DbCUDCommand(cmd);
+                }
+            }
+        }
 
         // -----------------------------------------------------
         // Dates and Habits_has_Dates Table Queries
@@ -404,6 +409,7 @@ namespace HabitLogger
             using (SQLiteConnection conn = new SQLiteConnection(_connString))
             {
                 DbConnect(conn);
+
                 // Add Date to Dates table if it does not exist
                 using (SQLiteCommand cmd = new SQLiteCommand(conn))
                 {
@@ -430,6 +436,7 @@ namespace HabitLogger
             using (SQLiteConnection conn = new SQLiteConnection(_connString))
             {
                 DbConnect(conn);
+
                 // Add record to HabitsHasDates table
                 using (SQLiteCommand cmd = new SQLiteCommand(conn))
                 {
@@ -465,6 +472,7 @@ namespace HabitLogger
             using (SQLiteConnection conn = new SQLiteConnection(_connString))
             {
                 DbConnect(conn);
+
                 // given a habitHasDateID, update the quantity column
                 using (SQLiteCommand cmd = new SQLiteCommand(conn))
                 {
@@ -499,9 +507,11 @@ namespace HabitLogger
             using (SQLiteConnection conn = new SQLiteConnection(_connString))
             {
                 DbConnect(conn);
+
                 using (SQLiteCommand cmd = new SQLiteCommand(conn))
                 {
-                    cmd.CommandText = @"DELETE FROM Habits_has_Dates 
+                    cmd.CommandText = @"DELETE 
+                                        FROM Habits_has_Dates 
                                         WHERE habitHasDateID = :habitHasDateID;";
                     cmd.Parameters.AddWithValue(":habitHasDateID", habitHasDateID);
 
@@ -513,5 +523,23 @@ namespace HabitLogger
 
         // DeleteDate method
         // deletes Dates record given a date
+
+        // DeleteChildlessDates
+        // deletes all Dates records that have no relationships with Habits
+        public void DeleteChildlessDates()
+        {
+            using (SQLiteConnection conn = new SQLiteConnection(_connString))
+            {
+                DbConnect(conn);
+
+                using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                {
+                    cmd.CommandText = @"";
+
+                    // execute query
+                    DbCUDCommand(cmd);
+                }
+            }
+        }
     }
 }
