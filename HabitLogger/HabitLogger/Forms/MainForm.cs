@@ -361,20 +361,27 @@ namespace HabitLogger
         // CellBeginEdit
         // calls OpenAddHabitForm support method and refreshes gridViewHabitsByUser
         // repopulates curUserHabits
+        private void gridViewHabitsByUser_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
+        {
+
+        }
 
         // CellEndEdit method
         // calls UpdateHabit method if on existing row - no validation required
         // repopulates curUserHabits
+        private void gridViewHabitsByUser_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
 
         // UserDeletingRow method
         // deletes the habit using DeleteHabit
         // does not support multiple simultaneous deletes
         // refreshes gridViewHabitsByUser
+        private void gridViewHabitsByUser_UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
+        {
 
-        // supporting methods
-
-        // RefreshGridViewHabitsByUser method
-        // refreshes gridViewHabitsByUser 
+        }
 
         // -----------------------------------------------------
         // pnlMain gridViewHabitsByDate Events

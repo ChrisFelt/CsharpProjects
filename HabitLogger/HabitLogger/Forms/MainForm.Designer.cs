@@ -124,6 +124,9 @@
             this.gridViewHabitsByUser.RowTemplate.Height = 28;
             this.gridViewHabitsByUser.Size = new System.Drawing.Size(492, 112);
             this.gridViewHabitsByUser.TabIndex = 15;
+            this.gridViewHabitsByUser.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.gridViewHabitsByUser_CellBeginEdit);
+            this.gridViewHabitsByUser.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.gridViewHabitsByUser_CellEndEdit);
+            this.gridViewHabitsByUser.UserDeletingRow += new System.Windows.Forms.DataGridViewRowCancelEventHandler(this.gridViewHabitsByUser_UserDeletingRow);
             // 
             // dataGridViewTextBoxColumn1
             // 
