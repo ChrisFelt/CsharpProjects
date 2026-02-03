@@ -223,7 +223,7 @@ namespace HabitLogger
                 {
 
                     cmd.CommandText = @"SELECT habitID AS 'habitID', 
-                                               name AS 'Name', 
+                                               name AS 'Habit', 
                                                description AS 'Description' 
                                         FROM Habits 
                                         WHERE userID = :userID;";
