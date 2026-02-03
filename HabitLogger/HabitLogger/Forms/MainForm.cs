@@ -21,7 +21,10 @@ namespace HabitLogger
         private string prevCellContents;  // track contents of a cell before edit
 
         // data source for gridViewHabitsByDate
-        private DataTable dt = new DataTable();
+        private DataTable gridViewHabitsByDateDT = new DataTable();
+
+        // data source for gridViewHabitsByUser
+        private DataTable gridViewHabitsByUserDT = new DataTable();
 
         // gridViewHabitsByDate columns
         private const int habitNameCol = 0;
@@ -85,6 +88,7 @@ namespace HabitLogger
 
                     // establish data source for gridViewHabitsByDate
                     RefreshGridViewHabitsByDate(monthCalendar.SelectionRange.Start.ToString("yyyy-MM-dd"));
+                    RefreshGridViewHabitsByUser(curUserID);
                 }
                 else if (curUserID == 0)
                 {
@@ -220,7 +224,7 @@ namespace HabitLogger
                 int habitHasDateID;
 
                 // get row data from history if dt is empty
-                if (dt.Rows.Count == 0)
+                if (gridViewHabitsByDateDT.Rows.Count == 0)
                 {
                     habitName = redoData.habitName;
                     quantity = redoData.quantity;
@@ -299,7 +303,7 @@ namespace HabitLogger
             }
 
             // delete row if it already exists (occurs when user adds a new row and clicks undo button)
-            foreach (DataRow dtRow in dt.Rows)
+            foreach (DataRow dtRow in gridViewHabitsByDateDT.Rows)
             {
                 if (dtRow.RowState != DataRowState.Deleted && dtRow[habitNameCol].ToString() == rowData.habitName)
                 {
@@ -316,26 +320,26 @@ namespace HabitLogger
             }
 
             // insert a new row into gridViewHabitsByDate
-            DataRow newRow = dt.NewRow();
+            DataRow newRow = gridViewHabitsByDateDT.NewRow();
 
             // update cell values
             newRow[habitNameCol] = rowData.habitName;
             newRow[quantityCol] = rowData.quantity;
             newRow[noteCol] = rowData.note;
 
-            dt.Rows.Add(newRow);
+            gridViewHabitsByDateDT.Rows.Add(newRow);
 
             // create Habits_Has_Dates relationship - new row will always be the last populated row in the datagridview
             CreateGridViewHabitsByDateRow(rowData.habitName, gridViewHabitsByDate.Rows.Count - 2);
 
             // update history here to reflect the new habitHasDateID
-            DataRow dtLastRow = dt.Rows[dt.Rows.Count - 1];
+            DataRow dtLastRow = gridViewHabitsByDateDT.Rows[gridViewHabitsByDateDT.Rows.Count - 1];
             string habitName = dtLastRow[habitNameCol].ToString();
             int quantity = Convert.ToInt32(dtLastRow[quantityCol]);
             string note = dtLastRow[noteCol].ToString();
             habitHasDateID = Convert.ToInt32(dtLastRow[habitHasDateIDCol]);
 
-            gridViewHabitsByDateHistory.Undo((rowType, dt.Rows.Count - 1, habitName, quantity, note, habitHasDateID));
+            gridViewHabitsByDateHistory.Undo((rowType, gridViewHabitsByDateDT.Rows.Count - 1, habitName, quantity, note, habitHasDateID));
         }
 
         // TODO: 
@@ -388,7 +392,7 @@ namespace HabitLogger
         private void gridViewHabitsByDate_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
             // 1. add new row - check if cell is on new row
-            if (e.RowIndex == dt.Rows.Count)
+            if (e.RowIndex == gridViewHabitsByDateDT.Rows.Count)
             {
                 // exit event without commiting data to db if no habit name entered
                 if (gridViewHabitsByDate.Rows[e.RowIndex].Cells[habitNameCol].Value.ToString() != "")
@@ -555,17 +559,31 @@ namespace HabitLogger
         // -----------------------------------------------------
         // pnlMain General Use Methods
         // -----------------------------------------------------
-        // refresh DataGridView
-        // TODO: change name to RefreshGridHabitsByDate?
+        // refresh gridViewHabitsByUser
+        private void RefreshGridViewHabitsByUser(int userID)
+        {
+            gridViewHabitsByUserDT.Clear();
+
+            // populate the dt from the db
+            gridViewHabitsByUserDT = sqliteDb.ReadHabitByUserDT(userID);
+
+            // bind to the DGV
+            gridViewHabitsByUser.DataSource = gridViewHabitsByUserDT;
+
+            // hide ID
+            gridViewHabitsByUser.Columns["habitID"].Visible = false;
+        }
+        
+        // refresh gridViewHabitsByDate
         private void RefreshGridViewHabitsByDate(string date)
         {
             // infinite loop can sometimes occur if DataTable isn't cleared first
-            dt.Clear();
+            gridViewHabitsByDateDT.Clear();
 
             // get populated DataTable from db for this date
-            dt = sqliteDb.ReadHabitByDateDT(curUserID, date);
+            gridViewHabitsByDateDT = sqliteDb.ReadHabitByDateDT(curUserID, date);
 
-            gridViewHabitsByDate.DataSource = dt;
+            gridViewHabitsByDate.DataSource = gridViewHabitsByDateDT;
 
             // hide IDs and description
             gridViewHabitsByDate.Columns["habitID"].Visible = false;
