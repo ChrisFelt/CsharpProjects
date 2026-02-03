@@ -26,6 +26,9 @@ namespace HabitLogger
         // data source for gridViewHabitsByUser
         private DataTable gridViewHabitsByUserDT = new DataTable();
 
+        // gridViewHabitsByUser columns - habitNameCol is SHARED
+        private const int descriptionCol = 1;
+
         // gridViewHabitsByDate columns
         private const int habitNameCol = 0;
         private const int quantityCol = 1;
@@ -359,11 +362,15 @@ namespace HabitLogger
         // event methods
 
         // CellBeginEdit
-        // calls OpenAddHabitForm support method and refreshes gridViewHabitsByUser
+        // calls OpenAddHabitForm support method and refreshes gridViewHabitsByUser -- MOVE TO CellEndEdit
         // repopulates curUserHabits
+        // TODO: delete event?
         private void gridViewHabitsByUser_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
         {
-
+            if (e.RowIndex == gridViewHabitsByUser.Rows.Count - 1)
+            {
+                Console.WriteLine("Last row of DGV HabitsByUser accessed.");
+            }
         }
 
         // CellEndEdit method
@@ -371,7 +378,18 @@ namespace HabitLogger
         // repopulates curUserHabits
         private void gridViewHabitsByUser_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
+            string habitName = gridViewHabitsByUser.Rows[e.RowIndex].Cells[habitNameCol].Value.ToString();
+            string description = gridViewHabitsByUser.Rows[e.RowIndex].Cells[descriptionCol].Value.ToString();
 
+            if (OpenAddHabitForm(habitName, e.RowIndex, description))
+            {
+                // refresh dgv
+            }
+            else
+            {
+                //gridViewHabitsByDate.Rows.Remove(gridViewHabitsByUser.Rows[e.RowIndex]);
+                Console.WriteLine("New row was removed: no habit name column value.");
+            }
         }
 
         // UserDeletingRow method
@@ -659,6 +677,8 @@ namespace HabitLogger
         // add a new habit
         private bool OpenAddHabitForm(string name, int row, string desc = "")
         {
+            // TODO: move DGV modifications outside of this method and return tuple leading with bool?
+
             // save arguments as a tuple to pass to the AddHabitForm
             (int habitID, string name, string desc) habitData = (0, name, desc);
 
