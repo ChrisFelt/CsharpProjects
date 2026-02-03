@@ -378,7 +378,6 @@ namespace HabitLogger
         // DeleteHabit method
         // delete a Habit given its ID
         // TODO: cascade should auto-delete all child habits_has_dates records, test!
-        // will need to manually check and delete dates
         public void DeleteHabit(int userID)
         {
             using (SQLiteConnection conn = new SQLiteConnection(_connString))
@@ -534,7 +533,11 @@ namespace HabitLogger
 
                 using (SQLiteCommand cmd = new SQLiteCommand(conn))
                 {
-                    cmd.CommandText = @"";
+                    cmd.CommandText = @"DELETE
+                                        FROM Dates
+                                        WHERE dateID NOT IN (
+	                                        SELECT Habits_has_Dates.dateID
+	                                        FROM Habits_has_Dates);";
 
                     // execute query
                     DbCUDCommand(cmd);
