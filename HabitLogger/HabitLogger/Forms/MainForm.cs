@@ -382,7 +382,7 @@ namespace HabitLogger
             string habitName = gridViewHabitsByUser.Rows[e.RowIndex].Cells[habitNameColByUser].Value.ToString();
             string description = gridViewHabitsByUser.Rows[e.RowIndex].Cells[descriptionCol].Value.ToString();
 
-            string curCellContents = gridViewHabitsByUser.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString(); ;
+            string curCellContents = gridViewHabitsByUser.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
 
             // add habit if habit name was entered on new row
             if (e.RowIndex == gridViewHabitsByUser.Rows.Count)
