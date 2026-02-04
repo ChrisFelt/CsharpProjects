@@ -365,7 +365,7 @@ namespace HabitLogger
         // event methods
 
         // CellBeginEdit
-        // grabs current contents of the cell
+        // grab current contents of the cell
         private void gridViewHabitsByUser_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
         {
             // save contents of cell before editing
@@ -389,6 +389,9 @@ namespace HabitLogger
             {
                 if (habitName != "" && OpenAddHabitForm(habitName, e.RowIndex, description))
                 {
+                    // repopulate current user's habits
+                    curUserHabits = sqliteDb.ReadHabitByUser(curUserID);
+
                     // refresh DGV
                     RefreshGridViewHabitsByUser(curUserID);
                 }
@@ -405,6 +408,9 @@ namespace HabitLogger
             else if (prevCellContents != curCellContents)
             {
                 sqliteDb.UpdateHabit(habitName, description, Convert.ToInt32(gridViewHabitsByUser.Rows[e.RowIndex].Cells[habitIDCol].Value));
+
+                // repopulate current user's habits
+                curUserHabits = sqliteDb.ReadHabitByUser(curUserID);
 
                 // refresh both DGVs
                 RefreshGridViewHabitsByUser(curUserID);
