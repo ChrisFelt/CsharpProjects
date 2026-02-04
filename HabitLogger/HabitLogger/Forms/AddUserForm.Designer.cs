@@ -57,6 +57,7 @@
             // btnCreateNewUser
             // 
             this.btnCreateNewUser.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.btnCreateNewUser.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCreateNewUser.Location = new System.Drawing.Point(107, 135);
             this.btnCreateNewUser.Name = "btnCreateNewUser";
             this.btnCreateNewUser.Size = new System.Drawing.Size(99, 37);
@@ -68,6 +69,7 @@
             // btnCloseNewUserForm
             // 
             this.btnCloseNewUserForm.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.btnCloseNewUserForm.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCloseNewUserForm.Location = new System.Drawing.Point(212, 135);
             this.btnCloseNewUserForm.Name = "btnCloseNewUserForm";
             this.btnCloseNewUserForm.Size = new System.Drawing.Size(76, 37);
