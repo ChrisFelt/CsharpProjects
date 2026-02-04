@@ -130,7 +130,7 @@ namespace HabitLogger
         private void lblNewUser_Click(object sender, EventArgs e)
         {
             // open NewUserForm window
-            NewUserForm newUser = new NewUserForm(sqliteDb);
+            AddUserForm newUser = new AddUserForm(sqliteDb);
             newUser.Show();
         }
 

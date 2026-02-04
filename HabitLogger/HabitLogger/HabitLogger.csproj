@@ -115,11 +115,11 @@
     <Compile Include="Forms\AddHabitForm.Designer.cs">
       <DependentUpon>AddHabitForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\NewUserForm.cs">
+    <Compile Include="Forms\AddUserForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\NewUserForm.Designer.cs">
-      <DependentUpon>NewUserForm.cs</DependentUpon>
+    <Compile Include="Forms\AddUserForm.Designer.cs">
+      <DependentUpon>AddUserForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\MainForm.cs">
       <SubType>Form</SubType>
@@ -132,8 +132,8 @@
     <EmbeddedResource Include="Forms\AddHabitForm.resx">
       <DependentUpon>AddHabitForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\NewUserForm.resx">
-      <DependentUpon>NewUserForm.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\AddUserForm.resx">
+      <DependentUpon>AddUserForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
