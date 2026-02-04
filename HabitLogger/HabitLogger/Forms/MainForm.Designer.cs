@@ -292,7 +292,7 @@
             this.lblSelectDate.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblSelectDate.AutoSize = true;
             this.lblSelectDate.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblSelectDate.Location = new System.Drawing.Point(23, 47);
+            this.lblSelectDate.Location = new System.Drawing.Point(30, 47);
             this.lblSelectDate.Name = "lblSelectDate";
             this.lblSelectDate.Size = new System.Drawing.Size(89, 16);
             this.lblSelectDate.TabIndex = 3;
