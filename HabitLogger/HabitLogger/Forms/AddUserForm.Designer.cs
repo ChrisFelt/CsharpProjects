@@ -38,18 +38,20 @@
             // 
             this.lblNewUser.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblNewUser.AutoSize = true;
+            this.lblNewUser.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblNewUser.Location = new System.Drawing.Point(77, 69);
             this.lblNewUser.Name = "lblNewUser";
-            this.lblNewUser.Size = new System.Drawing.Size(171, 20);
+            this.lblNewUser.Size = new System.Drawing.Size(143, 16);
             this.lblNewUser.TabIndex = 0;
             this.lblNewUser.Text = "Enter New User Name:";
             // 
             // txtNewUser
             // 
             this.txtNewUser.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.txtNewUser.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtNewUser.Location = new System.Drawing.Point(74, 92);
             this.txtNewUser.Name = "txtNewUser";
-            this.txtNewUser.Size = new System.Drawing.Size(214, 26);
+            this.txtNewUser.Size = new System.Drawing.Size(214, 22);
             this.txtNewUser.TabIndex = 1;
             // 
             // btnCreateNewUser
@@ -74,7 +76,7 @@
             this.btnCloseNewUserForm.UseVisualStyleBackColor = true;
             this.btnCloseNewUserForm.Click += new System.EventHandler(this.btnCloseNewUserForm_Click);
             // 
-            // NewUserForm
+            // AddUserForm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(362, 266);
@@ -82,7 +84,7 @@
             this.Controls.Add(this.btnCreateNewUser);
             this.Controls.Add(this.txtNewUser);
             this.Controls.Add(this.lblNewUser);
-            this.Name = "NewUserForm";
+            this.Name = "AddUserForm";
             this.Text = "Add New User";
             this.Load += new System.EventHandler(this.NewUserForm_Load);
             this.ResumeLayout(false);
