@@ -365,9 +365,7 @@ namespace HabitLogger
         // event methods
 
         // CellBeginEdit
-        // calls OpenAddHabitForm support method and refreshes gridViewHabitsByUser -- MOVE TO CellEndEdit
-        // repopulates curUserHabits
-        // TODO: delete event?
+        // grabs current contents of the cell
         private void gridViewHabitsByUser_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
         {
             // save contents of cell before editing
