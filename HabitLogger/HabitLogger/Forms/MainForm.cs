@@ -301,6 +301,7 @@ namespace HabitLogger
                 // if user cancels add habit, do not add the row
                 if (!OpenAddHabitForm(rowData.habitName, rowData.row))
                 {
+                    gridViewHabitsByDate.Rows.Remove(gridViewHabitsByDate.Rows[rowData.row]);
                     return;
                 }
             }
@@ -449,6 +450,12 @@ namespace HabitLogger
                         // if no, delete row
                         if (OpenAddHabitForm(habitName, e.RowIndex))
                         {
+                            // add row to date and refresh datagridview
+                            CreateGridViewHabitsByDateRow(habitName, e.RowIndex);
+
+                            // update current user habits list
+                            curUserHabits = sqliteDb.ReadHabitByUser(curUserID);
+
                             // add new row to history
                             int habitHasDateID = Convert.ToInt32(gridViewHabitsByDate.Rows[e.RowIndex].Cells[habitHasDateIDCol].Value);
                             CommitChanges(rowType, e.RowIndex, habitName, quantity, note, habitHasDateID);
@@ -700,17 +707,10 @@ namespace HabitLogger
                         sqliteDb.CreateHabit(habitName, habitDescription, curUserID);
                     }
 
-                    // add row to date and refresh datagridview
-                    CreateGridViewHabitsByDateRow(habitName, row);
-
-                    // update current user habits list
-                    curUserHabits = sqliteDb.ReadHabitByUser(curUserID);
-
                     return true;
                 }
                 else
                 {
-                    gridViewHabitsByDate.Rows.Remove(gridViewHabitsByDate.Rows[row]);
                     return false;
                 }
             }
