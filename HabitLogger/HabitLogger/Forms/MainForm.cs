@@ -684,8 +684,6 @@ namespace HabitLogger
         // add a new habit
         private bool OpenAddHabitForm(string name, int row, string desc = "")
         {
-            // TODO: move DGV modifications outside of this method and return tuple leading with bool?
-
             // save arguments as a tuple to pass to the AddHabitForm
             (int habitID, string name, string desc) habitData = (0, name, desc);
 
