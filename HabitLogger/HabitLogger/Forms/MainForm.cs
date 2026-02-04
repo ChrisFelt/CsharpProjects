@@ -348,23 +348,10 @@ namespace HabitLogger
             gridViewHabitsByDateHistory.Undo((rowType, gridViewHabitsByDateDT.Rows.Count - 1, habitName, quantity, note, habitHasDateID));
         }
 
-        // TODO: 
-        // refresh curUserHabits when a new habit record is added
-        // replace rtxtHabitDesc with DataGridView of all existing habits
-        // allow double-click event to add current selection to the DataGridView as a new row
-        // update whenever a new habit is created
-        // allow creation of new habit within the DataGriView, and editing the habit and its description
-        // use RowLeave event to strictly control edits, with confirmation popups each time a cell is edited
         // -----------------------------------------------------
         // pnlMain gridViewHabitsByUser Events
         // -----------------------------------------------------
-
-        // gridViewHabitsByUser data is populated with a DataTable using ReadHabitByUserDT method when the user logs in
-        // no redo/undo history will be used for the gridViewHabitsByUser
-
-        // event methods
-
-        // CellBeginEdit
+        // CellBeginEdit event
         // grab current contents of the cell
         private void gridViewHabitsByUser_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
         {
@@ -374,11 +361,13 @@ namespace HabitLogger
             Console.WriteLine($"Contents: {prevCellContents}");
         }
 
-        // CellEndEdit method
+        // CellEndEdit event
         // calls UpdateHabit method if on existing row - no validation required
         // repopulates curUserHabits
         private void gridViewHabitsByUser_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
+            // TODO: trim white space from user input!
+
             string habitName = gridViewHabitsByUser.Rows[e.RowIndex].Cells[habitNameColByUser].Value.ToString();
             string description = gridViewHabitsByUser.Rows[e.RowIndex].Cells[descriptionCol].Value.ToString();
 
@@ -420,13 +409,20 @@ namespace HabitLogger
             }
         }
 
-        // UserDeletingRow method
-        // deletes the habit using DeleteHabit
+        // UserDeletingRow event
         // does not support multiple simultaneous deletes
-        // refreshes gridViewHabitsByUser
         private void gridViewHabitsByUser_UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
         {
+            int habitID = Convert.ToInt32(gridViewHabitsByUser.Rows[e.Row.Index].Cells[habitIDCol].Value);
+            string habitName = gridViewHabitsByUser.Rows[e.Row.Index].Cells[habitNameColByUser].Value.ToString();
+            string description = gridViewHabitsByUser.Rows[e.Row.Index].Cells[descriptionCol].Value.ToString();
+            Console.WriteLine($"User deleting HabitsByUser row: {e.Row.Index} with contents: {habitID} {habitName} {description}.");
 
+            // delete row from db
+            sqliteDb.DeleteHabit(habitID);
+
+            // refresh both gridViewHabitsByDate
+            RefreshGridViewHabitsByDate(monthCalendar.SelectionRange.Start.ToString("yyyy-MM-dd"));
         }
 
         // -----------------------------------------------------
