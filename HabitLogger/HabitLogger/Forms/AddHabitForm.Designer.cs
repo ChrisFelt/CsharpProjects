@@ -40,10 +40,10 @@
             // 
             this.btnOk.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.btnOk.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnOk.Location = new System.Drawing.Point(80, 262);
-            this.btnOk.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btnOk.Location = new System.Drawing.Point(71, 210);
+            this.btnOk.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnOk.Name = "btnOk";
-            this.btnOk.Size = new System.Drawing.Size(159, 48);
+            this.btnOk.Size = new System.Drawing.Size(141, 38);
             this.btnOk.TabIndex = 8;
             this.btnOk.Text = "Ok";
             this.btnOk.UseVisualStyleBackColor = true;
@@ -54,7 +54,7 @@
             this.lblHabitName.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblHabitName.AutoSize = true;
             this.lblHabitName.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblHabitName.Location = new System.Drawing.Point(43, 14);
+            this.lblHabitName.Location = new System.Drawing.Point(38, 11);
             this.lblHabitName.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblHabitName.Name = "lblHabitName";
             this.lblHabitName.Size = new System.Drawing.Size(82, 16);
@@ -65,10 +65,10 @@
             // 
             this.btnCancel.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.btnCancel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnCancel.Location = new System.Drawing.Point(248, 262);
-            this.btnCancel.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btnCancel.Location = new System.Drawing.Point(220, 210);
+            this.btnCancel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(159, 48);
+            this.btnCancel.Size = new System.Drawing.Size(141, 38);
             this.btnCancel.TabIndex = 9;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
@@ -77,9 +77,11 @@
             // richTextBoxHabitDesc
             // 
             this.richTextBoxHabitDesc.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.richTextBoxHabitDesc.Location = new System.Drawing.Point(40, 118);
+            this.richTextBoxHabitDesc.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.richTextBoxHabitDesc.Location = new System.Drawing.Point(36, 94);
+            this.richTextBoxHabitDesc.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.richTextBoxHabitDesc.Name = "richTextBoxHabitDesc";
-            this.richTextBoxHabitDesc.Size = new System.Drawing.Size(408, 120);
+            this.richTextBoxHabitDesc.Size = new System.Drawing.Size(363, 97);
             this.richTextBoxHabitDesc.TabIndex = 12;
             this.richTextBoxHabitDesc.Text = "";
             // 
@@ -88,7 +90,7 @@
             this.lblHabitDesc.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblHabitDesc.AutoSize = true;
             this.lblHabitDesc.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblHabitDesc.Location = new System.Drawing.Point(43, 89);
+            this.lblHabitDesc.Location = new System.Drawing.Point(38, 71);
             this.lblHabitDesc.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblHabitDesc.Name = "lblHabitDesc";
             this.lblHabitDesc.Size = new System.Drawing.Size(78, 16);
@@ -98,25 +100,28 @@
             // comboBoxHabitName
             // 
             this.comboBoxHabitName.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.comboBoxHabitName.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.comboBoxHabitName.FormattingEnabled = true;
-            this.comboBoxHabitName.Location = new System.Drawing.Point(40, 42);
+            this.comboBoxHabitName.Location = new System.Drawing.Point(36, 34);
+            this.comboBoxHabitName.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.comboBoxHabitName.Name = "comboBoxHabitName";
-            this.comboBoxHabitName.Size = new System.Drawing.Size(408, 28);
+            this.comboBoxHabitName.Size = new System.Drawing.Size(363, 24);
             this.comboBoxHabitName.TabIndex = 11;
             this.comboBoxHabitName.SelectedIndexChanged += new System.EventHandler(this.comboBoxHabitName_SelectedIndexChanged);
             // 
             // AddHabitForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(494, 329);
+            this.ClientSize = new System.Drawing.Size(439, 263);
             this.Controls.Add(this.lblHabitDesc);
             this.Controls.Add(this.richTextBoxHabitDesc);
             this.Controls.Add(this.comboBoxHabitName);
             this.Controls.Add(this.lblHabitName);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnOk);
-            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "AddHabitForm";
             this.Text = "Add your habit!";
             this.ResumeLayout(false);
