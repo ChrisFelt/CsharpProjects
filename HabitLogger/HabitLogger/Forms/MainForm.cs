@@ -152,7 +152,6 @@ namespace HabitLogger
         private void monthCalendar_DateChanged(object sender, DateRangeEventArgs e)
         {
             RefreshGridViewHabitsByDate(e.Start.ToString("yyyy-MM-dd"));
-            // TODO: There is currently no way to delete a date. Add delete date option?
             
             // reset history and grey out undo/redo text
             gridViewHabitsByDateHistory.ClearHistory();
