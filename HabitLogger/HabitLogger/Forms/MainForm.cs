@@ -764,8 +764,7 @@ namespace HabitLogger
             {
                 if (row.Cells[habitHasDateIDCol].Value == null)
                 {
-                    //rowIndex = 0;
-                    break;
+                    break;  // habitHasID not found
                 }
                 if (Convert.ToInt32(row.Cells[habitHasDateIDCol].Value.ToString()) == habitHasDateID)
                 {
