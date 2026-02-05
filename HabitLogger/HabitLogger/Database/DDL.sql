@@ -25,7 +25,7 @@ CREATE TABLE Habits (
 	userID			INTEGER NOT NULL,
 	CONSTRAINT fk_Habits_User 
 		FOREIGN KEY (userID) 
-		REFERENCES Users(userID) 
+		REFERENCES Users (userID) 
 		ON DELETE CASCADE 
 		ON UPDATE NO ACTION
 );
@@ -51,12 +51,12 @@ CREATE TABLE Habits_has_Dates (
 	dateID			INTEGER NOT NULL,
 	CONSTRAINT fk_Habits_has_Dates_Date
 		FOREIGN KEY (dateID) 
-		REFERENCES Dates(dateID) 
+		REFERENCES Dates (dateID) 
 		ON DELETE CASCADE 
 		ON UPDATE NO ACTION,
 	CONSTRAINT fk_Habits_has_Dates_Habit 
-		FOREIGN KEY(habitID) 
-		REFERENCES Habits(habitID) 
+		FOREIGN KEY (habitID) 
+		REFERENCES Habits (habitID) 
 		ON DELETE CASCADE 
 		ON UPDATE NO ACTION
 );
