@@ -757,7 +757,6 @@ namespace HabitLogger
 
         private int FindRowByHabitHasDateID(int habitHasDateID)
         {
-            // TODO: need to change this method to search by habit name instead (if deleted habits_has_dates were modified before deleting, habitHasID searches break)
             int rowIndex = -1;
 
             // find row index where habitHasID matches 
@@ -775,7 +774,7 @@ namespace HabitLogger
                 }
             }
 
-            return rowIndex;  // TODO: will break if habitHasDateID not found
+            return rowIndex;
         }
 
         // commit row change to history and toggle undo/redo button text
