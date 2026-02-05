@@ -203,6 +203,8 @@ namespace HabitLogger
                             gridViewHabitsByDate.Rows.Remove(gridViewHabitsByDate.Rows[undoData.row]);
                             return;
                         }
+
+                        RefreshGridViewHabitsByUser(curUserID);
                     }
 
                     // either delete or add new row with rowHistory and add that row data to DGV history
@@ -281,6 +283,8 @@ namespace HabitLogger
                             gridViewHabitsByDate.Rows.Remove(gridViewHabitsByDate.Rows[row]);
                             return;
                         }
+
+                        RefreshGridViewHabitsByUser(curUserID);
                     }
 
                     // either delete or add new row with rowHistory and add that row data to DGV history
@@ -389,9 +393,6 @@ namespace HabitLogger
             {
                 if (habitName != "" && OpenAddHabitForm(habitName, e.RowIndex, description))
                 {
-                    // repopulate current user's habits
-                    curUserHabits = sqliteDb.ReadHabitByUser(curUserID);
-
                     // refresh DGV
                     RefreshGridViewHabitsByUser(curUserID);
                 }
@@ -408,9 +409,6 @@ namespace HabitLogger
             else if (prevCellContents != curCellContents)
             {
                 sqliteDb.UpdateHabit(habitName, description, Convert.ToInt32(gridViewHabitsByUser.Rows[e.RowIndex].Cells[habitIDCol].Value));
-
-                // repopulate current user's habits
-                curUserHabits = sqliteDb.ReadHabitByUser(curUserID);
 
                 // refresh both DGVs
                 RefreshGridViewHabitsByUser(curUserID);
@@ -432,8 +430,9 @@ namespace HabitLogger
             // delete row from db
             sqliteDb.DeleteHabit(habitID);
 
-            // refresh both gridViewHabitsByDate
+            // refresh both gridViewHabitsByDate and curUserHabits (calling RefreshGridViewHabitsByUser here results in an exception)
             RefreshGridViewHabitsByDate(monthCalendar.SelectionRange.Start.ToString("yyyy-MM-dd"));
+            curUserHabits = sqliteDb.ReadHabitByUser(curUserID);
         }
 
         // -----------------------------------------------------
@@ -487,12 +486,11 @@ namespace HabitLogger
                             // add row to date and refresh datagridview
                             CreateGridViewHabitsByDateRow(habitName, e.RowIndex);
 
-                            // update current user habits list
-                            curUserHabits = sqliteDb.ReadHabitByUser(curUserID);
-
                             // add new row to history
                             int habitHasDateID = Convert.ToInt32(gridViewHabitsByDate.Rows[e.RowIndex].Cells[habitHasDateIDCol].Value);
                             CommitChanges(rowType, e.RowIndex, habitName, quantity, note, habitHasDateID);
+
+                            RefreshGridViewHabitsByUser(curUserID);
                         }
                         else
                         {
@@ -640,6 +638,9 @@ namespace HabitLogger
 
             // hide ID
             gridViewHabitsByUser.Columns["habitID"].Visible = false;
+
+            // repopulate curUserHabits
+            curUserHabits = sqliteDb.ReadHabitByUser(curUserID);
         }
         
         // refresh gridViewHabitsByDate
