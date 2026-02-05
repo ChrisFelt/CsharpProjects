@@ -194,7 +194,21 @@ namespace HabitLogger
                 else
                 {
                     // TODO: need to account for multiple simultaneous deleted rows - loop method call for deletedrowscount?
-                    rowHistory((undoData.row, undoData.habitName, undoData.quantity, undoData.note));
+                    // attempt to add habit if it no longer exists
+                    if (!curUserHabits.Any(habit => habit.name == undoData.habitName))
+                    {
+                        // if user cancels add habit, do not add the row
+                        if (!OpenAddHabitForm(undoData.habitName, undoData.row))
+                        {
+                            // TODO: remove this line?
+                            gridViewHabitsByDate.Rows.Remove(gridViewHabitsByDate.Rows[undoData.row]);
+                            return;
+                        }
+                    }
+
+                    // either delete or add new row with rowHistory and add that row data to DGV history
+                    gridViewHabitsByDateHistory.Undo(rowHistory((undoData.row, undoData.habitName, undoData.quantity, undoData.note)));
+                    Console.WriteLine($"Added to history with Undo(): {gridViewHabitsByDateHistory.RedoPeek()}");
                 }
 
                 // grey out button text when undo history is empty
@@ -228,8 +242,8 @@ namespace HabitLogger
                 string note;
                 int habitHasDateID;
 
-                // get row data from history if dt is empty
-                if (gridViewHabitsByDateDT.Rows.Count == 0)
+                // get row data from history if habitHasDateID not found
+                if (row == -1)
                 {
                     habitName = redoData.habitName;
                     quantity = redoData.quantity;
@@ -245,6 +259,8 @@ namespace HabitLogger
                     habitHasDateID = redoData.habitHasDateID;
                 }
 
+                Console.WriteLine($"Attempting redo with: {(row, habitName, quantity, note, habitHasDateID)}");
+
                 // cell type - gather current values of the row then call Redo method
                 if (type == cellType)
                 {
@@ -256,13 +272,20 @@ namespace HabitLogger
                 // row type - delete the row and update history
                 else
                 {
-                    // TODO: may need to repeat method call for multiple simultaneous deletes
-                    DeleteRow(habitHasDateID);
+                    // attempt to add habit if it no longer exists
+                    if (!curUserHabits.Any(habit => habit.name == habitName))
+                    {
+                        // if user cancels add habit, do not add the row
+                        if (!OpenAddHabitForm(habitName, row))
+                        {
+                            // TODO: remove this line?
+                            gridViewHabitsByDate.Rows.Remove(gridViewHabitsByDate.Rows[row]);
+                            return;
+                        }
+                    }
 
-                    // need to refresh the grid view here unlike delete event handlers
-                    RefreshGridViewHabitsByDate(monthCalendar.SelectionRange.Start.ToString("yyyy-MM-dd"));
-
-                    gridViewHabitsByDateHistory.Redo((type, row, habitName, quantity, note, habitHasDateID));
+                    // either delete or add new row with rowHistory and add that row data to DGV history
+                    gridViewHabitsByDateHistory.Redo(rowHistory((row, habitName, quantity, note)));
                 }
 
                 // grey out button text when redo history is empty
@@ -292,21 +315,10 @@ namespace HabitLogger
         }
 
         // add row to gridViewHabitsByDate and create Habits_Has_Dates relationship OR remove row if it already exists
-        private void rowHistory((int row, string habitName, int quantity, string note) rowData)
+        private (string type, int row, string habitName, int quantity, string note, int habitHasDateID) rowHistory((int row, string habitName, int quantity, string note) rowData)
         {
             // habitHasDateID may vary depending on the action to take, so we declare it beforehand
             int habitHasDateID;
-
-            // attempt to add habit if it no longer exists
-            if (!curUserHabits.Any(habit => habit.name == rowData.habitName))
-            {
-                // if user cancels add habit, do not add the row
-                if (!OpenAddHabitForm(rowData.habitName, rowData.row))
-                {
-                    gridViewHabitsByDate.Rows.Remove(gridViewHabitsByDate.Rows[rowData.row]);
-                    return;
-                }
-            }
 
             // delete row if it already exists (occurs when user adds a new row and clicks undo button)
             foreach (DataRow dtRow in gridViewHabitsByDateDT.Rows)
@@ -314,14 +326,14 @@ namespace HabitLogger
                 if (dtRow.RowState != DataRowState.Deleted && dtRow[habitNameColByDate].ToString() == rowData.habitName)
                 {
                     habitHasDateID = Convert.ToInt32(dtRow[habitHasDateIDCol]);
-                    gridViewHabitsByDateHistory.Undo((rowType, rowData.row, rowData.habitName, rowData.quantity, rowData.note, habitHasDateID));
+                    
                     DeleteRow(habitHasDateID);
 
                     // need to refresh the grid view here unlike delete event handlers
                     RefreshGridViewHabitsByDate(monthCalendar.SelectionRange.Start.ToString("yyyy-MM-dd"));
                     
                     // exit function
-                    return;
+                    return (rowType, rowData.row, rowData.habitName, rowData.quantity, rowData.note, habitHasDateID);
                 }
             }
 
@@ -345,7 +357,7 @@ namespace HabitLogger
             string note = dtLastRow[noteCol].ToString();
             habitHasDateID = Convert.ToInt32(dtLastRow[habitHasDateIDCol]);
 
-            gridViewHabitsByDateHistory.Undo((rowType, gridViewHabitsByDateDT.Rows.Count - 1, habitName, quantity, note, habitHasDateID));
+            return (rowType, gridViewHabitsByDateDT.Rows.Count - 1, habitName, quantity, note, habitHasDateID);
         }
 
         // -----------------------------------------------------
@@ -709,6 +721,7 @@ namespace HabitLogger
         // add a new habit
         private bool OpenAddHabitForm(string name, int row, string desc = "")
         {
+            // TODO: remove row parameter
             // save arguments as a tuple to pass to the AddHabitForm
             (int habitID, string name, string desc) habitData = (0, name, desc);
 
@@ -752,7 +765,7 @@ namespace HabitLogger
             {
                 if (row.Cells[habitHasDateIDCol].Value == null)
                 {
-                    rowIndex = 0;
+                    //rowIndex = 0;
                     break;
                 }
                 if (Convert.ToInt32(row.Cells[habitHasDateIDCol].Value.ToString()) == habitHasDateID)
