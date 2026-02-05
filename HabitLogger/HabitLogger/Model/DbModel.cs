@@ -377,7 +377,6 @@ namespace HabitLogger
 
         // DeleteHabit method
         // delete a Habit given its ID
-        // TODO: cascade should auto-delete all child habits_has_dates records, test!
         public void DeleteHabit(int habitID)
         {
             using (SQLiteConnection conn = new SQLiteConnection(_connString))
