@@ -459,7 +459,7 @@ namespace HabitLogger
             if (e.RowIndex == gridViewHabitsByDateDT.Rows.Count)
             {
                 // exit event without commiting data to db if no habit name entered
-                if (gridViewHabitsByDate.Rows[e.RowIndex].Cells[habitNameColByDate].Value.ToString() != "")
+                if (gridViewHabitsByDate.Rows[e.RowIndex].Cells[habitNameColByDate].Value.ToString() != null && gridViewHabitsByDate.Rows[e.RowIndex].Cells[habitNameColByDate].Value.ToString() != "")
                 {
                     // set quantity to 0 if quantity column is empty (NOTE: will always be empty until delay committing row to db feature is added)
                     if (gridViewHabitsByDate.Rows[e.RowIndex].Cells[quantityCol].Value.ToString() == "")
