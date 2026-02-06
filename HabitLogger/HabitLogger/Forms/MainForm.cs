@@ -448,7 +448,15 @@ namespace HabitLogger
         private void gridViewHabitsByDate_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
         {
             Console.WriteLine($"Editing HabitsByDate cell at row {e.RowIndex} and column {e.ColumnIndex}");
-            prevCellContents = gridViewHabitsByDate.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
+            // contents can be null if cell editing previously canceled - set to empty string in this case
+            if (gridViewHabitsByDate.Rows[e.RowIndex].Cells[e.ColumnIndex].Value == null)
+            {
+                prevCellContents = "";
+            }
+            else
+            {
+                prevCellContents = gridViewHabitsByDate.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
+            }
             Console.WriteLine($"Contents: {prevCellContents}");
         }
 
@@ -459,7 +467,7 @@ namespace HabitLogger
             if (e.RowIndex == gridViewHabitsByDateDT.Rows.Count)
             {
                 // exit event without commiting data to db if no habit name entered
-                if (gridViewHabitsByDate.Rows[e.RowIndex].Cells[habitNameColByDate].Value.ToString() != null && gridViewHabitsByDate.Rows[e.RowIndex].Cells[habitNameColByDate].Value.ToString() != "")
+                if (gridViewHabitsByDate.Rows[e.RowIndex].Cells[habitNameColByDate].Value.ToString() != null || gridViewHabitsByDate.Rows[e.RowIndex].Cells[habitNameColByDate].Value.ToString() != "")
                 {
                     // set quantity to 0 if quantity column is empty (NOTE: will always be empty until delay committing row to db feature is added)
                     if (gridViewHabitsByDate.Rows[e.RowIndex].Cells[quantityCol].Value.ToString() == "")
@@ -577,6 +585,7 @@ namespace HabitLogger
             // notify user of unexpected error in a different column
             else
             {
+                // TODO: this line is executed when new row cell edit cancelled and user attempts to edit the new row 
                 gridViewHabitsByDate.EditingControl.Text = prevCellContents;
                 MessageBox.Show($"Error: an unexpected error has occurred \nat row: {anError.RowIndex} \nand column: {anError.ColumnIndex} \nwith current contents: {newCellContents} \nand previous contents: {prevCellContents}.\nError context: {anError.Context}", "Unexpected Error.", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
