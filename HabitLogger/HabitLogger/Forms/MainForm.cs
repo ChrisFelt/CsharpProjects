@@ -382,39 +382,44 @@ namespace HabitLogger
         private void gridViewHabitsByUser_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
             // TODO: trim white space from user input!
-
-            string habitName = gridViewHabitsByUser.Rows[e.RowIndex].Cells[habitNameColByUser].Value.ToString();
-            string description = gridViewHabitsByUser.Rows[e.RowIndex].Cells[descriptionCol].Value.ToString();
-
-            string curCellContents = gridViewHabitsByUser.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
-
-            // add habit if habit name was entered on new row
-            if (e.RowIndex == gridViewHabitsByUser.Rows.Count)
+            if (gridViewHabitsByUser.Rows[e.RowIndex].Cells[habitNameColByUser].Value != null)
             {
-                if (habitName != "" && OpenAddHabitForm(habitName, e.RowIndex, description))
+                // grab row data
+                string habitName = gridViewHabitsByUser.Rows[e.RowIndex].Cells[habitNameColByUser].Value.ToString();
+                string description = gridViewHabitsByUser.Rows[e.RowIndex].Cells[descriptionCol].Value.ToString();
+
+                string curCellContents = gridViewHabitsByUser.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
+
+                Console.WriteLine($"e.RowIndex: {e.RowIndex}, DGV count: {gridViewHabitsByUser.Rows.Count}");
+
+                // add habit if habit name was entered on new row
+                if (e.RowIndex == gridViewHabitsByUser.Rows.Count - 2)
                 {
-                    // refresh DGV
+                    if (habitName != "" && OpenAddHabitForm(habitName, e.RowIndex, description))
+                    {
+                        // refresh DGV
+                        RefreshGridViewHabitsByUser(curUserID);
+                    }
+
+                    // otherwise delete the new row if it was added
+                    else if (e.RowIndex != gridViewHabitsByUser.Rows.Count - 1)
+                    {
+                        gridViewHabitsByUser.Rows.Remove(gridViewHabitsByUser.Rows[e.RowIndex]);
+                        Console.WriteLine("New row was removed: no habit name/user exited AddHabitForm without saving.");
+                    }
+                }
+
+                // update habit if current cell modified
+                else if (prevCellContents != curCellContents)
+                {
+                    sqliteDb.UpdateHabit(habitName, description, Convert.ToInt32(gridViewHabitsByUser.Rows[e.RowIndex].Cells[habitIDCol].Value));
+
+                    // refresh both DGVs
                     RefreshGridViewHabitsByUser(curUserID);
+                    RefreshGridViewHabitsByDate(monthCalendar.SelectionRange.Start.ToString("yyyy-MM-dd"));
+
+                    Console.WriteLine($"Previous cell contents '{prevCellContents}' replaced with: '{curCellContents}'.");
                 }
-
-                // otherwise delete the new row if it was added
-                else if (e.RowIndex != gridViewHabitsByUser.Rows.Count - 1)
-                {
-                    gridViewHabitsByUser.Rows.Remove(gridViewHabitsByUser.Rows[e.RowIndex]);
-                    Console.WriteLine("New row was removed: no habit name/user exited AddHabitForm without saving.");
-                }
-            }
-
-            // update habit if current cell modified
-            else if (prevCellContents != curCellContents)
-            {
-                sqliteDb.UpdateHabit(habitName, description, Convert.ToInt32(gridViewHabitsByUser.Rows[e.RowIndex].Cells[habitIDCol].Value));
-
-                // refresh both DGVs
-                RefreshGridViewHabitsByUser(curUserID);
-                RefreshGridViewHabitsByDate(monthCalendar.SelectionRange.Start.ToString("yyyy-MM-dd"));
-
-                Console.WriteLine($"Previous cell contents '{prevCellContents}' replaced with: '{curCellContents}'.");
             }
         }
 
