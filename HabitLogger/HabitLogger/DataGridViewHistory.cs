@@ -13,8 +13,8 @@ namespace HabitLogger
         // controls the activity history for a DataGridView 
         // C# stack data structure documentation: https://learn.microsoft.com/en-us/dotnet/api/system.collections.stack?view=net-10.0
         // fields
-        private Stack<(string type, int row, string name, int quantity, string note, int habitHasDateID)> _undoHistory = new Stack<(string type, int row, string name, int quantity, string note, int habitHasDateID)>();
-        private Stack<(string type, int row, string name, int quantity, string note, int habitHasDateID)> _redoHistory = new Stack<(string type, int row, string name, int quantity, string note, int habitHasDateID)>();
+        private Stack<(string type, int row, string name, int quantity, string note)> _undoHistory = new Stack<(string type, int row, string name, int quantity, string note)>();
+        private Stack<(string type, int row, string name, int quantity, string note)> _redoHistory = new Stack<(string type, int row, string name, int quantity, string note)>();
         private int _deletedRowsCount = 0;
 
         // properties
@@ -32,10 +32,10 @@ namespace HabitLogger
 
         public DataGridViewHistory() { }  // empty constructor
 
-        public (string type, int row, string name, int quantity, string note, int habitHasDateID) Redo((string type, int row, string name, int quantity, string note, int habitHasDateID) values)
+        public (string type, int row, string name, int quantity, string note) Redo((string type, int row, string name, int quantity, string note) values)
         {
             // pop top value off _redoHistory
-            (string type, int row, string name, int quantity, string note, int habitHasDateID) returnValues = _redoHistory.Pop();
+            (string type, int row, string name, int quantity, string note) returnValues = _redoHistory.Pop();
             // find its destination cell(s) in the dt
             // push current values of those cell(s) into _undoHistory
             _undoHistory.Push(values);
@@ -45,10 +45,10 @@ namespace HabitLogger
             // write changes to database
         }
 
-        public (string type, int row, string name, int quantity, string note, int habitHasDateID) Undo((string type, int row, string name, int quantity, string note, int habitHasDateID) values)
+        public (string type, int row, string name, int quantity, string note) Undo((string type, int row, string name, int quantity, string note) values)
         {
             // pop top value off _undoHistory
-            (string type, int row, string name, int quantity, string note, int habitHasDateID) returnValues = _undoHistory.Pop();
+            (string type, int row, string name, int quantity, string note) returnValues = _undoHistory.Pop();
             // find its destination cell(s) in the dt
             // push current values of those cell(s) into _redoHistory
             _redoHistory.Push(values);
@@ -57,7 +57,7 @@ namespace HabitLogger
             // write changes to database
         }
 
-        public void Commit((string type, int row, string name, int quantity, string note, int habitHasDateID) values)
+        public void Commit((string type, int row, string name, int quantity, string note) values)
         {
             // clear _redoHistory stack and push values on top of _undoHistory
             _redoHistory.Clear();
@@ -74,13 +74,13 @@ namespace HabitLogger
             return _undoHistory.Count;
         }
 
-        public (string type, int row, string name, int quantity, string note, int habitHasDateID) UndoPeek()
+        public (string type, int row, string name, int quantity, string note) UndoPeek()
         {
             // peek at top value of _undoHistory
             return _undoHistory.Peek();
         }
 
-        public (string type, int row, string name, int quantity, string note, int habitHasDateID) RedoPeek()
+        public (string type, int row, string name, int quantity, string note) RedoPeek()
         {
             // peek at top value of _redoHistory
             return _redoHistory.Peek();
