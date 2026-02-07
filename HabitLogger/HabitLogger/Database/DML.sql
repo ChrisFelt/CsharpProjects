@@ -177,9 +177,9 @@ INNER JOIN Habits AS h
     ON hd.habitID = h.habitID 
 INNER JOIN Users AS u 
 	ON h.userID = u.userID
-WHERE u.userID = userID 
-	AND h.name = habitName 
-	AND d.date = date;
+WHERE u.userID = userIDInput 
+	AND h.name = nameInput 
+	AND d.date = dateInput;
 
 -- Read Dates LEFT JOIN HAbits_has_Dates on dateID
 SELECT *
