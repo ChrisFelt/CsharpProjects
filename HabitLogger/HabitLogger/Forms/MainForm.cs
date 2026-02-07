@@ -312,7 +312,7 @@ namespace HabitLogger
             }
         }
 
-        // update all columns in a row
+        // update all cells in a row
         private void cellHistory((int row, string habitName, int quantity, string note) cellData)
         {
             // update cell values
