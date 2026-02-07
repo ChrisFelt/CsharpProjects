@@ -697,16 +697,10 @@ namespace HabitLogger
         private void UpdateGridViewHabitsByDateRow(int row, string date)
         {
             // get values from the given row
-            /*
-            string note = gridViewHabitsByDate.Rows[row].Cells[noteCol].Value.ToString();
-            int quantity = Convert.ToInt32(gridViewHabitsByDate.Rows[row].Cells[quantityCol].Value.ToString());
-            int habitHasDateID = Convert.ToInt32(gridViewHabitsByDate.Rows[row].Cells[habitHasDateIDCol].Value.ToString());
-            */
-
             string habitName = gridViewHabitsByDate.Rows[row].Cells[habitNameColByDate].Value.ToString();
             string note = gridViewHabitsByDate.Rows[row].Cells[noteCol].Value.ToString();
             int quantity = Convert.ToInt32(gridViewHabitsByDate.Rows[row].Cells[quantityCol].Value.ToString());
-            int habitHasDateID = sqliteDb.ReadHabitHasDateID(curUserID, habitName, date);
+            int habitHasDateID = sqliteDb.ReadHabitHasDateID(curUserID, habitName, date);  // TODO: need to abort method when -1 is returned here
 
             // update db
             Console.Write($"Attempting to write note: {note}, quantity: {quantity}, habitHasDateID: {habitHasDateID}... ");
