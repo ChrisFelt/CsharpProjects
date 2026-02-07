@@ -158,7 +158,7 @@ VALUES (NULL,
 		(SELECT dateID FROM Dates WHERE date = dateInput));
 
 -- READ
--- Read from Dates and Habits_has_Dates simultaneously given an input Date
+-- 1. Read from Dates and Habits_has_Dates simultaneously given an input Date
 SELECT	d.date				AS 'Date',
 		hd.note				AS 'Note',
 		hd.quantity			AS 'Quantity',
@@ -167,6 +167,19 @@ FROM Dates AS d
 INNER JOIN Habits_has_Dates AS hd
 	ON d.dateID = hd.dateID
 WHERE d.date = dateInput;
+
+-- 2. Read habitHasDateID from record that matches userID, habitName, and Date
+SELECT hd.habitHasDateID AS 'habitHasDateID' 
+FROM Dates AS d 
+INNER JOIN Habits_has_Dates AS hd 
+    ON d.dateID = hd.dateID 
+INNER JOIN Habits AS h 
+    ON hd.habitID = h.habitID 
+INNER JOIN Users AS u 
+	ON h.userID = u.userID
+WHERE u.userID = userID 
+	AND h.name = habitName 
+	AND d.date = date;
 
 -- Read Dates LEFT JOIN HAbits_has_Dates on dateID
 SELECT *
