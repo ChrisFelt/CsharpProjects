@@ -464,6 +464,54 @@ namespace HabitLogger
             }
         }
 
+        // ReadHabitHasDateID
+        // finds the habitHasDateID for record with matching userID, name, and date
+        public int ReadHabitHasDateID(int userID, string habitName, string date)
+        {
+            int habitHasDateID = -1;
+
+            using (SQLiteConnection conn = new SQLiteConnection(_connString))
+            {
+                DbConnect(conn);
+
+                // run sql query
+                using (SQLiteCommand cmd = new SQLiteCommand(conn))
+                {
+                    cmd.CommandText = @"SELECT hd.habitHasDateID AS 'habitHasDateID' 
+                                        FROM Dates AS d 
+                                        INNER JOIN Habits_has_Dates AS hd 
+                                            ON d.dateID = hd.dateID 
+                                        INNER JOIN Habits AS h 
+                                            ON hd.habitID = h.habitID 
+                                        INNER JOIN Users as u 
+                                            ON h.userID = u.userID
+                                        WHERE u.userID = :userID 
+                                            AND h.name = :habitName 
+                                            AND d.date = :date;";
+                    cmd.Parameters.AddWithValue(":userID", userID);
+                    cmd.Parameters.AddWithValue(":habitName", habitName);
+                    cmd.Parameters.AddWithValue(":date", date);
+
+                    // read ID results
+                    try
+                    {
+                        using (SQLiteDataReader read = cmd.ExecuteReader())
+                        {
+                            if (read.Read())
+                            {
+                                habitHasDateID = Convert.ToInt32(read["habitHasDateID"]);
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"{ex.Message}", "Read Habit Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+            return habitHasDateID;
+        }
+
         // UpdateHabitsHasDates method
         public void UpdateHabitHasDate(string note, int quantity, int habitHasDateID)
         {
