@@ -43,6 +43,7 @@ namespace HabitLogger
         private void btnOk_Click(object sender, EventArgs e)
         {
             // grab input from combobox and rtxt box and save to userHabitInput
+            _userHabitInput.habitID = habitsList[comboBoxHabitName.SelectedIndex].habitID;
             _userHabitInput.name = habitsList[comboBoxHabitName.SelectedIndex].name;
             _userHabitInput.description = richTextBoxHabitDesc.Text;
             this.DialogResult = DialogResult.OK;
@@ -75,6 +76,7 @@ namespace HabitLogger
             foreach ((int habitID, string name, string description) habit in curUserHabits)
             {
                 returnList.Add(habit);
+                Console.WriteLine(habit);
             }
 
             return returnList;
