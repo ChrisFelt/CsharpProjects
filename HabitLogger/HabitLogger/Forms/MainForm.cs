@@ -411,6 +411,7 @@ namespace HabitLogger
                     // otherwise delete the new row if it was added
                     else if (e.RowIndex != gridViewHabitsByUser.Rows.Count - 1)
                     {
+                        // TODO: remove this line and replace with refresh
                         gridViewHabitsByUser.Rows.Remove(gridViewHabitsByUser.Rows[e.RowIndex]);
                         Console.WriteLine("New row was removed: no habit name/user exited AddHabitForm without saving.");
                     }
@@ -472,11 +473,12 @@ namespace HabitLogger
         private void gridViewHabitsByDate_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
             // TODO: do not add new row when habit name already exists on this date
+            // TODO: strip white space from input with Trim()
             // 1. add new row - check if row was added or if cell is on new row
             if (gridViewHabitsByDate.Rows.Count > prevGridViewHabitsByDateRowCount || e.RowIndex == gridViewHabitsByDate.Rows.Count - 1)
             {
                 // exit event without commiting data to db if no habit name entered
-                if (gridViewHabitsByDate.Rows[e.RowIndex].Cells[habitNameColByDate].Value != null && gridViewHabitsByDate.Rows[e.RowIndex].Cells[habitNameColByDate].Value.ToString() != "")
+                if (gridViewHabitsByDate.Rows[e.RowIndex].Cells[habitNameColByDate].Value != null && gridViewHabitsByDate.Rows[e.RowIndex].Cells[habitNameColByDate].Value.ToString().Trim() != "")
                 {
                     // set quantity to 0 if quantity column is empty (NOTE: will always be empty until delay committing row to db feature is added)
                     if (gridViewHabitsByDate.Rows[e.RowIndex].Cells[quantityCol].Value.ToString() == "")
@@ -686,7 +688,6 @@ namespace HabitLogger
             // TODO: allow user to enter habit name in new row under name column, then query db for habit by that name (not case-specific)
             // if habit exists, generate new row automatically with the habit and a frequency of 0
             // if it does not exist, delete text in the new row and notify user with popup asking if they want to create the habit
-
         }
 
         // call UpdateHabitHasDate on a given DataGridView row
@@ -769,6 +770,14 @@ namespace HabitLogger
                                       $"habit name: {habitName}, " +
                                       $"description: {habitDescription}.");
                         sqliteDb.CreateHabit(habitName, habitDescription, curUserID);
+                    }
+                    else
+                    {
+                        Console.Write($"Updating Habit record with: " +
+                                      $"habit ID: {habitID}, " +
+                                      $"habit name: {habitName}, " +
+                                      $"description: {habitDescription}.");
+                        sqliteDb.UpdateHabit(habitName, habitDescription, habitID);
                     }
 
                     return true;
