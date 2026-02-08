@@ -63,7 +63,7 @@ Annotations:
 6. User Habits Data Grid View - displays ALL habits for the current User with an optional description for each habit
 ```
 
-To create a new habit, you can begin typing in the 'Habit' column in either 4. (after selecting your desired date) or 6. Once you press Enter, the Add New Habit window will open and you may enter the name of your habit and an (optional) description there. Once a habit is created, it will always be listed in 6. However, it will only be listed in 4. if the appropriate date is selected.
+To create a new habit, you can begin typing in the 'Habit' column in either 4. (after selecting your desired date) or 6. Once you press Enter, the Add New Habit window will open and you may enter the name of your habit and a (optional) description there. Once a habit is created, it will always be listed in 6. However, it will only be listed in 4. if the appropriate date is selected.
 
 
 If a new habit is created using 4. it will be added to 6. and 4. simultaneously. A habit may be deleted form the selected date by selecting the habit row (click the empty square to the left of the row in the Data Grid View) and pressing the Delete button. If a habit is deleted from 4., it will only be deleted from the selected date. Warning! If a habit is deleted from 6., it will be deleted from the user profile, which includes ALL dates.
