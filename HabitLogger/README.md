@@ -16,6 +16,7 @@ Using Windows 10/11, simply download the project files and compile the source co
 
 Once the program starts, you will see the following login screen:
 
+
 <img width="2868" height="1925" alt="Image" src="https://github.com/user-attachments/assets/48e4b1cf-b082-4d19-94b6-09ee8c37d056" />
 
 <br>
@@ -37,6 +38,7 @@ If you are a new user, you must first create a user profile to begin using Habit
 
 If you are a new user, the following window will pop up after clicking the New User hyperlink:
 
+
 <img width="1252" height="1025" alt="Image" src="https://github.com/user-attachments/assets/d6f6e1b3-374c-4471-93ac-bbc241517dbd" />
 
 ```
@@ -51,6 +53,8 @@ To create a new user profile, enter your desired profile name into the New User 
 #### Main Window
 
 Once you have logged into the application, you will see the following window, from which you may create habits and add them to dates:
+
+
 <img width="2860" height="1929" alt="Image" src="https://github.com/user-attachments/assets/5457c5a1-d805-4d4e-bd49-9d710f1fa436" />
 
 ```
@@ -80,6 +84,8 @@ Finally, the Undo/Redo buttons allow you to undo your last action only in 4. Ff 
 #### Add New Habit Window
 
 If you attempt to create a new habit at any point from the Main window, the following Add New Habit window will open:
+
+
 <img width="1516" height="1015" alt="Image" src="https://github.com/user-attachments/assets/a091d23a-701b-4e6b-85e2-b919d60e167f" />
 
 ```
