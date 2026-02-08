@@ -75,7 +75,7 @@ You may modify the Frequency or Note columns in 4. by clicking on the cell in qu
 As pictured in the figure of the Main window above, if the habit already exists, you will be prompted with an autocomplete option including all possiblities given your current entry. You may autocomplete at any time by pressing the Tab button or clicking on any of the options in the popup.
 
 
-Finally, the Undo/Redo buttons allow you to undo your last action in 4. if you made a mistake or otherwise wish to undo the previous change. You may redo a previously undone action by clicking 'Redo'. If an action can be undone or redone, the text in the appropriate button will be shown in black. If no action can be taken, the text will be greyed out. Note: all Undo/Redo history will be lost if you select a new date!
+Finally, the Undo/Redo buttons allow you to undo your last action only in 4. Ff you made a mistake or otherwise wish to undo the previous change, simply click 'Undo'. You may redo a previously undone action by clicking 'Redo'. If an action can be undone or redone, the text in the appropriate button will be shown in black. If no action can be taken, the text will be greyed out. Note: all Undo/Redo history will be lost if you select a new date!
 
 #### Add New Habit Window
 
