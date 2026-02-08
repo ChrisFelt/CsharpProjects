@@ -97,6 +97,10 @@ The new habit name automatically populates to the name you entered into the Main
 
 <br>
 
+### Thank you for using Habit Logger!
+
+<br>
+
 ---
 
 <br>
