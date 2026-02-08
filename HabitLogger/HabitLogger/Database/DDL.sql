@@ -20,7 +20,7 @@ CREATE TABLE Users (
 -- -----------------------------------------------------
 CREATE TABLE Habits (
 	habitID			INTEGER PRIMARY KEY NOT NULL UNIQUE,
-	name			VARCHAR(30) NOT NULL,
+	name			VARCHAR(30) NOT NULL UNIQUE,
 	description		VARCHAR(200),
 	userID			INTEGER NOT NULL,
 	CONSTRAINT fk_Habits_User 
