@@ -411,7 +411,7 @@ namespace HabitLogger
                     if (curUserHabits.Any(habit => habit.name == habitName))
                     {
                         RefreshGridViewHabitsByUser(curUserID);
-                        Console.WriteLine("New row was removed: no habit name.");
+                        Console.WriteLine("New row was removed: habit already exists!");
                     }
                     else
                     {
