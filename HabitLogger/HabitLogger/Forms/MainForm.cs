@@ -712,7 +712,15 @@ namespace HabitLogger
             string habitName = gridViewHabitsByDate.Rows[row].Cells[habitNameColByDate].Value.ToString().Trim();
             string note = gridViewHabitsByDate.Rows[row].Cells[noteCol].Value.ToString().Trim();
             int quantity = Convert.ToInt32(gridViewHabitsByDate.Rows[row].Cells[quantityCol].Value.ToString().Trim());
-            int habitHasDateID = sqliteDb.ReadHabitHasDateID(curUserID, habitName, date);  // TODO: need to abort method when -1 is returned here
+            int habitHasDateID = sqliteDb.ReadHabitHasDateID(curUserID, habitName, date);
+
+            // abort method if habit ID not found - this should not happen
+            if (habitHasDateID == -1)
+            {
+                MessageBox.Show($"Error: habit ID not found.", "Input failed.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                RefreshGridViewHabitsByDate(date);
+                return;
+            }
 
             // update db
             Console.Write($"Attempting to write note: {note}, quantity: {quantity}, habitHasDateID: {habitHasDateID}... ");
