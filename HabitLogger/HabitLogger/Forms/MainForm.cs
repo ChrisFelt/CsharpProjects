@@ -521,7 +521,6 @@ namespace HabitLogger
                     }
                     else
                     {
-                        // TODO: need to get habit chosen by user in AddHabitForm
                         // popup asks user if they want to add new habit
                         // if yes, open AddHabitForm
                         // if no, delete row
@@ -571,7 +570,6 @@ namespace HabitLogger
                 // commit all valid edits to db and update history (note: all values are valid for note column)
                 else if (prevCellContents != curCellContents)
                 {
-                    // TODO: do not write to db unless both habit name and quantity columns have a value
                     UpdateGridViewHabitsByDateRow(e.RowIndex, monthCalendar.SelectionRange.Start.ToString("yyyy-MM-dd"));
 
                     // determine previous cell contents and commit to history
@@ -617,7 +615,6 @@ namespace HabitLogger
             // notify user of unexpected error in a different column
             else
             {
-                // TODO: this line is executed when new row cell edit cancelled and user attempts to edit the new row 
                 gridViewHabitsByDate.EditingControl.Text = prevCellContents;
                 MessageBox.Show($"Error: an unexpected error has occurred \nat row: {anError.RowIndex} \nand column: {anError.ColumnIndex} \nwith current contents: {newCellContents} \nand previous contents: {prevCellContents}.\nError context: {anError.Context}", "Unexpected Error.", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -706,10 +703,6 @@ namespace HabitLogger
             gridViewHabitsByDate.Columns["habitID"].Visible = false;
             gridViewHabitsByDate.Columns["Description"].Visible = false;
             gridViewHabitsByDate.Columns["habitHasDateID"].Visible = false;
-
-            // TODO: allow user to enter habit name in new row under name column, then query db for habit by that name (not case-specific)
-            // if habit exists, generate new row automatically with the habit and a frequency of 0
-            // if it does not exist, delete text in the new row and notify user with popup asking if they want to create the habit
         }
 
         // call UpdateHabitHasDate on a given DataGridView row
@@ -733,10 +726,6 @@ namespace HabitLogger
         {
             sqliteDb.DeleteHabitHasDate(habitHasDateID);
             Console.WriteLine($"Successfully deleted HabitsHasDates row with ID: {habitHasDateID}.");
-            
-            // TODO: may not need this line anymore
-            // need to refresh the data table to avoid deleted row inaccessible exception
-            //RefreshGridViewHabitsByDate(monthCalendar.SelectionRange.Start.ToString("yyyy-MM-dd"));
         }
 
         // call CreateHabitHasDate on a given gridViewHabitsByDate row
@@ -769,7 +758,6 @@ namespace HabitLogger
         // add a new habit
         private (string addedHabitName, int addedHabitID) OpenAddHabitForm(string name, string desc = "")
         {
-            // TODO: remove row parameter
             // save arguments as a tuple to pass to the AddHabitForm
             (int habitID, string name, string desc) habitData = (0, name, desc);
 
