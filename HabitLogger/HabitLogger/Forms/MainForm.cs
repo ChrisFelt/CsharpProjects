@@ -767,50 +767,6 @@ namespace HabitLogger
         }
 
         // add a new habit
-        private bool OpenAddHabitForm2(string name, int row, string desc = "")
-        {
-            // TODO: remove row parameter
-            // save arguments as a tuple to pass to the AddHabitForm
-            (int habitID, string name, string desc) habitData = (0, name, desc);
-
-            // show AddHabitForm
-            using (AddHabitForm addHabit = new AddHabitForm(curUserID, sqliteDb, curUserHabits, habitData))
-            {
-                // open form and get dialog result
-                DialogResult result = addHabit.ShowDialog();
-                if (result == DialogResult.OK)
-                {
-                    // grab user input from AddHabitForm
-                    int habitID = addHabit.UserHabitInput.habitID;
-                    string habitName = addHabit.UserHabitInput.name;
-                    string habitDescription = addHabit.UserHabitInput.description;
-
-                    // create habit in db if it does not exist
-                    if (habitID == 0)
-                    {
-                        Console.Write($"Creating new Habit record with: " +
-                                      $"habit name: {habitName}, " +
-                                      $"description: {habitDescription}.");
-                        sqliteDb.CreateHabit(habitName, habitDescription, curUserID);
-                    }
-                    else
-                    {
-                        Console.Write($"Updating Habit record with: " +
-                                      $"habit ID: {habitID}, " +
-                                      $"habit name: {habitName}, " +
-                                      $"description: {habitDescription}.");
-                        sqliteDb.UpdateHabit(habitName, habitDescription, habitID);
-                    }
-
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-        }
-
         private (string addedHabitName, int addedHabitID) OpenAddHabitForm(string name, string desc = "")
         {
             // TODO: remove row parameter
