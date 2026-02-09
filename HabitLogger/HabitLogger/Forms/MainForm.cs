@@ -154,7 +154,7 @@ namespace HabitLogger
         private void monthCalendar_DateChanged(object sender, DateRangeEventArgs e)
         {
             RefreshGridViewHabitsByDate(e.Start.ToString("yyyy-MM-dd"));
-            
+
             // reset history and grey out undo/redo text
             gridViewHabitsByDateHistory.ClearHistory();
 
@@ -340,12 +340,12 @@ namespace HabitLogger
                 if (dtRow.RowState != DataRowState.Deleted && dtRow[habitNameColByDate].ToString() == rowData.habitName)
                 {
                     habitHasDateID = Convert.ToInt32(dtRow[habitHasDateIDCol]);
-                    
+
                     DeleteRow(habitHasDateID);
 
                     // need to refresh the grid view here unlike delete event handlers
                     RefreshGridViewHabitsByDate(monthCalendar.SelectionRange.Start.ToString("yyyy-MM-dd"));
-                    
+
                     // exit function
                     return (rowType, rowData.row, rowData.habitName, rowData.quantity, rowData.note);
                 }
@@ -402,29 +402,23 @@ namespace HabitLogger
                     string habitName = gridViewHabitsByUser.Rows[e.RowIndex].Cells[habitNameColByUser].Value.ToString().Trim();
                     string description = gridViewHabitsByUser.Rows[e.RowIndex].Cells[descriptionCol].Value.ToString().Trim();
 
-                    string curCellContents = gridViewHabitsByUser.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString().Trim();
-
-                    Console.WriteLine($"e.RowIndex: {e.RowIndex}, DGV count: {gridViewHabitsByUser.Rows.Count}");
-
                     // attempt to add habit if habit does not exist
-                    if (curUserHabits.Any(habit => habit.name == habitName))
+                    if (!curUserHabits.Any(habit => habit.name == habitName))
                     {
-                        RefreshGridViewHabitsByUser(curUserID);
-                        Console.WriteLine("New row was removed: habit already exists!");
+                        (string addedHabitName, int addedHabitID) addedHabitData = OpenAddHabitForm(habitName, description);                        
                     }
                     else
                     {
-                        (string addedHabitName, int addedHabitID) addedHabitData = OpenAddHabitForm(habitName, description);
-
-                        // regardless of whether user added new habit, edited existing habit, or cancelled, always refresh DGV
-                        RefreshGridViewHabitsByUser(curUserID);
+                        Console.WriteLine("New row was removed: habit already exists!");                        
                     }
                 }
                 else
-                {
-                    RefreshGridViewHabitsByUser(curUserID);
+                {  
                     Console.WriteLine("New row was removed: no habit name.");
                 }
+
+                // always refresh gridViewHabitsByUser if user attempts to add new row (removes rows that have not been commited to data table)
+                RefreshGridViewHabitsByUser(curUserID);
             }
 
             // 2. edit existing row
@@ -508,23 +502,15 @@ namespace HabitLogger
                     string habitName = gridViewHabitsByDate.Rows[e.RowIndex].Cells[habitNameColByDate].Value.ToString().Trim();
                     int quantity = Convert.ToInt32(gridViewHabitsByDate.Rows[e.RowIndex].Cells[quantityCol].Value);
                     string note = gridViewHabitsByDate.Rows[e.RowIndex].Cells[noteCol].Value.ToString().Trim();
+                    string filterExpression = $"Habit = '{habitName}'";  // search the Habit column for all rows that contain habitName
 
                     // if habit name does not exist, prompt user to create new habit
-                    if (curUserHabits.Any(habit => habit.name == habitName))
+                    if (!curUserHabits.Any(habit => habit.name == habitName))
                     {
-                        // create new Habits_Has_Dates record in db and add to history
-                        CreateGridViewHabitsByDateRow(habitName, e.RowIndex);
-
-                        int habitHasDateID = Convert.ToInt32(gridViewHabitsByDate.Rows[e.RowIndex].Cells[habitHasDateIDCol].Value);
-                        CommitChanges(rowType, e.RowIndex, habitName, quantity, note);
-                    }
-                    else
-                    {
-                        // popup asks user if they want to add new habit
-                        // if yes, open AddHabitForm
-                        // if no, delete row
+                        // attempt to add new habit
                         (string addedHabitName, int addedHabitID) addedHabitData = OpenAddHabitForm(habitName);
 
+                        // if user selected a habit, add it to the date
                         if (addedHabitData.addedHabitID != -1)
                         {
                             // add row to date and refresh datagridview
@@ -536,12 +522,25 @@ namespace HabitLogger
 
                             RefreshGridViewHabitsByUser(curUserID);
                         }
+
+                        // if user canceled, do not add row
                         else
                         {
                             Console.WriteLine("New row was removed: user exited AddHabitForm without saving.");
                         }
                     }
-                    RefreshGridViewHabitsByDate(monthCalendar.SelectionRange.Start.ToString("yyyy-MM-dd"));
+
+                    // as long as habit does not already exist on this date, add it to the date
+                    else if (gridViewHabitsByDateDT.Select(filterExpression).Length == 0)
+                    {
+
+                        // Console.WriteLine($"Matches for {habitName} found: {gridViewHabitsByDateDT.Select(filterExpression).Length}.");
+                        // create new Habits_Has_Dates record in db and add to history
+                        CreateGridViewHabitsByDateRow(habitName, e.RowIndex);
+
+                        int habitHasDateID = Convert.ToInt32(gridViewHabitsByDate.Rows[e.RowIndex].Cells[habitHasDateIDCol].Value);
+                        CommitChanges(rowType, e.RowIndex, habitName, quantity, note);
+                    }
                 }
 
                 // delete new row from the DGV if it was added
@@ -549,8 +548,10 @@ namespace HabitLogger
                 {
                     // TODO: notify user that they must enter a habit name for row to be saved?
                     Console.WriteLine("New row was removed: no habit name column value.");
-                    RefreshGridViewHabitsByDate(monthCalendar.SelectionRange.Start.ToString("yyyy-MM-dd"));
                 }
+
+                // always refresh gridViewHabitsByDate if user attempted to add row (removes rows that have not been commited to data table)
+                RefreshGridViewHabitsByDate(monthCalendar.SelectionRange.Start.ToString("yyyy-MM-dd"));
             }
             // 2. edit existing row
             else if (e.RowIndex != gridViewHabitsByDate.Rows.Count - 1)
@@ -629,10 +630,10 @@ namespace HabitLogger
             string note = gridViewHabitsByDate.Rows[e.Row.Index].Cells[noteCol].Value.ToString();
             int habitHasDateID = Convert.ToInt32(gridViewHabitsByDate.Rows[e.Row.Index].Cells[habitHasDateIDCol].Value);
             Console.WriteLine($"User deleting row: {e.Row.Index} with contents: {habitName} {quantity} {note}.");
-            
+
             // NOTE: this event fires for EACH row deleted. Multiple rows deleted simultaneously each cause the event to fire individually.
             CommitChanges(rowType, e.Row.Index, habitName, quantity, note);
-            
+
             // placeholder - currently history only supports deleting one row at a time
             gridViewHabitsByDateHistory.DeletedRowsCount++;
             Console.WriteLine($"Deleted row count: {gridViewHabitsByDateHistory.DeletedRowsCount}");
@@ -686,7 +687,7 @@ namespace HabitLogger
             // repopulate curUserHabits
             curUserHabits = sqliteDb.ReadHabitByUser(curUserID);
         }
-        
+
         // refresh gridViewHabitsByDate
         private void RefreshGridViewHabitsByDate(string date)
         {
