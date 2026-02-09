@@ -19,7 +19,6 @@ namespace HabitLogger
         private DbModel sqliteDb = new DbModel();
         private int curUserID = 0;  // user not logged in
         private string prevCellContents;  // track contents of a cell before edit
-        int prevGridViewHabitsByDateRowCount;
         int prevRowCount;
 
 
@@ -486,7 +485,7 @@ namespace HabitLogger
                 prevCellContents = gridViewHabitsByDate.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString().Trim();
             }
             Console.WriteLine($"Contents: {prevCellContents}");
-            prevGridViewHabitsByDateRowCount = gridViewHabitsByDate.Rows.Count;
+            prevRowCount = gridViewHabitsByDate.Rows.Count;
         }
 
         // validate edits made to a cell and update DataGridViewHistory
@@ -494,7 +493,7 @@ namespace HabitLogger
         {
             // TODO: do not add new row when habit name already exists on this date
             // 1. add new row - check if row was added
-            if (gridViewHabitsByDate.Rows.Count > prevGridViewHabitsByDateRowCount)
+            if (gridViewHabitsByDate.Rows.Count > prevRowCount)
             {
                 // exit event without commiting data to db if no habit name entered
                 if (gridViewHabitsByDate.Rows[e.RowIndex].Cells[habitNameColByDate].Value != null && gridViewHabitsByDate.Rows[e.RowIndex].Cells[habitNameColByDate].Value.ToString().Trim() != "")
