@@ -77,7 +77,6 @@ namespace HabitLogger
                 // attempt to login
                 inputTxt = inputTxt.Trim(' ');
                 curUserID = sqliteDb.ReadUser(inputTxt);
-                //Console.WriteLine($"Current user ID: {curUserID}");  // testing ReadUser
 
                 if (curUserID > 0)
                 {
@@ -396,6 +395,7 @@ namespace HabitLogger
             // 1. check if new row added
             if (gridViewHabitsByUser.Rows.Count > prevRowCount)
             {
+                // exit event without saving changes if no habit name entered
                 if (gridViewHabitsByUser.Rows[e.RowIndex].Cells[habitNameColByUser].Value != null && gridViewHabitsByUser.Rows[e.RowIndex].Cells[habitNameColByUser].Value.ToString().Trim() != "")
                 {
                     // grab row data
@@ -464,7 +464,6 @@ namespace HabitLogger
         // -----------------------------------------------------
         // pnlMain gridViewHabitsByDate Events
         // -----------------------------------------------------
-
         // grab contents of the cell before user edits it
         private void gridViewHabitsByDate_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
         {
@@ -482,13 +481,13 @@ namespace HabitLogger
             prevRowCount = gridViewHabitsByDate.Rows.Count;
         }
 
-        // validate edits made to a cell and update DataGridViewHistory
+        // validate edits made to a cell/row and update DataGridViewHistory
         private void gridViewHabitsByDate_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
             // 1. add new row - check if row was added
             if (gridViewHabitsByDate.Rows.Count > prevRowCount)
             {
-                // exit event without commiting data to db if no habit name entered
+                // exit event without committing data to db if no habit name entered
                 if (gridViewHabitsByDate.Rows[e.RowIndex].Cells[habitNameColByDate].Value != null && gridViewHabitsByDate.Rows[e.RowIndex].Cells[habitNameColByDate].Value.ToString().Trim() != "")
                 {
                     // set quantity to 0 if quantity column is empty (NOTE: will always be empty until delay committing row to db feature is added)
@@ -501,7 +500,7 @@ namespace HabitLogger
                     string habitName = gridViewHabitsByDate.Rows[e.RowIndex].Cells[habitNameColByDate].Value.ToString().Trim();
                     int quantity = Convert.ToInt32(gridViewHabitsByDate.Rows[e.RowIndex].Cells[quantityCol].Value);
                     string note = gridViewHabitsByDate.Rows[e.RowIndex].Cells[noteCol].Value.ToString().Trim();
-                    string filterExpression = $"Habit = '{habitName}'";  // search the Habit column for all rows that contain habitName
+                    string filterExpression = $"Habit = '{habitName}'";  // search the Habit column for all rows that contain habitName (C# DT row filter guide: https://www.csharp-examples.net/dataview-rowfilter/)
 
                     // if habit name does not exist, prompt user to create new habit
                     if (!curUserHabits.Any(habit => habit.name == habitName))
