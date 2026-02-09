@@ -485,7 +485,6 @@ namespace HabitLogger
         // validate edits made to a cell and update DataGridViewHistory
         private void gridViewHabitsByDate_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
-            // TODO: do not add new row when habit name already exists on this date
             // 1. add new row - check if row was added
             if (gridViewHabitsByDate.Rows.Count > prevRowCount)
             {
