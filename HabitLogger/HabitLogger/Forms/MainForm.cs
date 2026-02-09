@@ -409,12 +409,12 @@ namespace HabitLogger
                     }
                     else
                     {
-                        Console.WriteLine("New row was removed: habit already exists!");                        
+                        Console.WriteLine("New row removed: habit already exists!");                        
                     }
                 }
                 else
                 {  
-                    Console.WriteLine("New row was removed: no habit name.");
+                    Console.WriteLine("New row removed: no habit name entered.");
                 }
 
                 // always refresh gridViewHabitsByUser if user attempts to add new row (removes rows that have not been commited to data table)
@@ -532,13 +532,17 @@ namespace HabitLogger
                     // as long as habit does not already exist on this date, add it to the date
                     else if (gridViewHabitsByDateDT.Select(filterExpression).Length == 0)
                     {
-
                         // Console.WriteLine($"Matches for {habitName} found: {gridViewHabitsByDateDT.Select(filterExpression).Length}.");
                         // create new Habits_Has_Dates record in db and add to history
                         CreateGridViewHabitsByDateRow(habitName, e.RowIndex);
 
                         int habitHasDateID = Convert.ToInt32(gridViewHabitsByDate.Rows[e.RowIndex].Cells[habitHasDateIDCol].Value);
                         CommitChanges(rowType, e.RowIndex, habitName, quantity, note);
+                    }
+
+                    else
+                    {
+                        Console.WriteLine($"New row removed: {habitName} already added to this date!");
                     }
                 }
 
