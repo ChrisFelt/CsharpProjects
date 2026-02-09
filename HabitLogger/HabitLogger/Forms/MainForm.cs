@@ -384,7 +384,7 @@ namespace HabitLogger
         {
             // save contents of cell before editing
             Console.WriteLine($"Editing HabitsByUser cell at row {e.RowIndex} and column {e.ColumnIndex}");
-            prevCellContents = gridViewHabitsByUser.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
+            prevCellContents = gridViewHabitsByUser.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString().Trim();
             Console.WriteLine($"Contents: {prevCellContents}");
             prevRowCount = gridViewHabitsByUser.Rows.Count;
         }
@@ -394,16 +394,16 @@ namespace HabitLogger
         // repopulates curUserHabits
         private void gridViewHabitsByUser_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
-            // check if new row added
+            // 1. check if new row added
             if (gridViewHabitsByUser.Rows.Count > prevRowCount)
             {
                 if (gridViewHabitsByUser.Rows[e.RowIndex].Cells[habitNameColByUser].Value != null && gridViewHabitsByUser.Rows[e.RowIndex].Cells[habitNameColByUser].Value.ToString().Trim() != "")
                 {
                     // grab row data
-                    string habitName = gridViewHabitsByUser.Rows[e.RowIndex].Cells[habitNameColByUser].Value.ToString();
-                    string description = gridViewHabitsByUser.Rows[e.RowIndex].Cells[descriptionCol].Value.ToString();
+                    string habitName = gridViewHabitsByUser.Rows[e.RowIndex].Cells[habitNameColByUser].Value.ToString().Trim();
+                    string description = gridViewHabitsByUser.Rows[e.RowIndex].Cells[descriptionCol].Value.ToString().Trim();
 
-                    string curCellContents = gridViewHabitsByUser.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
+                    string curCellContents = gridViewHabitsByUser.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString().Trim();
 
                     Console.WriteLine($"e.RowIndex: {e.RowIndex}, DGV count: {gridViewHabitsByUser.Rows.Count}");
 
@@ -428,13 +428,14 @@ namespace HabitLogger
                 }
             }
 
+            // 2. edit existing row
             else if (e.RowIndex != gridViewHabitsByUser.Rows.Count - 1)
             {
                 // grab row data
-                string habitName = gridViewHabitsByUser.Rows[e.RowIndex].Cells[habitNameColByUser].Value.ToString();
-                string description = gridViewHabitsByUser.Rows[e.RowIndex].Cells[descriptionCol].Value.ToString();
+                string habitName = gridViewHabitsByUser.Rows[e.RowIndex].Cells[habitNameColByUser].Value.ToString().Trim();
+                string description = gridViewHabitsByUser.Rows[e.RowIndex].Cells[descriptionCol].Value.ToString().Trim();
 
-                string curCellContents = gridViewHabitsByUser.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
+                string curCellContents = gridViewHabitsByUser.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString().Trim();
 
                 // update habit if current cell modified
                 if (prevCellContents != curCellContents)
@@ -455,8 +456,8 @@ namespace HabitLogger
         private void gridViewHabitsByUser_UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
         {
             int habitID = Convert.ToInt32(gridViewHabitsByUser.Rows[e.Row.Index].Cells[habitIDCol].Value);
-            string habitName = gridViewHabitsByUser.Rows[e.Row.Index].Cells[habitNameColByUser].Value.ToString();
-            string description = gridViewHabitsByUser.Rows[e.Row.Index].Cells[descriptionCol].Value.ToString();
+            string habitName = gridViewHabitsByUser.Rows[e.Row.Index].Cells[habitNameColByUser].Value.ToString().Trim();
+            string description = gridViewHabitsByUser.Rows[e.Row.Index].Cells[descriptionCol].Value.ToString().Trim();
             Console.WriteLine($"User deleting HabitsByUser row: {e.Row.Index} with contents: {habitID} {habitName} {description}.");
 
             // delete row from db
@@ -482,7 +483,7 @@ namespace HabitLogger
             }
             else
             {
-                prevCellContents = gridViewHabitsByDate.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
+                prevCellContents = gridViewHabitsByDate.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString().Trim();
             }
             Console.WriteLine($"Contents: {prevCellContents}");
             prevGridViewHabitsByDateRowCount = gridViewHabitsByDate.Rows.Count;
@@ -492,7 +493,6 @@ namespace HabitLogger
         private void gridViewHabitsByDate_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
             // TODO: do not add new row when habit name already exists on this date
-            // TODO: strip white space from input with Trim()
             // 1. add new row - check if row was added
             if (gridViewHabitsByDate.Rows.Count > prevGridViewHabitsByDateRowCount)
             {
@@ -500,15 +500,15 @@ namespace HabitLogger
                 if (gridViewHabitsByDate.Rows[e.RowIndex].Cells[habitNameColByDate].Value != null && gridViewHabitsByDate.Rows[e.RowIndex].Cells[habitNameColByDate].Value.ToString().Trim() != "")
                 {
                     // set quantity to 0 if quantity column is empty (NOTE: will always be empty until delay committing row to db feature is added)
-                    if (gridViewHabitsByDate.Rows[e.RowIndex].Cells[quantityCol].Value.ToString() == "")
+                    if (gridViewHabitsByDate.Rows[e.RowIndex].Cells[quantityCol].Value.ToString().Trim() == "")
                     {
                         gridViewHabitsByDate.Rows[e.RowIndex].Cells[quantityCol].Value = 0;
                     }
 
                     // get habit row data
-                    string habitName = gridViewHabitsByDate.Rows[e.RowIndex].Cells[habitNameColByDate].Value.ToString();
+                    string habitName = gridViewHabitsByDate.Rows[e.RowIndex].Cells[habitNameColByDate].Value.ToString().Trim();
                     int quantity = Convert.ToInt32(gridViewHabitsByDate.Rows[e.RowIndex].Cells[quantityCol].Value);
-                    string note = gridViewHabitsByDate.Rows[e.RowIndex].Cells[noteCol].Value.ToString();
+                    string note = gridViewHabitsByDate.Rows[e.RowIndex].Cells[noteCol].Value.ToString().Trim();
 
                     // if habit name does not exist, prompt user to create new habit
                     if (curUserHabits.Any(habit => habit.name == habitName))
@@ -557,7 +557,7 @@ namespace HabitLogger
             // 2. edit existing row
             else if (e.RowIndex != gridViewHabitsByDate.Rows.Count - 1)
             {
-                string curCellContents = gridViewHabitsByDate.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
+                string curCellContents = gridViewHabitsByDate.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString().Trim();
                 Console.WriteLine($"Finished editing cell at row {e.RowIndex} and column {e.ColumnIndex}");
                 Console.WriteLine($"Previous contents were: '{prevCellContents}'. New contents are: '{curCellContents}'");
 
@@ -575,9 +575,9 @@ namespace HabitLogger
                     UpdateGridViewHabitsByDateRow(e.RowIndex, monthCalendar.SelectionRange.Start.ToString("yyyy-MM-dd"));
 
                     // determine previous cell contents and commit to history
-                    string habitName = gridViewHabitsByDate.Rows[e.RowIndex].Cells[habitNameColByDate].Value.ToString();
+                    string habitName = gridViewHabitsByDate.Rows[e.RowIndex].Cells[habitNameColByDate].Value.ToString().Trim();
                     int quantity = Convert.ToInt32(gridViewHabitsByDate.Rows[e.RowIndex].Cells[quantityCol].Value);
-                    string note = gridViewHabitsByDate.Rows[e.RowIndex].Cells[noteCol].Value.ToString();
+                    string note = gridViewHabitsByDate.Rows[e.RowIndex].Cells[noteCol].Value.ToString().Trim();
                     int habitHasDateID = Convert.ToInt32(gridViewHabitsByDate.Rows[e.RowIndex].Cells[habitHasDateIDCol].Value);
 
                     // assign prevCellContents to appropriate variable
@@ -716,9 +716,9 @@ namespace HabitLogger
         private void UpdateGridViewHabitsByDateRow(int row, string date)
         {
             // get values from the given row
-            string habitName = gridViewHabitsByDate.Rows[row].Cells[habitNameColByDate].Value.ToString();
-            string note = gridViewHabitsByDate.Rows[row].Cells[noteCol].Value.ToString();
-            int quantity = Convert.ToInt32(gridViewHabitsByDate.Rows[row].Cells[quantityCol].Value.ToString());
+            string habitName = gridViewHabitsByDate.Rows[row].Cells[habitNameColByDate].Value.ToString().Trim();
+            string note = gridViewHabitsByDate.Rows[row].Cells[noteCol].Value.ToString().Trim();
+            int quantity = Convert.ToInt32(gridViewHabitsByDate.Rows[row].Cells[quantityCol].Value.ToString().Trim());
             int habitHasDateID = sqliteDb.ReadHabitHasDateID(curUserID, habitName, date);  // TODO: need to abort method when -1 is returned here
 
             // update db
@@ -743,8 +743,8 @@ namespace HabitLogger
         private void CreateGridViewHabitsByDateRow(string habitName, int row)
         {
             // grab cell values for the row besides name
-            int newRowQuantity = Convert.ToInt32(gridViewHabitsByDate.Rows[row].Cells[quantityCol].Value.ToString());
-            string newRowNote = gridViewHabitsByDate.Rows[row].Cells[noteCol].Value.ToString();
+            int newRowQuantity = Convert.ToInt32(gridViewHabitsByDate.Rows[row].Cells[quantityCol].Value.ToString().Trim());
+            string newRowNote = gridViewHabitsByDate.Rows[row].Cells[noteCol].Value.ToString().Trim();
             string newRowDate = monthCalendar.SelectionRange.Start.ToString("yyyy-MM-dd");
 
             // call CreateDate (method only adds date if it doesn't already exist)
@@ -866,7 +866,7 @@ namespace HabitLogger
                 {
                     break;  // habitHasID not found
                 }
-                if (row.Cells[habitNameColByDate].Value.ToString() == habitName)
+                if (row.Cells[habitNameColByDate].Value.ToString().Trim() == habitName)
                 {
                     rowIndex = row.Index;
                     break;  // stop searching
