@@ -8,7 +8,10 @@ Habit Logger was written in C# using the Windows Forms GUI library for .NET Wind
 
 ## Setup
 
-Using Windows 10/11, simply download the project files and compile the source code using Visual Studio or your favorite IDE for C#. From there, run the program executable to begin!
+This application is compatible with .NET version 4.8+. Please ensure that you a compatible .NET version installed before continuing.
+
+
+To run the application, simply download the project files and compile the source code using Visual Studio or your favorite IDE for C#. From there, run the program executable to begin!
 
 ## Usage
 
