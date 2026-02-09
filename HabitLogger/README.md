@@ -4,11 +4,11 @@ Welcome to Habit Logger -- a very simple desktop application for keeping track o
 
 #### Built With
 
-Habit Logger was written in C# using the Windows Forms GUI library for .NET Windows desktop applications. It also uses SQLite to store your data locally.
+Habit Logger was written in C# using the Windows Forms GUI library for .NET SDK version 9.0. It also uses SQLite version 3.5 to store your data locally.
 
 ## Setup
 
-This application is compatible with .NET version 4.8+. Please ensure that you a compatible .NET version installed before continuing.
+This application is compatible with .NET version 4.8+. Please ensure that you have a compatible .NET version installed before continuing.
 
 
 To run the application, simply download the project files and compile the source code using Visual Studio or your favorite IDE for C#. From there, run the program executable to begin!
