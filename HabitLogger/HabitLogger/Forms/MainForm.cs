@@ -20,6 +20,7 @@ namespace HabitLogger
         private int curUserID = 0;  // user not logged in
         private string prevCellContents;  // track contents of a cell before edit
         int prevGridViewHabitsByDateRowCount;
+        int prevRowCount;
 
 
         // data source for gridViewHabitsByDate
@@ -208,7 +209,9 @@ namespace HabitLogger
                     if (!curUserHabits.Any(habit => habit.name == undoData.habitName))
                     {
                         // if user cancels add habit, do not add the row
-                        if (!OpenAddHabitForm(undoData.habitName, undoData.row))
+                        (string addedHabitName, int addedHabitID) addedHabitData = OpenAddHabitForm(undoData.habitName);
+
+                        if (addedHabitData.addedHabitID != 0)
                         {
                             // TODO: remove this line?
                             gridViewHabitsByDate.Rows.Remove(gridViewHabitsByDate.Rows[undoData.row]);
@@ -285,7 +288,9 @@ namespace HabitLogger
                     if (!curUserHabits.Any(habit => habit.name == habitName))
                     {
                         // if user cancels add habit, do not add the row
-                        if (!OpenAddHabitForm(habitName, row))
+                        (string addedHabitName, int addedHabitID) addedHabitData = OpenAddHabitForm(habitName);
+
+                        if (addedHabitData.addedHabitID != 0)
                         {
                             // TODO: remove this line?
                             gridViewHabitsByDate.Rows.Remove(gridViewHabitsByDate.Rows[row]);
@@ -381,6 +386,7 @@ namespace HabitLogger
             Console.WriteLine($"Editing HabitsByUser cell at row {e.RowIndex} and column {e.ColumnIndex}");
             prevCellContents = gridViewHabitsByUser.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
             Console.WriteLine($"Contents: {prevCellContents}");
+            prevRowCount = gridViewHabitsByUser.Rows.Count;
         }
 
         // CellEndEdit event
@@ -388,8 +394,41 @@ namespace HabitLogger
         // repopulates curUserHabits
         private void gridViewHabitsByUser_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
-            // TODO: trim white space from user input!
-            if (gridViewHabitsByUser.Rows[e.RowIndex].Cells[habitNameColByUser].Value != null)
+            // check if new row added
+            if (gridViewHabitsByUser.Rows.Count > prevRowCount)
+            {
+                if (gridViewHabitsByUser.Rows[e.RowIndex].Cells[habitNameColByUser].Value != null && gridViewHabitsByUser.Rows[e.RowIndex].Cells[habitNameColByUser].Value.ToString().Trim() != "")
+                {
+                    // grab row data
+                    string habitName = gridViewHabitsByUser.Rows[e.RowIndex].Cells[habitNameColByUser].Value.ToString();
+                    string description = gridViewHabitsByUser.Rows[e.RowIndex].Cells[descriptionCol].Value.ToString();
+
+                    string curCellContents = gridViewHabitsByUser.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
+
+                    Console.WriteLine($"e.RowIndex: {e.RowIndex}, DGV count: {gridViewHabitsByUser.Rows.Count}");
+
+                    // attempt to add habit if habit does not exist
+                    if (curUserHabits.Any(habit => habit.name == habitName))
+                    {
+                        RefreshGridViewHabitsByUser(curUserID);
+                        Console.WriteLine("New row was removed: no habit name.");
+                    }
+                    else
+                    {
+                        (string addedHabitName, int addedHabitID) addedHabitData = OpenAddHabitForm(habitName, description);
+
+                        // regardless of whether user added new habit, edited existing habit, or cancelled, always refresh DGV
+                        RefreshGridViewHabitsByUser(curUserID);
+                    }
+                }
+                else
+                {
+                    RefreshGridViewHabitsByUser(curUserID);
+                    Console.WriteLine("New row was removed: no habit name.");
+                }
+            }
+
+            else if (e.RowIndex != gridViewHabitsByUser.Rows.Count - 1)
             {
                 // grab row data
                 string habitName = gridViewHabitsByUser.Rows[e.RowIndex].Cells[habitNameColByUser].Value.ToString();
@@ -397,28 +436,8 @@ namespace HabitLogger
 
                 string curCellContents = gridViewHabitsByUser.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
 
-                Console.WriteLine($"e.RowIndex: {e.RowIndex}, DGV count: {gridViewHabitsByUser.Rows.Count}");
-
-                // add habit if habit name was entered on new row
-                if (e.RowIndex == gridViewHabitsByUser.Rows.Count - 2)
-                {
-                    if (habitName != "" && OpenAddHabitForm(habitName, e.RowIndex, description))
-                    {
-                        // refresh DGV
-                        RefreshGridViewHabitsByUser(curUserID);
-                    }
-
-                    // otherwise delete the new row if it was added
-                    else if (e.RowIndex != gridViewHabitsByUser.Rows.Count - 1)
-                    {
-                        // TODO: remove this line and replace with refresh
-                        gridViewHabitsByUser.Rows.Remove(gridViewHabitsByUser.Rows[e.RowIndex]);
-                        Console.WriteLine("New row was removed: no habit name/user exited AddHabitForm without saving.");
-                    }
-                }
-
                 // update habit if current cell modified
-                else if (prevCellContents != curCellContents)
+                if (prevCellContents != curCellContents)
                 {
                     sqliteDb.UpdateHabit(habitName, description, Convert.ToInt32(gridViewHabitsByUser.Rows[e.RowIndex].Cells[habitIDCol].Value));
 
@@ -474,8 +493,8 @@ namespace HabitLogger
         {
             // TODO: do not add new row when habit name already exists on this date
             // TODO: strip white space from input with Trim()
-            // 1. add new row - check if row was added or if cell is on new row
-            if (gridViewHabitsByDate.Rows.Count > prevGridViewHabitsByDateRowCount || e.RowIndex == gridViewHabitsByDate.Rows.Count - 1)
+            // 1. add new row - check if row was added
+            if (gridViewHabitsByDate.Rows.Count > prevGridViewHabitsByDateRowCount)
             {
                 // exit event without commiting data to db if no habit name entered
                 if (gridViewHabitsByDate.Rows[e.RowIndex].Cells[habitNameColByDate].Value != null && gridViewHabitsByDate.Rows[e.RowIndex].Cells[habitNameColByDate].Value.ToString().Trim() != "")
@@ -502,17 +521,20 @@ namespace HabitLogger
                     }
                     else
                     {
+                        // TODO: need to get habit chosen by user in AddHabitForm
                         // popup asks user if they want to add new habit
                         // if yes, open AddHabitForm
                         // if no, delete row
-                        if (OpenAddHabitForm(habitName, e.RowIndex))
+                        (string addedHabitName, int addedHabitID) addedHabitData = OpenAddHabitForm(habitName);
+
+                        if (addedHabitData.addedHabitID != -1)
                         {
                             // add row to date and refresh datagridview
-                            CreateGridViewHabitsByDateRow(habitName, e.RowIndex);
+                            CreateGridViewHabitsByDateRow(addedHabitData.addedHabitName, e.RowIndex);
 
                             // add new row to history
                             int habitHasDateID = Convert.ToInt32(gridViewHabitsByDate.Rows[e.RowIndex].Cells[habitHasDateIDCol].Value);
-                            CommitChanges(rowType, e.RowIndex, habitName, quantity, note);
+                            CommitChanges(rowType, e.RowIndex, addedHabitData.addedHabitName, quantity, note);
 
                             RefreshGridViewHabitsByUser(curUserID);
                         }
@@ -525,7 +547,7 @@ namespace HabitLogger
                 }
 
                 // delete new row from the DGV if it was added
-                else if (e.RowIndex != gridViewHabitsByDate.Rows.Count - 1)
+                else
                 {
                     // TODO: notify user that they must enter a habit name for row to be saved?
                     Console.WriteLine("New row was removed: no habit name column value.");
@@ -533,7 +555,7 @@ namespace HabitLogger
                 }
             }
             // 2. edit existing row
-            else
+            else if (e.RowIndex != gridViewHabitsByDate.Rows.Count - 1)
             {
                 string curCellContents = gridViewHabitsByDate.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
                 Console.WriteLine($"Finished editing cell at row {e.RowIndex} and column {e.ColumnIndex}");
@@ -745,7 +767,7 @@ namespace HabitLogger
         }
 
         // add a new habit
-        private bool OpenAddHabitForm(string name, int row, string desc = "")
+        private bool OpenAddHabitForm2(string name, int row, string desc = "")
         {
             // TODO: remove row parameter
             // save arguments as a tuple to pass to the AddHabitForm
@@ -785,6 +807,50 @@ namespace HabitLogger
                 else
                 {
                     return false;
+                }
+            }
+        }
+
+        private (string addedHabitName, int addedHabitID) OpenAddHabitForm(string name, string desc = "")
+        {
+            // TODO: remove row parameter
+            // save arguments as a tuple to pass to the AddHabitForm
+            (int habitID, string name, string desc) habitData = (0, name, desc);
+
+            // show AddHabitForm
+            using (AddHabitForm addHabit = new AddHabitForm(curUserID, sqliteDb, curUserHabits, habitData))
+            {
+                // open form and get dialog result
+                DialogResult result = addHabit.ShowDialog();
+                if (result == DialogResult.OK)
+                {
+                    // grab user input from AddHabitForm
+                    int habitID = addHabit.UserHabitInput.habitID;
+                    string habitName = addHabit.UserHabitInput.name;
+                    string habitDescription = addHabit.UserHabitInput.description;
+
+                    // create habit in db if it does not exist
+                    if (habitID == 0)
+                    {
+                        Console.Write($"Creating new Habit record with: " +
+                                      $"habit name: {habitName}, " +
+                                      $"description: {habitDescription}.");
+                        sqliteDb.CreateHabit(habitName, habitDescription, curUserID);
+                    }
+                    else
+                    {
+                        Console.Write($"Updating Habit record with: " +
+                                      $"habit ID: {habitID}, " +
+                                      $"habit name: {habitName}, " +
+                                      $"description: {habitDescription}.");
+                        sqliteDb.UpdateHabit(habitName, habitDescription, habitID);
+                    }
+
+                    return (habitName, habitID);
+                }
+                else
+                {
+                    return (name, -1);
                 }
             }
         }
