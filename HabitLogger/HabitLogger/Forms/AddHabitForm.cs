@@ -55,16 +55,9 @@ namespace HabitLogger
             this.DialogResult = DialogResult.Cancel;
         }
 
-
         private void comboBoxHabitName_SelectedIndexChanged(object sender, EventArgs e)
         {
             richTextBoxHabitDesc.Text = habitsList[comboBoxHabitName.SelectedIndex].description;
-        }
-
-        // TODO: might not need this event?
-        private void comboBoxHabitName_SelectionChangeCommitted(object sender, EventArgs e)
-        {
-            // change description to match the habit name
         }
 
         private void richTextBoxHabitDesc_KeyPress(object sender, KeyPressEventArgs e)
