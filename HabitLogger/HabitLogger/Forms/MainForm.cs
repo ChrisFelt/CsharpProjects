@@ -181,13 +181,15 @@ namespace HabitLogger
                     // get row number of matching habitHasDateID
                     int row = FindRowByHabitName(undoData.habitName);
 
-                    // abort if habitName not found - this shouldn't happen!
+                    // abort if habitName not found
+                    // occurs when a habits_has_dates record is automatically deleted after a habit is deleted AND the last action to be taken was an edit to the habits_has_dates record's quantity or note 
                     if (row == -1)
                     {
                         MessageBox.Show($"Error! {undoData.habitName} not found. History will be flushed.", "Unexpected Error.", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         gridViewHabitsByDateHistory.ClearHistory();
                         btnUndo.ForeColor = SystemColors.ControlDark;
                         btnRedo.ForeColor = SystemColors.ControlDark;
+                        return;
                     }
 
                     string habitName = gridViewHabitsByDate.Rows[row].Cells[habitNameColByDate].Value.ToString();
