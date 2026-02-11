@@ -670,6 +670,19 @@ namespace HabitLogger
         }
 
         // -----------------------------------------------------
+        // aboutToolStripMenuItem Methods
+        // -----------------------------------------------------
+        private void quickStartToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://github.com/ChrisFelt/CsharpProjects/tree/main/HabitLogger#usage");
+        }
+
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show($"Habit Logger v1.0.\nDeveloped by Christopher Felt 2026.", "About", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        // -----------------------------------------------------
         // pnlMain General Use Methods
         // -----------------------------------------------------
         // refresh gridViewHabitsByUser
