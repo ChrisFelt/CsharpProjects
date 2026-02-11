@@ -213,8 +213,6 @@ namespace HabitLogger
 
                         if (addedHabitData.addedHabitID != 0)
                         {
-                            // TODO: remove this line?
-                            gridViewHabitsByDate.Rows.Remove(gridViewHabitsByDate.Rows[undoData.row]);
                             return;
                         }
 
@@ -292,8 +290,6 @@ namespace HabitLogger
 
                         if (addedHabitData.addedHabitID != 0)
                         {
-                            // TODO: remove this line?
-                            gridViewHabitsByDate.Rows.Remove(gridViewHabitsByDate.Rows[row]);
                             return;
                         }
 
