@@ -53,6 +53,7 @@
             this.txtNewUser.Name = "txtNewUser";
             this.txtNewUser.Size = new System.Drawing.Size(214, 22);
             this.txtNewUser.TabIndex = 1;
+            this.txtNewUser.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtNewUser_KeyPress);
             // 
             // btnCreateNewUser
             // 
