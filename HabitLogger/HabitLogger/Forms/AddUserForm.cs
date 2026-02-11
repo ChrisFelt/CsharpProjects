@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -32,10 +33,20 @@ namespace HabitLogger
             {
                 // create new user, notify the user, and close NewUserForm
                 inputTxt = inputTxt.Trim();
-                sqliteDb.CreateUser(inputTxt);
-                // TODO: only show this message when CreateUser is successful
-                MessageBox.Show($"New user: '{inputTxt}' added.", "Success!", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                Close();
+
+                // display success message and exit window when successful
+                if (sqliteDb.CreateUser(inputTxt))
+                {
+                    MessageBox.Show($"New user: '{inputTxt}' added.", "Success!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    Close();
+                }
+
+                // otherwise clear txtNewUser box and cancel operation
+                else
+                {
+                    txtNewUser.Clear();
+                    return;
+                }
             }
         }
 
