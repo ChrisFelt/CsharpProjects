@@ -67,6 +67,16 @@ namespace HabitLogger
             // change description to match the habit name
         }
 
+        private void richTextBoxHabitDesc_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            // fire btnLogin_Click event on Enter key press
+            if (e.KeyChar == (char)Keys.Enter)
+            {
+                e.Handled = true;  // suppress ding sound
+                btnOk.PerformClick();
+            }
+        }
+
         private List<(int habitID, string name, string description)> GenerateHabitNameArray(List<(int habitID, string name, string description)> curUserHabits)
         {
             // populate return list with initial habit data and user's habits

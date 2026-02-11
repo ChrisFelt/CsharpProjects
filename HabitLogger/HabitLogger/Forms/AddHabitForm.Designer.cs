@@ -84,6 +84,7 @@
             this.richTextBoxHabitDesc.Size = new System.Drawing.Size(363, 97);
             this.richTextBoxHabitDesc.TabIndex = 12;
             this.richTextBoxHabitDesc.Text = "";
+            this.richTextBoxHabitDesc.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.richTextBoxHabitDesc_KeyPress);
             // 
             // lblHabitDesc
             // 
@@ -137,5 +138,5 @@
         private System.Windows.Forms.RichTextBox richTextBoxHabitDesc;
         private System.Windows.Forms.Label lblHabitDesc;
         private System.Windows.Forms.ComboBox comboBoxHabitName;
-    }
+        }
 }
