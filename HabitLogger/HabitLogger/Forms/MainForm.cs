@@ -75,7 +75,7 @@ namespace HabitLogger
             else
             {
                 // attempt to login
-                inputTxt = inputTxt.Trim(' ');
+                inputTxt = inputTxt.Trim();
                 curUserID = sqliteDb.ReadUser(inputTxt);
 
                 if (curUserID > 0)
