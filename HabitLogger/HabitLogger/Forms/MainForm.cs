@@ -546,7 +546,6 @@ namespace HabitLogger
                 // delete new row from the DGV if it was added
                 else
                 {
-                    // TODO: notify user that they must enter a habit name for row to be saved?
                     Console.WriteLine("New row was removed: no habit name column value.");
                 }
 
