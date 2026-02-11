@@ -8,7 +8,7 @@ Habit Logger was written in C# using the Windows Forms GUI library for .NET SDK 
 
 ## Setup
 
-This application is compatible with .NET version 4.8+. Please ensure that you have a compatible .NET version installed before continuing. Note: while it should be compatible with Linux and MacOS, it has only been tested in Windows 10/11.
+This application is compatible with .NET version 4.8+ on Windows 10/11. Please ensure that you have a compatible .NET version installed before continuing. MacOS and Linux are not supported.
 
 
 To run the application, simply download the project files and compile the source code using Visual Studio or your favorite IDE for C#. From there, run the program executable to begin!
