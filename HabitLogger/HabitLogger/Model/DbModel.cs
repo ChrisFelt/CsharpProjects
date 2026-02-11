@@ -96,23 +96,25 @@ namespace HabitLogger
             }
         }
 
-        public void DbCUDCommand(SQLiteCommand cmd, [CallerMemberName] string callingMethod = null)
+        public bool DbCUDCommand(SQLiteCommand cmd, [CallerMemberName] string callingMethod = null)
         {
             // attempt to execute query for Create, Update, or Delete operations
             try
             {
                 cmd.ExecuteNonQuery();
+                return true;
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"{ex.Message}", $"{callingMethod} Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
             }
         }
 
         // -----------------------------------------------------
         // Users Table Queries
         // -----------------------------------------------------
-        public void CreateUser(string userName)
+        public bool CreateUser(string userName)
         {
             using (SQLiteConnection conn = new SQLiteConnection(_connString))
             {
@@ -126,7 +128,7 @@ namespace HabitLogger
                     cmd.Parameters.AddWithValue(":userName", userName);
 
                     // execute query
-                    DbCUDCommand(cmd);
+                    return DbCUDCommand(cmd);
                 }
             }
 
