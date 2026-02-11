@@ -1,6 +1,6 @@
 # Habit Logger
 
-Welcome to Habit Logger -- a very simple desktop application for keeping track of your daily habits! Just login with your profile, choose a date, and start adding habits you'd like to keep tabs on. This application runs and stores all data on your local computer.
+Welcome to Habit Logger -- a very simple desktop application for keeping track of your daily habits! Just login with your profile, choose a date, and start adding habits you'd like to keep tabs on. This application runs and stores all data on your local computer. Additionally, all data is stored immediately to a SQLite database when entered - no need to manually save!
 
 #### Built With
 
@@ -32,14 +32,14 @@ Annotations:
 4. New user link - click to create a new user; this will open the Add New User window
 ```
 
-To login, enter your username and click the 'Login' button. You may also login using the Enter key once you input your username.
+To login, enter your username and click the 'Login' button. You may alternatively login by simply pressing the Enter key once you input your username.
 
 
 If you are a new user, you must first create a user profile to begin using Habit Logger. Click on the New User hyperlink at the bottom of the window to begin.
 
 #### Add New User Window
 
-If you are a new user, the following window will pop up after clicking the New User hyperlink:
+The following window will pop up after clicking the New User hyperlink:
 
 
 <img width="1252" height="1025" alt="Image" src="https://github.com/user-attachments/assets/d6f6e1b3-374c-4471-93ac-bbc241517dbd" />
@@ -55,7 +55,7 @@ To create a new user profile, enter your desired profile name into the New User 
 
 #### Main Window
 
-Once you have logged into the application, you will see the following window, from which you may create habits and add them to dates:
+Once you have logged into the application, you will see the following window, from which you may create habits and add those habits to dates:
 
 
 <img width="2860" height="1929" alt="Image" src="https://github.com/user-attachments/assets/5457c5a1-d805-4d4e-bd49-9d710f1fa436" />
@@ -64,7 +64,7 @@ Once you have logged into the application, you will see the following window, fr
 Annotations:
 1. Calendar - use the calendar to select dates
 2. Welcome message - displays the current user
-3. Logout button - click to exit the Main window and return to the Login window; no data will be lost
+3. Logout button - click to exit the Main window and return to the Login window; no data will be lost!
 4. Daily Habits Data Grid View - displays the habits you practiced on the selected date with number of times practiced and an optional note
 5. Undo/Redo buttons - undo the previous action or redo an action that has been undone
 6. User Habits Data Grid View - displays ALL habits for the current User with an optional description for each habit
@@ -73,16 +73,16 @@ Annotations:
 To create a new habit, you can begin typing in the 'Habit' column in either 4. (after selecting your desired date) or 6. Once you press Enter, the Add New Habit window will open and you may enter the name of your habit and a (optional) description there. Once a habit is created, it will always be listed in 6. However, it will only be listed in 4. if the appropriate date is selected.
 
 
-If a new habit is created using 4. it will be added to 6. and 4. simultaneously. A habit may be deleted form the selected date by selecting the habit row (click the empty square to the left of the row in the Data Grid View) and pressing the Delete button. If a habit is deleted from 4., it will only be deleted from the selected date. Warning! If a habit is deleted from 6., it will be deleted from the user profile, which includes ALL dates.
+If a new habit is created using 4. it will be added to 6. and 4. simultaneously. A habit may be deleted from the selected date OR from the user's habits by selecting the habit row(s) in 4. or 6. (click the empty square to the left of the row in the Data Grid View) and pressing the Delete button on your keyboard. If a habit is deleted from 4., it will only be deleted from the selected date. Warning! If a habit is deleted from 6., it will be deleted from the user profile, which includes ALL dates.
 
 
-You may modify the Frequency or Note columns in 4. by clicking on the cell in question and entering the desired value. You may also modify Habit name or Description in 6. by doing the same.
+You may modify the Frequency or Note columns in 4. by clicking on the cell in question and entering the desired value. You may also modify Habit name or Description in 6. by doing the same. Habit names cannot be modified in 4.
 
 
-As pictured in the figure of the Main window above, if the habit already exists, you will be prompted with an autocomplete option including all possiblities given your current entry. You may autocomplete at any time by pressing the Tab button or clicking on any of the options in the popup.
+As pictured in the figure of the Main window above, if the habit already exists, you will be prompted with an autocomplete option including all possiblities given your current entry. You may autocomplete the current selection at any time by pressing the Tab key. To select a different autocomplete option, use your mouse to click or press the down/up arrows on your keyboard.
 
 
-Finally, the Undo/Redo buttons allow you to undo your last action only in 4. Ff you made a mistake or otherwise wish to undo the previous change, simply click 'Undo'. You may redo a previously undone action by clicking 'Redo'. If an action can be undone or redone, the text in the appropriate button will be shown in black. If no action can be taken, the text will be greyed out. Note: all Undo/Redo history will be lost if you select a new date!
+Finally, the Undo/Redo buttons allow you to undo your last action **only** in 4. If you made a mistake or otherwise wish to undo the previous change, simply click 'Undo'. You may redo a previously undone action by clicking 'Redo'. If an action can be undone or redone, the text in the appropriate button will be shown in black. If no action can be taken, the text will be greyed out. Note: all Undo/Redo history will be lost if you select a new date!
 
 #### Add New Habit Window
 
@@ -99,10 +99,10 @@ Annotations:
 4. Cancel button - exit the Add New Habit window without adding the habit
 ```
 
-To add your new habit, select the habit name, add a description (optional), and click 'Ok'. 
+To add your new habit, select the habit name, add a description (optional), and click 'Ok'.
 
 
-The new habit name automatically populates to the name you entered into the Main window, but you may instead choose to select an existing habit if you prefer. Any edit you make to the description will be updated in the existing habit.
+The name you entered into the Main window is selected by default, but you may instead choose to select any of your existing habits if you prefer by clicking on the dropdown box and selecting it. Any edits you make to the description box here will update in the existing habit.
 
 <br>
 
