@@ -560,9 +560,9 @@ namespace HabitLogger
                 Console.WriteLine($"Previous contents were: '{prevCellContents}'. New contents are: '{curCellContents}'");
 
                 // habit name column can't be edited - roll back value when user attempts to edit it
-                // TODO: non-intrusive notification that this column can't be edited
                 if (e.ColumnIndex == habitNameColByDate)
                 {
+                    MessageBox.Show($"Error: habit names cannot be changed here.\nTo modify, edit name under 'My habits' below.", "Input failed.", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     gridViewHabitsByDate.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = prevCellContents;
                 }
 
