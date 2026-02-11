@@ -204,7 +204,6 @@ namespace HabitLogger
                 // row type - history is updated only after new Habits_Has_Dates record is created
                 else
                 {
-                    // TODO: need to account for multiple simultaneous deleted rows - loop method call for deletedrowscount?
                     // attempt to add habit if it no longer exists
                     if (!curUserHabits.Any(habit => habit.name == undoData.habitName))
                     {
