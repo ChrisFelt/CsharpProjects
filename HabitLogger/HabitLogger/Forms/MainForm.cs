@@ -497,7 +497,7 @@ namespace HabitLogger
                     string habitName = gridViewHabitsByDate.Rows[e.RowIndex].Cells[habitNameColByDate].Value.ToString().Trim();
                     int quantity = Convert.ToInt32(gridViewHabitsByDate.Rows[e.RowIndex].Cells[quantityCol].Value);
                     string note = gridViewHabitsByDate.Rows[e.RowIndex].Cells[noteCol].Value.ToString().Trim();
-                    string filterExpression = $"Habit = '{habitName}'";  // search the Habit column for all rows that contain habitName (C# DT row filter guide: https://www.csharp-examples.net/dataview-rowfilter/)
+                    string filterExpression = $"Habit = '{habitName.Replace("'", "''")}'";  // search the Habit column for all rows that contain habitName (C# DT row filter guide: https://www.csharp-examples.net/dataview-rowfilter/)
 
                     // if habit name does not exist, prompt user to create new habit
                     if (!curUserHabits.Any(habit => habit.name == habitName))
