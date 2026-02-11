@@ -89,7 +89,6 @@
             this.Controls.Add(this.lblNewUser);
             this.Name = "AddUserForm";
             this.Text = "Add New User";
-            this.Load += new System.EventHandler(this.NewUserForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

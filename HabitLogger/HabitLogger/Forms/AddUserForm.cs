@@ -20,11 +20,6 @@ namespace HabitLogger
             CenterToScreen();
         }
 
-        private void NewUserForm_Load(object sender, EventArgs e)
-        {
-            
-        }
-
         private void btnCreateNewUser_Click(object sender, EventArgs e)
         {
             // validate input
