@@ -1,5 +1,6 @@
 ﻿namespace Chatter
 {
+    // define App class 
     public partial class App : Application
     {
         public App()

@@ -1,5 +1,6 @@
 ﻿namespace Chatter
 {
+    // define logic for event handlers/actions triggered by controls on MainPage
     public partial class MainPage : ContentPage
     {
         int count = 0;
@@ -18,6 +19,7 @@
             else
                 CounterBtn.Text = $"Clicked {count} times";
 
+            // accessibility support - specifies text read by screen reader when user selects button
             SemanticScreenReader.Announce(CounterBtn.Text);
         }
     }

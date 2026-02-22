@@ -1,9 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
+<!-- user-interface definition -->
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Chatter.MainPage">
 
+    <!-- provide scrollbar if view is too large to be displayed on device -->
     <ScrollView>
+        <!-- arrange controls vertically -->
         <VerticalStackLayout
             Padding="30,0"
             Spacing="25">
