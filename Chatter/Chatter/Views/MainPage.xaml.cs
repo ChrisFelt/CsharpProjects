@@ -1,26 +1,29 @@
-﻿namespace Chatter
+﻿using Chatter.ViewModels;
+
+namespace Chatter
 {
     // define logic for event handlers/actions triggered by controls on MainPage
     public partial class MainPage : ContentPage
     {
-        int count = 0;
+        private readonly ChatViewModel ViewModel;
 
-        public MainPage()
+        public MainPage(ChatViewModel viewModel)
         {
             InitializeComponent();
+
+            BindingContext = ViewModel = viewModel;
+
+            MessagesDisplay.Scrolled += MessagesDisplay_Scrolled;
         }
 
-        private void OnCounterClicked(object? sender, EventArgs e)
+        private void MessagesDisplay_Scrolled(object sender, ItemsViewScrolledEventArgs e)
         {
-            count++;
+            ButtonScrollToBottom.IsVisible = e.LastVisibleItemIndex != ViewModel.MessageCollection.Count - 1;
+        }
 
-            if (count == 1)
-                CounterBtn.Text = $"Clicked {count} time";
-            else
-                CounterBtn.Text = $"Clicked {count} times";
-
-            // accessibility support - specifies text read by screen reader when user selects button
-            SemanticScreenReader.Announce(CounterBtn.Text);
+        private void ButtonScrollToBottom_Clicked(object sender, EventArgs e)
+        {
+            MessagesDisplay.ScrollTo(ViewModel.MessageCollection.Count - 1);
         }
     }
 }
